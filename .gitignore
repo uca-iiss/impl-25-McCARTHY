@@ -1,0 +1,119 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Java
+*.class
+.classpath
+.factorypath
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Terraform 
+**/.terraform/
+*.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
+
+# Other
+.DS_Store
+.project
+
+# VSCode
+.vscode/
+.vscode/settings.json
+
+# IntelliJ IDEA
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Visual Studio
+
+## Ignorar la carpeta de compilación
+bin/
+obj/
+
+## Ignorar archivos de configuraciones del usuario de Visual Studio
+*.suo
+*.user
+
+## Ignorar la carpeta de paquetes NuGet
+packages/
+
+## Archivos temporales
+*.cache
+*.[Cc]ache
+*.[Tt]mp
+*.[Tt]emp
+
+## Ignorar archivos de configuración que contienen credenciales
+appsettings.json
+
+# Gradle
+
+## Ignore Gradle project-specific cache directory
+.gradle
+
+## Ignore Gradle build output directory
+build/
+
+# Sentinel runtime directory
+.sentinel
+
+# Dart
+.dart_tool/
