@@ -1,4 +1,4 @@
-# Prácticas de Implementación CURSO
+# Prácticas de Implementación 2024-25
 
 Las prácticas de implementación consisten en construir y realizar ejemplos que pongan en práctica los conceptos teóricos de cada tema estudiado en la asigatura, tanto para la parte de **Implementación** como para **DevOps**, utilizando uno o varios lenguajes elegidos por los estudiantes.
 
