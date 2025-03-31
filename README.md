@@ -4,7 +4,8 @@ Las prácticas de implementación consisten en construir y realizar ejemplos que
 
 Los ejemplos a construir serán similares a los estudiados en teoría, u otros alternativos propuestos por cada estudiante. La elección del ejemplo de un tema no excluye utilizar elementos de otros temas, aunque se intentará centrar cada ejemplo, sobre todo, en elementos de construcción propios del tema elegido. Por ejemplo, en el tema de _herencia_ se pueden usar elementos de _abstracción_, pero, en todo caso, el ejemplo se deberá centrar en ilustrar el buen uso de la _herencia_ en el lenguaje elegido.
 
-Para aprobar la práctica es obligatorio implementar, al menos, **un ejemplo de cada bloque** de la lista de [temas y bloques](#6-temas) disponible más adelante. No es obligatorio implementar un ejemplo de cada tema para obtener un aprobado. Pero si se quiere alcanzar la máxima calificación, deberá implementarse un ejemplo de cada tema.
+> [!IMPORTANT]
+> Para aprobar la práctica es obligatorio implementar, al menos, **un ejemplo de cada bloque** de la lista de [temas y bloques](#6-temas) disponible más adelante. No es obligatorio implementar un ejemplo de cada tema para obtener un aprobado. Pero si se quiere alcanzar la máxima calificación, deberá implementarse un ejemplo de cada tema.
 
 ## Elección de lenguajes
 
@@ -24,7 +25,8 @@ Cada ejemplo deberá usar un lenguaje de implementación elegido de entre los si
 - [TypeScript](https://www.typescriptlang.org/)
 - Cualquier otro lenguaje que tenga un mecanismo útil de implementación para el tema en cuestión y el ejemplo propuesto. Dicha elección debe haberse aceptado por el profesor tras una propuesta inicial a realizar por el estudiante.
 
-Para el [bloque A](#bloque-a-objetos) y el [bloque C](#bloque-c-streams) se deberán elegir cualesquiera lenguajes de los propuestos, a excepción de Java o C++. El lenguaje a elegir solo podrá ser Java o C++ para los temas del [bloque B](#bloque-b-dependencias).
+> [!NOTE]
+> Para el [bloque A](#bloque-a-objetos) y el [bloque C](#bloque-c-streams) se deberán elegir cualesquiera lenguajes de los propuestos, a excepción de Java o C++. El lenguaje a elegir solo podrá ser Java o C++ para los temas del [bloque B](#bloque-b-dependencias).
 
 ## Procedimiento
 
@@ -53,24 +55,28 @@ A modo de ejemplo, el PR debe incluir  líneas adicionales al fichero [authors](
 |---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Curso <br/> <br/>| [Español Español, Juan](https://github.com/juanespanol) <br/> [Española Española, María](https://github.com/mariaespanola) |  [TypeScript](temas/abstraccion/typescript/)  | [TypeScript](temas/herencia/typescript/)  | [Python](temas/delegacion/typescript/) | [Scala](temas/inyeccion/scala/) | [...](temas/anotaciones/lenguaje) | [](temas/aspectos/lenguaje) | [](temas/errores/lenguaje) | [](temas/lambdas/lenguaje) |
 
-**Importante**: el PR inicial de propuesta o cualquier otro de modificación de la elección de lenguajes solo debe modificar el fichero [authors](authors.md) y ningún otro fichero del repositorio.
+> [!IMPORTANT]
+> El PR inicial de propuesta o cualquier otro de modificación de la elección de lenguajes solo debe modificar el fichero [authors](authors.md) y ningún otro fichero del repositorio.
 
 Se valorará que la elección del lenguaje sea adecuada al tema, es decir, el lenguaje debe proporcionar mecanismos de implementación adecuados para ilustrar los conceptos estudiados en el tema en cuestión. Por ejemplo, elegir el lenguaje C para ilustrar conceptos de implementación orientada a objetos no sería una buena elección.
 
 También se primará que haya diversidad en los lenguajes de implementación elegidos por distintos equipos. En caso de que varios equipos hagan una misma elección de lenguaje para los ejemplos propuestos, el profesor decidirá aceptar cada PR en función del orden en que lleguen los mismos y rechazará los demás, proponiendo cambios a la elección (_change requests_).
 
-Podrá suponer el rechazo por parte del profesor un PR inicial que contenga:
-
-- Cualquier contenido no válido del fichero [authors](authors.md).
-- Que fichero [authors](authors.md) con las modificaciones propuestas no esté situado en su carpeta correcta dentro del repositorio.
-- Que se intente modificar cualquier otro contenido del repositorio distinto del fichero [authors](authors.md).
-- Cualquier otra modificación que altere la estructura del repositorio y de sus carpetas.
+> [!WARNING]
+> Podrá suponer el rechazo por parte del profesor un PR inicial que contenga:
+>
+> - Cualquier contenido no válido del fichero [authors](authors.md).
+> - Que fichero [authors](authors.md) con las modificaciones propuestas no esté situado en su carpeta correcta dentro del repositorio.
+> - Que se intente modificar cualquier otro contenido del repositorio distinto del fichero [authors](authors.md).
+> - Cualquier otra modificación que altere la estructura del repositorio y de sus carpetas.
 
 En caso de rechazo del PR inicial, los autores tendrán que emitir otro PR para notificar su elección. El nuevo PR se situará por detrás de todos los PRs que hayan llegado hasta entonces.
 
-Recordar hacer una petición de `git pull` para sincronizar el repositorio local antes de hacer cada nuevo PR.
+> [!CAUTION]
+> Recordar hacer una petición de `git pull` para sincronizar el repositorio local antes de hacer cada nuevo PR.
 
-Los miembros de un mismo equipo deben proponer un único PR inicial para modificar el fichero [authors](authors.md).
+> [!IMPORTANT]
+> Los miembros de un mismo equipo deben proponer un único PR inicial para modificar el fichero [authors](authors.md).
 
 ### 2. **Organización del repositorio**
 
@@ -104,14 +110,22 @@ Dentro de cada una de estas carpetas, cada equipo ubicará sus ejemplos en una s
 - `swift`
 - `typescript`
 
-Por ejemplo, si un equipo desea usar C# para implementar un ejemplo de  _abstracción_ y _Kotlin_ para implementar un ejemplo de _herencia_, sus entregas deberán estar ubicadas en la siguiente estructura de carpetas:
+> [!TIP]
+> Por ejemplo, si un equipo desea usar C# para implementar un ejemplo de  _abstracción_ y _Kotlin_ para implementar un ejemplo de _herencia_, sus entregas deberán estar ubicadas en la siguiente estructura de carpetas:
+>
+> `temas/abstraccion/csharp/`
+>
+> `temas/herencia/kotlin/`
 
-`temas/abstraccion/csharp/`
-`temas/herencia/kotlin/`
+Se deberá implementar cada ejemplo empleando los mecanismos específicos del lenguaje elegido que están relacionados con el _tema_ en cuestión.
 
-Se deberá implementar cada ejemplo empleando los mecanismos específicos del lenguaje elegido que están relacionados con el _tema_ en cuestión. Por ejemplo, si se elige _Scala_ para el tema de _Errores_, deberán emplearse los mecanismos específicos de _Scala_ para el tratamiento de errores.
+> [!TIP]
+> Por ejemplo, si se elige _Scala_ para el tema de _Errores_, deberán emplearse los mecanismos específicos de _Scala_ para el tratamiento de errores.
 
-Cada ejemplo deberá construirse usando las **herramientas de construcción** y gestión de dependencias y bibliotecas, propias del lenguaje. Por ejemplo, al igual que en Java se usa _maven_ o _gradle_, en Python se  usarán _pip_, _pybuilder_, etc; en Javascript se usarán _npm_ o _yarn_, etc.
+Cada ejemplo deberá construirse usando las **herramientas de construcción** y gestión de dependencias y bibliotecas, propias del lenguaje. 
+
+> [!TIP]
+> Por ejemplo, al igual que en Java se usa _maven_ o _gradle_, en Python se  usarán _pip_, _pybuilder_, etc; en Javascript se usarán _npm_ o _yarn_, etc.
 
 En cuanto a la estructura y contenido del repositorio:
 
@@ -122,21 +136,26 @@ En cuanto a la estructura y contenido del repositorio:
   - el código implementado
   - las pruebas construidas
   - los ficheros de configuración propios de la herramienta de construcción utilizada necesarios para compilar y probar el ejemplo. Por ejemplo: `pom.xml` en Java y _maven_, `requirements.txt` en Python, `package.json` en JavaScript, etc.
+  - los ficheros de configuración de la herramienta de aprovisionamiento elegida para construir y desplegar el ejemplo, como `Dockerfile`, `Jenkinsfile`, etc.
 
 - Cada ejemplo debe contener el código de, al menos, un programa principal de demostración del ejercicio, junto con las explicaciones correspondientes para construirlo y ejecutarlo.
 - Todos los ficheros entregados deberán estar ubicados en la subcarpeta correcta bajo [temas](temas/), según se explica más arriba.
-  
-Cada PR final para la entrega total o parcial de la práctica no deberá escribir fuera de las carpetas que contnienen los ejemplos entregados.
+
+> [!CAUTION]  
+> Cada PR final para la entrega total o parcial de la práctica **no deberá** escribir fuera de las carpetas que contienen los ejemplos entregados.
 
 #### Convención de nombres de carpetas
 
 En caso de **colisiones** en los PR (por ejemplo, colisión en el nombre de las carpetas que contienen los ejemplos), se rechazará el PR. Entonces se deberá hacer un nuevo PR que resuelva los conflictos añadiendo un sufijo en el nombre de cada carpeta final que contiene todo lo entregado.
 
-Por ejemplo, si hay tres equipos que usan _kotlin_ para implementar su ejemplo de _herencia_, los dos equipos que hagan el PR final más tarde tendrán que retocar la estructura de carpetas:
-
-`temas/herencia/kotlin/` (donde entregó el primer equipo)
-`temas/herencia/kotlin-01/` (donde entrega el segundo equipo)
-`temas/herencia/kotlin-02/` (donde entrega el tercer equipo)
+> [!TIP]
+> Por ejemplo, si hay tres equipos que usan _kotlin_ para implementar su ejemplo de _herencia_, los dos equipos que hagan el PR final más tarde tendrán que retocar la estructura de carpetas:
+>
+> `temas/herencia/kotlin/` (donde entregó el primer equipo)
+>
+> `temas/herencia/kotlin-01/` (donde entrega el segundo equipo)
+>
+> `temas/herencia/kotlin-02/` (donde entrega el tercer equipo)
 
 ### 3. **Construcción aplicando DevOps**
 
@@ -152,13 +171,13 @@ a) Definir las Github __actions__ necesarias para construir y probar el ejemplo.
 
 b) Definir un __pipeline__ de Jenkins que permita construir y probar el ejemplo. En este caso, se deberá aprovisionar un servidor Jenkins contenerizado en Docker y crear los ficheros `Jenkinsfile` que describen el _pipeline_.
 
-Los ficheros `Dockerfile`, `Jenkinsfile` y cualquier otro fichero necesario para definir la infraestructura como código (_IaC_) de aprovisionamiento también deben someterse a control de versiones en el repositorio forkeado.
+Los ficheros `Dockerfile`, `Jenkinsfile` y cualquier otro fichero necesario para definir la infraestructura como código (_IaC_) para el aprovisionamiento también deben someterse a control de versiones en el repositorio forkeado.
 
 #### Convención de nombrado de ficheros de workflow
 
 GitHub Actions obliga a que los ficheros de definición de workflows de un determinado repo se guarden todos en una carpeta de nombre `.github/workflows/` en la __raíz del repo__. Esto puede causar problemas de colisión de ficheros de _workflow_ en el repo origin, al sincronizar los cambios que se hagan en cada repositorio forkeado. Para evitarlo, se seguirá una convención de nombrado de los ficheros `.yaml` o `.yml` que contengan la definición de los workflows entregados por cada equipo para cada tema y lenguaje elegido.
 
-La convención de nombrado de los ficheros `.yaml` a situar en `.github/workflows/` será: `<tema>.<lenguaje>-<numero>.yaml`. Por ejemplo, si un equipo entrega un _workflow_ para el tema de _herencia_ hecho en _Kotlin_, el fichero de workflow se debe llamar `herencia.kotlin.yaml`. Si hubiera dos equipos que han elegido hacer sus ejercicios en _Kotlin_ para el tema de _herencia_, los ficheros de workflow se deberán llamar `herencia.kotlin.yaml` (para el primer equipo) y `herencia.kotlin-01.yaml` (para el segundo equipo).
+La convención de nombrado de los ficheros `.yaml` a situar en `.github/workflows/` será: `<tema>.<lenguaje>-<EQUIPO>.yaml`. Por ejemplo, si un equipo llamado TURING entrega un _workflow_ para el tema de _herencia_ hecho en _Kotlin_, el fichero de workflow se debe llamar `herencia.kotlin-TURING.yaml`. Si hubiera dos equipos, de nombre TURING y HOPPER, que han elegido hacer sus ejercicios en _Kotlin_ para el tema de _herencia_, los ficheros de workflow se deberán llamar `herencia.kotlin-TURING.yaml` (para el primer equipo) y `herencia.kotlin-HOPPER.yaml` (para el segundo equipo).
 
 ### 4. Criterios de valoración
 
