@@ -37,6 +37,12 @@ Cada práctica puede hacerse en **equipos de 2 personas**.
 
 Para realizar la práctica se deberán completar los siguientes pasos:
 
+1. [Notificación](#1-notificación) de los nombres de los miembros del equipo y lenguajes elegidos para cada tema.
+2. [Organización](#2-organización) del repositorio forkeado y creación de los ejemplos.
+3. [Construcción](#3-construcción-aplicando-devops) de los ejemplos aplicando DevOps.
+4. [Entrega](#5-entrega-en-el-campus-virtual) de los ejemplos en el campus virtual.
+5. [Presentación oral](#6-presentación-oral) de los ejemplos entregados.
+
 ### 1. **Notificación**
 
 En primer lugar, se debe hacer un **_fork_** del repositorio donde se publica este enunciado (que, a partir de entonces, actuará como _origin_). Todos los miembros del equipo trabajarán colaborativamente sobre dicho fork.
@@ -179,9 +185,28 @@ GitHub Actions obliga a que los ficheros de definición de workflows de un deter
 
 La convención de nombrado de los ficheros `.yaml` a situar en `.github/workflows/` será: `<tema>.<lenguaje>-<EQUIPO>.yaml`. Por ejemplo, si un equipo llamado TURING entrega un _workflow_ para el tema de _herencia_ hecho en _Kotlin_, el fichero de workflow se debe llamar `herencia.kotlin-TURING.yaml`. Si hubiera dos equipos, de nombre TURING y HOPPER, que han elegido hacer sus ejercicios en _Kotlin_ para el tema de _herencia_, los ficheros de workflow se deberán llamar `herencia.kotlin-TURING.yaml` (para el primer equipo) y `herencia.kotlin-HOPPER.yaml` (para el segundo equipo).
 
-### 4. Criterios de valoración
+### 4. **Entrega en el Campus Virtual**
 
-Se valorará:
+La entrega final oficial de cara a plazos establecidos para la práctica se hará en el campus virtual. La entrega será la realizada a través de la actividad correspondiente en el campus virtual, indicando en la entrega la URL de vuestro repositorio.
+
+Antes de la entrega final, se deberá hacer completado el PR final del paso 5 para integrar en el repositorio _origin_ todos los cambios hechos en el repositorio forkeado.
+
+### 5. **Presentación oral**
+
+Finalmente, se hará una presentación de los ejemplos entregados para una selección de temas. Solo habrá que elegir _un tema de cada bloque (A, B y C)_, es decir, cada equipo presentará oralmente solo _3 temas_.
+
+La presentación se hará en clase tras pedir fecha y hora al profesor a través de la actividad correspondiente del campus. En casos excepcionales, se podrá grabar un video explicativo de menos de 8 minutos con la presentación y entregarlo a través del campus virtual. No obstante, en esta segunda opción no se podrá valorar la defensa de lo presentado, lo que podrá ser tenido en cuenta en la evaluación.
+
+### Evaluación
+
+> [!TIP]
+> En la evaluación se valorarán los criterios relativos a los siguientes aspectos:
+>
+> - La calidad de los **entregables** y del **proceso** realizado.
+> - El cummplimiento de las normas de **entrega**.
+> - La **presentación oral** realizada.
+
+En cuanto a la calidad de los **entregables** y del **proceso**, se valorará:
 
 - El uso de **ramas** para estructurar el trabajo en el repositorio forkeado, siguiendo el patrón de workflow _github flow_ y aplicando buenas prácticas de CI/CD.
 - La **estructura** y el contenido del repositorio para cada ejemplo, acorde con las normas básicas descritas anterioremente y las buenas prácticas del lenguaje y la herramienta de construcción elegida.
@@ -193,34 +218,22 @@ Se valorará:
 - La definición de **workflows** de CI/CD a través de _actions_ o _pipelines_, sometidos a control de versiones en el repositorio github, para automatizar la construcción, prueba y despliegue de los ejemplos.
 - La puesta en práctica de las herramientas de **IaC** para contenerizar la construcción, prueba y despliegue de los ejemplos.
 
-### 5. **Entrega en el Campus Virtual**
-
-La entrega final oficial de cara a plazos establecidos para la práctica se hará en el campus virtual. La entrega será la realizada a través de la actividad correspondiente en el campus virtual, indicando en la entrega la URL de vuestro repositorio.
-
-Antes de la entrega final, se deberá hacer completado el PR final del paso 5 para integrar en el repositorio _origin_ todos los cambios hechos en el repositorio forkeado.
-
-Se valorará:
+También se valorarán aspectos relacionados con la **entrega**:
 
 - El respeto del **protocolo** definido, basado en un PR inicial, para elegir componentes del equipo y lenguajes de implementación, seguido de uno o más PR de entrega (total o parcial), o de PR para cambiar el lenguaje elegido.
-- El seguimiento de las **normas** de entrega final y para proponer cualquier corrección a lo entregado utilizando PRs adicionales.
+- El seguimiento de las **normas** de entrega, tanto la entrega final como para proponer cualquier corrección a lo entregado utilizando PRs adicionales.
 - La **entrega final** con PR en el repositorio _origin_ de lo realizado por el equipo en el repositorio forkeado.
 - **Minimizar** el número de PR de entrega en respuesta a correcciones solicitadas por el profesor, sin necesidad de excesivas re-entregas.
 - La actividad en el repositorio forkeado que refleje la colaboración entre los miembros de cada equipo, a través de **commits** e **issues** que reflejen la participación de todos los miembros.
 
-### 6. **Presentación oral**
+Para la **presentación oral** se valorará:
 
-Finalmente, se hará una presentación de los ejemplos entregados para una selección de temas. Solo habrá que elegir _un tema de cada bloque (A, B y C)_, es decir, cada equipo presentará oralmente solo _3 temas_.
-
-La presentación se hará en clase tras pedir fecha y hora al profesor a través de la actividad correspondiente del campus. En casos excepcionales, se podrá grabar un video explicativo de menos de 8 minutos con la presentación y entregarlo a través del campus virtual. No obstante, en esta segunda opción no se podrá valorar la defensa de lo presentado, lo que podrá ser tenido en cuenta en la evaluación.
-
-Se valorará:
-
-- El material diseñado para la presentación oral
+- El material diseñado para la presentación oral y su disponibilidad en el repositorio en un formato abierto
 - La presentación oral realizada
 - La inclusión de una demo funcional de los ejemplos presentados
-- La defensa que se haga de lo presentado
+- La defensa que se haga de los ejemplos presentados a partir de las preguntas que realice el profesor
 
-### 7. Temas
+### Anexo I. Temas
 
 Los bloques y los temas para realizar la práctica son los siguientes:
 
