@@ -128,12 +128,6 @@ En cuanto a la estructura y contenido del repositorio:
   
 Cada PR final para la entrega total o parcial de la práctica no deberá escribir fuera de las carpetas que contnienen los ejemplos entregados.
 
-### 3. **Construcción aplicando DevOps**
-
-La implementación y construcción se realizará colaborativamente entre todos los miembros del equipo y reflejando todos los **cambios** en el repositorio propio, convenientemente forkeado al principio.
-
-Al finalizar el trabajo, o cada vez que se decida que hay ejemplos (_features_) ya completos y se desee su revisión por parte del profesor, debe hacerse un PR para solicitar su **integración** en el repositorio _origin_.
-
 #### Convención de nombres de carpetas
 
 En caso de **colisiones** en los PR (por ejemplo, colisión en el nombre de las carpetas que contienen los ejemplos), se rechazará el PR. Entonces se deberá hacer un nuevo PR que resuelva los conflictos añadiendo un sufijo en el nombre de cada carpeta final que contiene todo lo entregado.
@@ -144,29 +138,43 @@ Por ejemplo, si hay tres equipos que usan _kotlin_ para implementar su ejemplo d
 `temas/herencia/kotlin-01/` (donde entrega el segundo equipo)
 `temas/herencia/kotlin-02/` (donde entrega el tercer equipo)
 
+### 3. **Construcción aplicando DevOps**
+
+La implementación y construcción se realizará colaborativamente entre todos los miembros del equipo y reflejando todos los **cambios** en el repositorio propio, convenientemente forkeado al principio. Sobre el repositorio forkeado se seguirá un patrón de _branching_ basado en __github flow__.
+
+Al finalizar el trabajo, o cada vez que se decida que hay ejemplos (_features_) ya completos y se desee su revisión por parte del profesor, debe hacerse un PR para solicitar su **integración** en el repositorio _origin_.
+
+#### Workflows de CI/CD
+
+Para cada uno de los ejemplos entregados, se deberá definir un _workflow_ de CI/CD que permita construir y probar el ejemplo. Hay dos opciones para implementar el _workflow_:
+
+a) Definir las Github __actions__ necesarias para construir y probar el ejemplo. En este caso, se deberá crear un fichero `.yaml` o `.yml` en la carpeta `.github/workflows/` del repositorio forkeado. Las _actions_ deberán aprovisionar uno o varios contenedores Docker configurados con todas las herramientas necesarias del lenguaje elegido para construir (compilar, probar, empaquetar y desplegar) el ejemplo. 
+
+b) Definir un __pipeline__ de Jenkins que permita construir y probar el ejemplo. En este caso, se deberá aprovisionar un servidor Jenkins contenerizado en Docker y crear los ficheros `Jenkinsfile` que describen el _pipeline_.
+
+Los ficheros `Dockerfile`, `Jenkinsfile` y cualquier otro fichero necesario para definir la infraestructura como código (_IaC_) de aprovisionamiento también deben someterse a control de versiones en el repositorio forkeado.
+
 #### Convención de nombrado de ficheros de workflow
 
 GitHub Actions obliga a que los ficheros de definición de workflows de un determinado repo se guarden todos en una carpeta de nombre `.github/workflows/` en la __raíz del repo__. Esto puede causar problemas de colisión de ficheros de _workflow_ en el repo origin, al sincronizar los cambios que se hagan en cada repositorio forkeado. Para evitarlo, se seguirá una convención de nombrado de los ficheros `.yaml` o `.yml` que contengan la definición de los workflows entregados por cada equipo para cada tema y lenguaje elegido.
 
 La convención de nombrado de los ficheros `.yaml` a situar en `.github/workflows/` será: `<tema>.<lenguaje>-<numero>.yaml`. Por ejemplo, si un equipo entrega un _workflow_ para el tema de _herencia_ hecho en _Kotlin_, el fichero de workflow se debe llamar `herencia.kotlin.yaml`. Si hubiera dos equipos que han elegido hacer sus ejercicios en _Kotlin_ para el tema de _herencia_, los ficheros de workflow se deberán llamar `herencia.kotlin.yaml` (para el primer equipo) y `herencia.kotlin-01.yaml` (para el segundo equipo).
 
-#### Criterios de valoración
+### 4. Criterios de valoración
 
 Se valorará:
 
-- El uso de **ramas** para estructurar el trabajo en el repositorio forkeado, siguiendo el _workflow_ más adecuado para cada caso y las buenas prácticas de CI/CD. Por ejemplo, el uso de una rama distinta para desarrollar el ejemplo de cada tema o _feature_.
-- La **estructura** y contenido del repositorio para cada ejemplo, acorde con las normas básicas descritas anterioremente y las buenas prácticas del lenguaje y la herramienta de construcción elegida.
+- El uso de **ramas** para estructurar el trabajo en el repositorio forkeado, siguiendo el patrón de workflow _github flow_ y aplicando buenas prácticas de CI/CD.
+- La **estructura** y el contenido del repositorio para cada ejemplo, acorde con las normas básicas descritas anterioremente y las buenas prácticas del lenguaje y la herramienta de construcción elegida.
 - La satisfacción de las **peticiones de cambio** (_change requests_) que el profesor haga para la corrección de los PR que lo requieran.
 - La redacción y organización de las **instrucciones** en los documentos markdown del repositorio, incluyendo títulos de apartados, explicaciones, alcanzabilidad desde el README.md de cualquier fichero entregado.
-- El respeto a los **formatos** empleados para la entrega (markdown, código, imágenes, tablas, etc.)
-- La **legibilidad y accesibilidad** de la documentación markdown entregada (listados de código, capturas de pantalla, tamaño de imágenes, etc.)
-- La explicación de las instrucciones de instalación y **despliegue** de los ejemplos, siguiendo las prácticas de CI/CD y el empleo de herramientas de IaC.
-- La correcta **compilación** y **ejecución** de los ejemplos implementados.
-- El uso de **herramientas de construcción** propias de cada lenguaje (mvn, gradle, npm, pip, etc.) para compilar y probar los ejemplos.
-- La definición de **pipelines** de CI/CD en el repositorio github para automatizar la construcción y prueba de los ejemplos.
-- La puesta en práctica de las herramientas de **IaC** para automatizar la construcción, prueba y despliegue de los ejemplos.
+- El respeto a los **formatos** empleados para la entrega (markdown, código, imágenes, tablas, etc.) y la **legibilidad y accesibilidad** de la documentación entregada (listados de código, capturas de pantalla, tamaño de imágenes, etc.)
+- El uso de **herramientas de construcción** propias de cada lenguaje (mvn, gradle, npm, pip, etc.) para compilar y probar los ejemplos, incluyendo la correcta **compilación** y **ejecución** de los ejemplos implementados.
+- La explicación de las instrucciones de instalación y **despliegue** de los ejemplos, siguiendo las prácticas de CI/CD y el empleo de las herramientas de IaC.
+- La definición de **workflows** de CI/CD a través de _actions_ o _pipelines_, sometidos a control de versiones en el repositorio github, para automatizar la construcción, prueba y despliegue de los ejemplos.
+- La puesta en práctica de las herramientas de **IaC** para contenerizar la construcción, prueba y despliegue de los ejemplos.
 
-### 4. **Entrega en el Campus Virtual**
+### 5. **Entrega en el Campus Virtual**
 
 La entrega final oficial de cara a plazos establecidos para la práctica se hará en el campus virtual. La entrega será la realizada a través de la actividad correspondiente en el campus virtual, indicando en la entrega la URL de vuestro repositorio.
 
@@ -180,7 +188,7 @@ Se valorará:
 - **Minimizar** el número de PR de entrega en respuesta a correcciones solicitadas por el profesor, sin necesidad de excesivas re-entregas.
 - La actividad en el repositorio forkeado que refleje la colaboración entre los miembros de cada equipo, a través de **commits** e **issues** que reflejen la participación de todos los miembros.
 
-### 5. **Presentación oral**
+### 6. **Presentación oral**
 
 Finalmente, se hará una presentación de los ejemplos entregados para una selección de temas. Solo habrá que elegir _un tema de cada bloque (A, B y C)_, es decir, cada equipo presentará oralmente solo _3 temas_.
 
@@ -193,7 +201,7 @@ Se valorará:
 - La inclusión de una demo funcional de los ejemplos presentados
 - La defensa que se haga de lo presentado
 
-### 6. Temas
+### 7. Temas
 
 Los bloques y los temas para realizar la práctica son los siguientes:
 
