@@ -1,7 +1,7 @@
 | Curso | GRUPO | AUTORES  | Abstracción | Herencia | Delegación  | Inyección  | Anotaciones | Aspectos | Errores | Lambdas |
 |---|---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 2024-25 <br/> <br/>| [Español Español, Juan](https://github.com/juanespanol) <br/> [Española Española, María](https://github.com/mariaespanola) |  [Lenguaje](temas/abstraccion/lenguaje/)  | [Lenguaje](temas/herencia/lenguaje/)  | [Lenguaje](temas/delegacion/lenguaje/) | [Lenguaje](temas/inyeccion/lenguaje/) | [Lenguaje](temas/anotaciones/lenguaje) | [Lenguaje](temas/aspectos/lenguaje) | [Lenguaje](temas/errores/lenguaje) | [Lenguaje](temas/lambdas/lenguaje) |
-
 | Curso | GRUPO | AUTORES  | Abstracción | Herencia | Delegación  | Inyección  | Anotaciones | Aspectos | Errores | Lambdas |
 |---|---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 2024-25 <br/> <br/>| [Alejandro](https://github.com/xxxxx) <br/> [Christian](https://github.com/xxxxxx) |  [Lenguaje](temas/abstraccion/lenguaje/)  | [Lenguaje](temas/herencia/lenguaje/)  | [Lenguaje](temas/delegacion/lenguaje/) | [Lenguaje](temas/inyeccion/lenguaje/) | [Lenguaje](temas/anotaciones/lenguaje) | [Lenguaje](temas/aspectos/lenguaje) | [Lenguaje](temas/errores/lenguaje) | [Lenguaje](temas/lambdas/lenguaje) |
 | 2024-25 <br/> <br/>| [Gonzalez Vega, Adrian](https://github.com/juanespanol) <br/> [Montes Solano, Jose Antonio](https://github.com/mariaespanola) |  [Lenguaje](temas/abstraccion/lenguaje/)  | [Lenguaje](temas/herencia/lenguaje/)  | [Lenguaje](temas/delegacion/lenguaje/) | [Lenguaje](temas/inyeccion/lenguaje/) | [Lenguaje](temas/anotaciones/lenguaje) | [Lenguaje](temas/aspectos/lenguaje) | [Lenguaje](temas/errores/lenguaje) | [Lenguaje](temas/lambdas/lenguaje) |
