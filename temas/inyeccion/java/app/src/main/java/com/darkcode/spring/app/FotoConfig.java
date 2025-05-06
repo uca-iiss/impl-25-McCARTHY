@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FotoConfig 
 {
-
     @Bean
     public Foto fotoOcio1() 
     {
@@ -20,7 +19,7 @@ public class FotoConfig
     }
 
     @Bean
-    public Foto fotoArte1() 
+    public Foto fotoArte1()
     {
         return new ArteFoto("Pintura surrealista");
     }
@@ -42,16 +41,4 @@ public class FotoConfig
     {
         return new ArteFoto("Exposición de arte moderno");
     }
-
-    /* 
-    @Bean
-    public List<Foto> fotos() {
-        return List.of(
-            new OcioFoto("Vacaciones en la playa"),
-            new TrabajoFoto("Presentación en la empresa"),
-            new ArteFoto("Pintura surrealista"),
-            new OcioFoto("Excursión al bosque")
-        );
-    }
-    */
 }
