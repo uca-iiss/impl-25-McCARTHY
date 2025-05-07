@@ -1,3 +1,5 @@
 | Curso | GRUPO | AUTORES  | Abstracción | Herencia | Delegación  | Inyección  | Anotaciones | Aspectos | Errores | Lambdas |
 |---|---|---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 2024-25 <br/> <br/>| AQUÍ NOMBRE DEL GRUPO | [Español Español, Juan](https://github.com/juanespanol) <br/> [Española Española, María](https://github.com/mariaespanola) |  [Lenguaje](temas/abstraccion/lenguaje/)  | [Lenguaje](temas/herencia/lenguaje/)  | [Lenguaje](temas/delegacion/lenguaje/) | [Lenguaje](temas/inyeccion/lenguaje/) | [Lenguaje](temas/anotaciones/lenguaje) | [Lenguaje](temas/aspectos/lenguaje) | [Lenguaje](temas/errores/lenguaje) | [Lenguaje](temas/lambdas/lenguaje) |
+| 2024-25 <br/> <br/>| ICHBIAH | [Heredia Bravo, Cristian](https://github.com/CristianHerediaAlum) <br/> [Salvador Toledo, Alejandro](https://github.com/alex3695743) |  [C#](temas/abstraccion/csharp)  | [Python](temas/herencia/python)  | [Ruby](temas/delegacion/ruby) | [Java](temas/inyeccion/java) | [TypeScript](temas/anotaciones/typescript) | [Java](temas/aspectos/java) | [Scala](temas/errores/scala) | [Python](temas/lambdas/python) |
+
