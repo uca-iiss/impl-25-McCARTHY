@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparar entorno') {
+            steps {
+                echo "Instalando dependencias Ruby (si hay Gemfile)..."
+                sh 'bundle install || true' // evitar fallo si no hay Gemfile
+            }
+        }
+
+        stage('Ejecutar pruebas') {
+            steps {
+                echo "Ejecutando pruebas con Rake..."
+                sh 'bundle exec rake'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'La ejecución falló.'
+        }
+    }
+}
