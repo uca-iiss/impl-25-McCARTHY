@@ -10,12 +10,13 @@ pipeline {
         }
 
         stage('Ejecutar pruebas') {
-            steps {
+    	    steps {
                 echo 'Ejecutando pruebas con Rake...'
-                sh 'rake' // Ejecuta rake directamente, sin bundle
+                dir('temas/delegacion/ruby-01') {
+                    sh 'rake'
+                }
             }
         }
-    }
 
     post {
         always {
