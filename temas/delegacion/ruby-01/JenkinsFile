@@ -5,18 +5,19 @@ pipeline {
         stage('Preparar entorno') {
             steps {
                 echo 'Preparando entorno Ruby...'
-                // Eliminado bundle install
+                // Si necesitas instalar dependencias, lo puedes agregar aquí
             }
         }
 
         stage('Ejecutar pruebas') {
-    	    steps {
+            steps {
                 echo 'Ejecutando pruebas con Rake...'
                 dir('temas/delegacion/ruby-01') {
                     sh 'rake'
                 }
             }
         }
+    }
 
     post {
         always {
@@ -24,6 +25,9 @@ pipeline {
         }
         failure {
             echo 'La ejecución falló.'
+        }
+        success {
+            echo 'La ejecución fue exitosa.'
         }
     }
 }
