@@ -4,15 +4,15 @@ pipeline {
     stages {
         stage('Preparar entorno') {
             steps {
-                echo "Instalando dependencias Ruby (si hay Gemfile)..."
-                sh 'bundle install || true' // evitar fallo si no hay Gemfile
+                echo 'Preparando entorno Ruby...'
+                // Eliminado bundle install
             }
         }
 
         stage('Ejecutar pruebas') {
             steps {
-                echo "Ejecutando pruebas con Rake..."
-                sh 'bundle exec rake'
+                echo 'Ejecutando pruebas con Rake...'
+                sh 'rake' // Ejecuta rake directamente, sin bundle
             }
         }
     }
