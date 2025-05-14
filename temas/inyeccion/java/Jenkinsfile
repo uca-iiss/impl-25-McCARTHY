@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven-3.9.0' // Usa el nombre configurado en Jenkins
+    }
+
+    stages {
+        stage('Compilar') {
+            steps {
+                echo 'Compilando el proyecto...'
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Ejecutar Main.java') {
+            steps {
+                echo 'Ejecutando programa principal...'
+                sh 'mvn exec:java'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Compilación y ejecución completadas con éxito.'
+        }
+        failure {
+            echo 'Hubo un error en el pipeline.'
+        }
+    }
+}
