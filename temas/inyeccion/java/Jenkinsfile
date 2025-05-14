@@ -4,15 +4,19 @@ pipeline {
     stages {
         stage('Compilar') {
             steps {
-                echo 'Compilando el proyecto...'
-                sh 'mvn clean compile'
+                dir('temas/inyeccion/java') {
+                    echo 'Compilando el proyecto...'
+                    sh 'mvn clean compile'
+                }
             }
         }
 
         stage('Ejecutar Main.java') {
             steps {
-                echo 'Ejecutando programa principal...'
-                sh 'mvn exec:java'
+                dir('temas/inyeccion/java') {
+                    echo 'Ejecutando programa principal...'
+                    sh 'mvn exec:java'
+                }
             }
         }
     }
