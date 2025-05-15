@@ -10,15 +10,14 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                dir('java') {
-                    sh 'mvn dependency:tree'
-                }
+                git branch: 'main', 
+                    url: 'https://github.com/AdolfoGomezMorera/IISS.git'
             }
         }
 
         stage('Compilar') {
             steps {
-                dir('java') {
+                dir('temas/anotaciones/java') {
                     sh 'mvn clean compile'
                 }
             }
@@ -26,20 +25,20 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('java') {
+                dir('temas/anotaciones/java') {
                     sh 'mvn test'
                 }
             }
             post {
                 always {
-                    junit 'java/target/surefire-reports/*.xml'
+                    junit 'temas/anotaciones/java/target/surefire-reports/*.xml'
                 }
             }
         }
 
         stage('Package') {
             steps {
-                dir('java') {
+                dir('temas/anotaciones/java') {
                     sh 'mvn package -DskipTests'
                 }
             }
@@ -48,7 +47,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'java/target/*.jar', fingerprint: true
+            archiveArtifacts artifacts: 'temas/anotaciones/java/target/*.jar', fingerprint: true
         }
     }
 }
