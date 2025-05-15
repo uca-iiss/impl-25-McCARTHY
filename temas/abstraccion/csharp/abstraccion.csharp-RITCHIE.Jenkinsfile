@@ -12,12 +12,12 @@ pipeline {
         stage('Restaurar') {
             steps {
                 // Restaurar el proyecto principal
-                dir('Figuras') {
+                dir('temas/abstraccion/csharp/Figuras') {
                     sh 'dotnet restore'
                 }
         
                 // Restaurar el proyecto de tests
-                dir('Figuras.Tests') {
+                dir('temas/abstraccion/csharp/Figuras.Tests') {
                     sh 'dotnet restore'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Compilar') {
             steps {
-                dir('Figuras') {
+                dir('temas/abstraccion/csharp/Figuras') {
                     sh 'dotnet build --no-restore'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('Figuras.Tests') {
+                dir('temas/abstraccion/csharp/Figuras.Tests') {
                     // Ejecutar tests con restauración explícita
                     sh 'dotnet test --no-restore --verbosity normal'
                 }
