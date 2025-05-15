@@ -100,24 +100,17 @@ Maven:
 - Marca  "Install automatically".
 
 ### 4. Crear el Pipeline
-En el panel de Jenkins, haz clic en “New Item”.
+1. En el panel de Jenkins, haz clic en “New Item”.
+2. Introduce un nombre para el proyecto (por ejemplo, `Anotaciones-Java`).
+3. Selecciona “Pipeline” como tipo de proyecto y haz clic en OK.
+4. En el menú lateral, selecciona **Pipeline** y luego:
 
-- Introduce un nombre para el proyecto (por ejemplo, Anotaciones-Java).
+    - En “Definition” selecciona **Pipeline script from SCM**
+    - En “SCM” elige **Git**
+    - En “Repository URL” introduce la URL de tu repositorio
+    - En Jenkinsfile, poner `temas/anotaciones/java/anotaciones.java-RITCHIE.Jenkinsfile`
+    - Haz clic en **Save**.
 
-- Selecciona “Pipeline” como tipo de proyecto y haz clic en OK.
-
-- En el menú lateral, selecciona Pipeline y luego:
-
-- En “Definition”, selecciona Pipeline script from SCM
-
-- En “SCM”, elige Git
-
-- En “Repository URL”, introduce la URL de tu repositorio
-
-- En archivo JenkinsFile debes poner la siguiente ruta:
-```bash
-temas/anotaciones/java/anotaciones.java-RITCHIE.Jenkinsfile
-```
 
 - Haz clic en Save
 
