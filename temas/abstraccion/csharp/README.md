@@ -43,8 +43,11 @@ Las Pruebas verifican:
 ### Despliegue para pruebas
 
 #### 1. Iniciar los contenedores ####
+
+Desde la carpeta temas/abstraccion/csharp
+
 ```bash
-    docker-compose -f docker-compose.yml up -d
+    docker-compose -f abstraccion.csharp-RITCHIE.yml up -d
 ```
 #### 2. Accede a Jenkins
 
