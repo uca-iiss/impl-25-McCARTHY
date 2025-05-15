@@ -34,7 +34,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'scala/target/test-reports/**/*.xml'
+                    junit 'temas/errores/scala/target/test-reports/**/*.xml'
                 }
             }
         }
