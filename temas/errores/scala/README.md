@@ -67,7 +67,7 @@ docker exec scala-jenkins-1 cat /var/jenkins_home/secrets initialAdminPassword
  #### 4. Eliminar todo (limpieza)
 ```bash
 docker stop scala-jenkins-1
-docker rm cshscala-jenkins-1
+docker rm scala-jenkins-1
 docker volume rm scala_jenkins_data
 docker rmi scala-jenkin
 ```
