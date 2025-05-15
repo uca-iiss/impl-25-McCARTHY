@@ -1,6 +1,6 @@
 # Aspectos en Python: Calculadora Aumentada
 
-Este proyecto implementa una calculadora básica en Python a la que se le aplican **aspectos** utilizando la librería `aspectlib`, demostrando los principios de **Programación Orientada a Aspectos (AOP)**.
+Este proyecto implementa una calculadora básica en Python a la que se le aplican **aspectos** utilizando la librería `aspectlib`.
 
 Se utilizan aspectos para:
 - Medir el tiempo de ejecución de cada método
