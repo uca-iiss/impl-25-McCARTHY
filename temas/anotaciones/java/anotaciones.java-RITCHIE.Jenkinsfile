@@ -10,8 +10,9 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                git branch: 'main', 
-                    url: 'https://github.com/AdolfoGomezMorera/IISS.git'
+                dir('temas/anotaciones/java') {
+                    sh 'mvn dependency:tree'
+                }
             }
         }
 
