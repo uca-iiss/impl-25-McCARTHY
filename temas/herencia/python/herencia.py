@@ -1,7 +1,6 @@
 # Clase base
 class Trabajador:
-    def __init__(self, nombre, id_empleado, salario_base, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, nombre, id_empleado, salario_base):
         self.nombre = nombre
         self.id_empleado = id_empleado
         self.salario_base = salario_base
@@ -17,12 +16,14 @@ class Trabajador:
 
 # --- Herencia Simple ---
 
+# Clase Diseñador hereda de Trabajador
 class Disenador(Trabajador):
-    def __init__(self, herramienta_preferida, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, nombre, id_empleado, herramienta_preferida, salario_base):
+        super().__init__(nombre, id_empleado, salario_base)
         self.herramienta_preferida = herramienta_preferida
         self.bonus_disenador = 5000
 
+    # Sobrescritura de método (Polimorfismo)
     def trabajar(self):
         return f"{self.nombre} está diseñando interfaces con {self.herramienta_preferida}."
 
@@ -32,12 +33,14 @@ class Disenador(Trabajador):
     def calcular_salario_anual(self):
         return self.salario_base + self.bonus_disenador
 
+# Clase Desarrollador hereda de Trabajador
 class Desarrollador(Trabajador):
-    def __init__(self, lenguaje_principal, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, nombre, id_empleado, lenguaje_principal, salario_base):
+        super().__init__(nombre, id_empleado, salario_base)
         self.lenguaje_principal = lenguaje_principal
         self.bonus_desarrollador = 8000
 
+    # Sobrescritura de método (Polimorfismo)
     def trabajar(self):
         return f"{self.nombre} está desarrollando software en {self.lenguaje_principal}."
 
@@ -46,10 +49,11 @@ class Desarrollador(Trabajador):
 
     def calcular_salario_anual(self):
         return self.salario_base + self.bonus_desarrollador
+    
 
 class EspecialistaDeAccesibilidad(Trabajador):
-    def __init__(self, normativa_referencia, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, nombre, id_empleado, normativa_referencia, salario_base):
+        super().__init__(nombre, id_empleado, salario_base)
         self.normativa_referencia = normativa_referencia
         self.bonus_accesibilidad = 6000
 
@@ -64,38 +68,35 @@ class EspecialistaDeAccesibilidad(Trabajador):
 
 # --- Herencia Múltiple ---
 
+# Clase Fullstack hereda de Desarrollador y Disenador
 class Fullstack(Desarrollador, Disenador):
     def __init__(self, nombre, id_empleado, lenguaje_principal, herramienta_preferida, anos_experiencia, salario_base):
-        super().__init__(
-            nombre=nombre,
-            id_empleado=id_empleado,
-            salario_base=salario_base,
-            lenguaje_principal=lenguaje_principal,
-            herramienta_preferida=herramienta_preferida
-        )
+        Desarrollador.__init__(self, nombre, id_empleado, lenguaje_principal, salario_base)
+        Disenador.__init__(self, nombre, id_empleado, herramienta_preferida, salario_base)
+        self.salario_base = salario_base
         self.anos_experiencia = anos_experiencia
         self.bonus_fullstack = 10000
 
+    # Sobrescritura de método (Polimorfismo)
     def trabajar(self):
-        trabajo_dev = Desarrollador.trabajar(self)
-        trabajo_dis = Disenador.trabajar(self)
+        # Podemos llamar a los métodos de las clases padre si queremos combinar comportamientos
+        trabajo_dev = Desarrollador.trabajar(self) # Accedemos directamente
+        trabajo_dis = Disenador.trabajar(self)   # Accedemos directamente
         return f"{self.nombre} (Fullstack) está:\n  - {trabajo_dev}\n  - {trabajo_dis}\n  - Integrando frontend y backend."
 
     def gestionar_proyecto_completo(self):
         return f"{self.nombre} está gestionando un proyecto de desarrollo completo."
 
     def calcular_salario_anual(self):
+        # Salario base de Fullstack + bonus por experiencia y combinación de habilidades
         return self.salario_base + (self.anos_experiencia * 1000) + self.bonus_fullstack
 
+# Clase UXEngineer hereda de Disenador y EspecialistaAccesibilidad
 class UXEngineer(Disenador, EspecialistaDeAccesibilidad):
     def __init__(self, nombre, id_empleado, herramienta_preferida, normativa_referencia, especialidad_ux, anos_experiencia, salario_base):
-        super().__init__(
-            nombre=nombre,
-            id_empleado=id_empleado,
-            salario_base=salario_base,
-            herramienta_preferida=herramienta_preferida,
-            normativa_referencia=normativa_referencia
-        )
+        Disenador.__init__(self, nombre, id_empleado, herramienta_preferida, salario_base)
+        EspecialistaDeAccesibilidad.__init__(self, nombre, id_empleado, normativa_referencia, salario_base)
+        self.salario_base = salario_base
         self.especialidad_ux = especialidad_ux
         self.anos_experiencia = anos_experiencia
         self.bonus_ux = 9000
