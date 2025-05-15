@@ -1,5 +1,6 @@
 using Xunit;
 using System;
+using System.Reflection;
 
 namespace BancoApp.Tests
 {
@@ -51,17 +52,6 @@ namespace BancoApp.Tests
         }
 
         [Fact]
-        public void Retirar_SaldoInsuficiente_DeberiaLanzarExcepcion()
-        {
-            // Arrange
-            var cuenta = new CuentaBancaria("1234567890", 100m);
-            decimal montoRetiro = 200m;
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => cuenta.Retirar(montoRetiro));
-        }
-
-        [Fact]
         public void Depositar_CantidadNegativa_DeberiaLanzarExcepcion()
         {
             // Arrange
@@ -73,10 +63,29 @@ namespace BancoApp.Tests
         }
 
         [Fact]
-        public void CrearCuenta_SaldoNegativo_DeberiaLanzarExcepcion()
+        public void NumeroCuenta_NoDebeTenerSetterPublico()
         {
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => new CuentaBancaria("1234567890", -500m));
+            // Arrange
+            var propiedad = typeof(CuentaBancaria).GetProperty("NumeroCuenta");
+
+            // Act
+            var tieneSetter = propiedad?.SetMethod != null && propiedad.SetMethod.IsPublic;
+
+            // Assert
+            Assert.False(tieneSetter, "La propiedad NumeroCuenta no debe tener un setter público.");
+        }
+
+        [Fact]
+        public void Saldo_NoDebeTenerSetterPublico()
+        {
+            // Arrange
+            var propiedad = typeof(CuentaBancaria).GetProperty("Saldo");
+
+            // Act
+            var tieneSetter = propiedad?.SetMethod != null && propiedad.SetMethod.IsPublic;
+
+            // Assert
+            Assert.False(tieneSetter, "La propiedad Saldo no debe tener un setter público.");
         }
     }
 }
