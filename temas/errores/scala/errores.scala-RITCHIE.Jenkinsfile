@@ -20,7 +20,7 @@ pipeline {
 
         stage('Compilar') {
             steps {
-                dir('scala') {
+                dir('temas/errores/scala') {
                     sh 'sbt -Dsbt.rootdir=true -Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory=project/.boot -Dsbt.ivy.home=project/.ivy2 compile'
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('scala') {
+                dir('temas/errores/scala') {
                     sh 'sbt test'
                 }
             }
