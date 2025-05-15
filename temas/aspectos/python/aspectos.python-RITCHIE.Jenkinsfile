@@ -17,7 +17,7 @@ pipeline {
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install --upgrade pip
-                    pip install -r python/requirements.txt
+                    pip install -r temas/aspectos/python/requirements.txt
                 '''
             }
         }
@@ -29,7 +29,7 @@ pipeline {
                     withEnv(["PATH+VENV=${env.WORKSPACE}/venv/bin"]) {
                         sh '''
                         . venv/bin/activate
-                        python -m pytest python/tests/ -v
+                        python -m pytest temas/aspectos/python/tests/ -v
                         '''
                     }
                 }
@@ -43,7 +43,7 @@ pipeline {
                     withEnv(["PATH+VENV=${env.WORKSPACE}/venv/bin"]) {
                         sh '''
                         . venv/bin/activate
-                        python python/src/main.py
+                        python temas/aspectos/python/src/main.py
                         '''
                     }
                 }
