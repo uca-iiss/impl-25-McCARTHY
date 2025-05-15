@@ -71,8 +71,8 @@ class EspecialistaDeAccesibilidad(Trabajador):
 # Clase Fullstack hereda de Desarrollador y Disenador
 class Fullstack(Desarrollador, Disenador):
     def __init__(self, nombre, id_empleado, lenguaje_principal, herramienta_preferida, anos_experiencia, salario_base):
-        Desarrollador.__init__(self, nombre, id_empleado, lenguaje_principal, salario_base)
         Disenador.__init__(self, nombre, id_empleado, herramienta_preferida, salario_base)
+        Desarrollador.__init__(self, nombre, id_empleado, lenguaje_principal, salario_base)
         self.salario_base = salario_base
         self.anos_experiencia = anos_experiencia
         self.bonus_fullstack = 10000
