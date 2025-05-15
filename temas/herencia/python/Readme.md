@@ -145,6 +145,7 @@ class UXEngineer(Disenador, EspecialistaDeAccesibilidad):
 
     def calcular_salario_anual(self):
         return self.salario_base + (self.anos_experiencia * 1000) + self.bonus_ux
+```
 
 Ahora vamos a explicar los métodos que se han usado en el ejemplo:
 
@@ -152,6 +153,6 @@ Ahora vamos a explicar los métodos que se han usado en el ejemplo:
 Este código proporciona un claro ejemplo de cómo la herencia simple y la herencia múltiple pueden ser usadas en Python para crear jerarquías de clases flexibles y reutilizar funcionalidades, permitiendo a las subclases extender o modificar comportamientos de las superclases. La herencia también facilita la implementación de polimorfismo, donde métodos con el mismo nombre pueden tener comportamientos diferentes en diferentes clases.
 
 
-#A continuacion mostraremos como se verificaran este codigo
+A continuacion mostraremos como se verificaran este codigo
 
 ## Ejecución desde una Terminal
