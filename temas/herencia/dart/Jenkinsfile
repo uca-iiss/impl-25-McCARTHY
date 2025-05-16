@@ -23,6 +23,14 @@ pipeline {
       }
     }
 
+    stage('Ejecutar main.dart') {
+      steps {
+        dir('temas/herencia/dart') {
+          sh 'dart run lib/main.dart'
+        }
+      }
+    }
+
     stage('Ejecutar tests') {
       steps {
         dir('temas/herencia/dart') {
