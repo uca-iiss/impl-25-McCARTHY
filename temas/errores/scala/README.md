@@ -42,7 +42,7 @@ Abre [http://localhost:8080](http://localhost:8080) en tu navegador.
 Ejecuta el siguiente comando para obtener la contraseña inicial:
 
 ```bash
-docker exec scala-jenkins-1 cat /var/jenkins_home/secrets initialAdminPassword
+docker exec scala-jenkins-1 cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
 - Instalar plugins recomendados
