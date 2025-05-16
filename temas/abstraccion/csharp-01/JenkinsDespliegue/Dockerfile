@@ -13,8 +13,7 @@ RUN apt-get update && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y \
-        dotnet-sdk-8.0 &&\
+    apt-get install -y dotnet-sdk-8.0 dotnet-runtime-8.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
