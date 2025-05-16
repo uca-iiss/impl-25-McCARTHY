@@ -1,231 +1,318 @@
-# Ejemplo de Inyección de Dependencias en Java
+# Ejemplo de Programación Orientada a Aspectos (AOP) en Java con AspectJ
 
 Este documento describe:
 
-- Cómo hemos implementado un ejemplo de inyección de dependencias en Java.
+- Cómo hemos implementado un ejemplo de programación orientada a aspectos en Java usando AspectJ.
 - Batería de pruebas y automatización con Maven.
 - Cómo se construye una imagen personalizada de Jenkins con Java y se crean los contenedores.
 - Ejecución de pruebas automatizadas usando un `Jenkinsfile`.
 
 ---
 
-# Análisis de inyección de dependencias en Java
+## Análisis de programación orientada a aspectos en Java
 
-La **inyección de dependencias (DI)** es un patrón de diseño en el que un objeto no crea sus dependencias directamente, sino que se las proporcionan desde fuera. Esto mejora el desacoplamiento entre clases, facilita el mantenimiento, la extensión del código y la realización de pruebas unitarias.
+La **programación orientada a aspectos (AOP)** es un paradigma que permite modularizar aspectos transversales (*cross-cutting concerns*) como logging, seguridad, y control de acceso sin ensuciar la lógica principal de la aplicación. AspectJ es una herramienta popular que facilita esta modularización en Java.
 
-En Java, este patrón se puede implementar de muchas maneras: manualmente, con frameworks como Spring o Guice. En este ejemplo utilizamos **Google Guice** por su simplicidad y ligereza.
+En el ejemplo que veremos, hemos implementado un sistema domótico que controla dispositivos inteligentes (luces, termostato, cerradura). Usamos aspectos para:
 
-Aplicando el patrón DI al ejemplo que veremos más adelante, la clase principal (`ProcesadorPedido`) no instancia directamente sus colaboradores (`VerificadorStock`, `CalculadorDescuentos`, `ProcesadorPago`), sino que Guice los inyecta automáticamente.
+- Registrar acciones importantes (logging).
+- Restringir operaciones críticas (seguridad).
+- Controlar el consumo energético (monitorización de tiempo encendido).
 
 ---
 
-# Explicación del código en Java con Guice
+## Explicación del código en Java con AspectJ
 
-Este proyecto define varias clases: `Pedido`, `ProcesadorPedido`, `VerificadorStock`, `CalculadorDescuentos`, y `ProcesadorPago`. El flujo simula el procesamiento de pedidos en un sistema de comercio electrónico. Las dependencias se resuelven mediante **inyección por constructor**, lo cual es una práctica recomendada.
+Este proyecto define varias clases: `Luz`, `Termostato`, `SmartLock`, y aspectos como `LoggingAspect`, `SecurityAspect` y `EnergyControlAspect`. La lógica principal se mantiene limpia, y los aspectos se encargan de insertar funcionalidades transversales sin modificar las clases base.
 
-## Componentes
+---
 
-### `Pedido`
+### Componentes 
+
+### 'Luz'
 
 ```java
-public class Pedido {
-    private String producto;
-    private int cantidad;
-    private double precioUnitario;
+public class Luz implements Device {
+    private String name;
+    private boolean isOn = false;
 
-    public Pedido(String producto, int cantidad, double precioUnitario) {
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
+    public Luz(String name) {
+        this.name = name;
     }
 
-    public String getProducto() {
-        return producto;
+    public String getName() { return name; }
+
+    public void turnOn() {
+        isOn = true;
+        System.out.println(name + " encendida.");
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public double getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public double getTotalSinDescuento() {
-        return cantidad * precioUnitario;
+    public void turnOff() {
+        isOn = false;
+        System.out.println(name + " apagada.");
     }
 }
 ```
 
-Contiene los datos de un pedido: producto, cantidad y precio por unidad. Aparte de los metodos observadores, tiene un método para calcular el total sin descuento.
+Clase que representa una luz inteligente con métodos para encender y apagar.
 
-### 'VerificarStock'
+### 'Termostato'
 
 ```Java
-public class VerificadorStock {
-    public boolean hayStock(Pedido pedido) {
-        System.out.println("Verificando stock para: " + pedido.getProducto());
-        return true; // Simulación
+public class Termostato implements Device {
+    private String name;
+    private boolean isOn = false;
+    private int temperature = 20;
+
+    public Termostato(String name) {
+        this.name = name;
+    }
+
+    public String getName() { return name; }
+
+    public void setTemperature(int t) {
+        if (t < 5 || t > 35)
+            throw new IllegalArgumentException("Temperatura fuera de rango");
+        temperature = t;
+        System.out.println(name + " temperatura ajustada a " + temperature + "°C.");
+    }
+
+    public void turnOn() {
+        isOn = true;
+        System.out.println(name + " encendido.");
+    }
+
+    public void turnOff() {
+        isOn = false;
+        System.out.println(name + " apagado.");
     }
 }
 ```
 
-Comprueba si hay stock suficiente para procesar el pedido.
+Dispositivo que controla la temperatura, con método para ajustar la temperatura dentro de un rango seguro.
 
-### 'CalculadorDescuentos'
+### 'SmartLock'
 
 ```Java
-public class CalculadorDescuentos {
-    public double aplicarDescuento(Pedido pedido) {
-        double descuento = pedido.getCantidad() > 5 ? 0.1 : 0.0;
-        double total = pedido.getTotalSinDescuento() * (1 - descuento);
-        System.out.println("Total con descuento: $" + total);
-        return total;
+public class SmartLock implements Device {
+    private String name;
+    private boolean locked = true;
+
+    public SmartLock(String name) {
+        this.name = name;
+    }
+
+    public String getName() { return name; }
+
+    public void unlock() {
+        System.out.println(name + " desbloqueada.");
+        locked = false;
+    }
+
+    public void lock() {
+        System.out.println(name + " bloqueada.");
+        locked = true;
+    }
+
+    public void turnOn() {} // No-op
+    public void turnOff() {} // No-op
+}
+```
+
+Cerradura inteligente que puede ser bloqueada o desbloqueada. Su método `unlock` está protegido por un aspecto de seguridad.
+
+### Aspectos Implementados
+
+### 'LoggingAspect'
+
+```Java
+import org.aspectj.lang.*;
+import org.aspectj.lang.annotation.*;
+
+@Aspect
+public class LoggingAspect {
+
+    @Pointcut("execution(* Device.turnOn(..)) || execution(* Device.turnOff(..))")
+    public void powerControl() {}
+
+    @Before("powerControl()")
+    public void logAction(JoinPoint jp) {
+        Device device = (Device) jp.getTarget();
+        System.out.println("[LOG] Acción: " + jp.getSignature().getName() +
+            " sobre dispositivo: " + device.getName());
     }
 }
 ```
 
-Aplica una política simple de descuentos según la cantidad del pedido.
+Registra automáticamente llamadas a métodos críticos como encender/apagar dispositivos o bloquear/desbloquear la cerradura.
 
-### 'ProcesadorPago'
-
-```Java
-public class ProcesadorPago {
-    public void cobrar(String cliente, double total) {
-        System.out.println("Cobrando a " + cliente + ": $" + total);
-    }
-}
-```
-
-Encargado de cobrar el importe al cliente.
-
-### 'ProcesadorPedido'
+### 'SecurityAspect'
 
 ```Java
-import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.JoinPoint;
 
-public class ProcesadorPedido {
+@Aspect
+public class SecurityAspect {
+    private static boolean authenticated = false;
 
-    private final VerificadorStock stock;
-    private final CalculadorDescuentos descuentos;
-    private final ProcesadorPago pago;
-
-    @Inject
-    public ProcesadorPedido(VerificadorStock stock, CalculadorDescuentos descuentos, ProcesadorPago pago) {
-        this.stock = stock;
-        this.descuentos = descuentos;
-        this.pago = pago;
+    public static void login() {
+        authenticated = true;
+        System.out.println("[AUTH] Usuario autenticado.");
     }
 
-    public void procesar(String cliente, Pedido pedido) {
-        System.out.println("Procesando pedido de: " + cliente);
+    public static void logout() {
+        authenticated = false;
+        System.out.println("[AUTH] Usuario desconectado.");
+    }
 
-        if (!stock.hayStock(pedido)) {
-            System.out.println("No hay stock disponible.");
-            return;
+    @Pointcut("execution(* SmartLock.unlock(..))")
+    public void unlocking() {}
+
+    @Before("unlocking()")
+    public void checkAuth() {
+        if (!authenticated) {
+            throw new SecurityException("[ERROR] Acceso denegado. No autenticado.");
         }
-
-        double total = descuentos.aplicarDescuento(pedido);
-        pago.cobrar(cliente, total);
-
-        System.out.println("Pedido completado.");
     }
 }
 ```
 
-Esta clase central recibe sus dependencias inyectadas por Guice, y coordina el flujo completo de procesamiento de un pedido.
+Controla que sólo un usuario autenticado pueda desbloquear la cerradura, lanzando excepciones en caso contrario.
 
-## Ventajas del patrón de Inyección
+### 'EnergyControlAspect'
 
-1. **Desacoplamiento**: La clase 'ProcesadorPedido' no crea sus propias instancias de 'VerificadorStock', 'CalculadorDescuentos' ni 'ProcesadorPago', Guice se encarga de inyectarlas, lo que permite cambiar fácilmente una implementación sin modificar 'ProcesadorPedido'.
-2. **RSeparación de responsabilidades**: Cada clase tiene una responsabilidad bien definida, gracias a DI, estas clases no saben nada unas de otras, excepto lo necesario.
-3. **Flexibilidad y extensibilidad**: Si cambiar la lógica de descuentos, añadir logging a los pagos, solo necesitariamos crear nuevas implementaciones y cambiar el binding en el 'AppModule'.
-4. **Código limpio y mantenible**: 'ProcesadorPedido' no contiene lógica innecesaria de construcción de objetos, solo depende de interfaces públicas o clases concretas, y se enfoca en la lógica de cómo se procesa un pedido.
+```Java
+import java.util.HashMap;
+import java.util.Map;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.JoinPoint;
+
+@Aspect
+public class EnergyControlAspect {
+    private Map<String, Long> startTimes = new HashMap<>();
+
+    @Pointcut("execution(* Device.turnOn(..)) && target(dev)")
+    public void turnedOn(Device dev) {}
+
+    @Pointcut("execution(* Device.turnOff(..)) && target(dev)")
+    public void turnedOff(Device dev) {}
+
+    @Before("turnedOn(dev)")
+    public void markStart(Device dev) {
+        startTimes.put(dev.getName(), System.currentTimeMillis());
+    }
+
+    @After("turnedOff(dev)")
+    public void checkDuration(Device dev) {
+        Long start = startTimes.remove(dev.getName());
+        if (start != null) {
+            long duration = (System.currentTimeMillis() - start) / 1000;
+            if (duration > 10) {
+                System.out.println("[ENERGY] " + dev.getName() +
+                        " estuvo encendido por " + duration + "s. Considera optimizar.");
+            }
+        }
+    }
+}
+```
+Monitorea el tiempo que cada dispositivo permanece encendido y muestra alertas si se exceden ciertos límites para optimizar el consumo.
 
 ---
 
+## Ventajas del paradigma de Programación Orientada a Aspectos (AOP)
+
+1. **Separación de responsabilidades**: Los aspectos permiten encapsular funcionalidades transversales como logging, seguridad o control energético sin mezclar esa lógica con el código principal de los dispositivos.
+
+2. **Modularidad**: Cambios en aspectos como la política de seguridad o las reglas de monitoreo energético se pueden realizar sin modificar las clases base ('Luz', 'Termostato', 'SmartLock').
+
+3. **Reutilización**: Los aspectos pueden aplicarse fácilmente a múltiples clases y métodos con expresiones puntuales ('pointcuts'), facilitando la reutilización de código.
+
+4. **Mantenimiento sencillo**: El código principal permanece limpio y enfocado en su responsabilidad, mientras que los aspectos gestionan los detalles transversales, reduciendo el riesgo de errores y facilitando pruebas.
+
+---
+
+## Estructura de manejo de aspectos en el proyecto
+
+- El aspecto 'LoggingAspect' intercepta y registra llamadas a métodos importantes como 'turnOn()' o 'unlock()'.
+- 'SecurityAspect' protege métodos críticos, lanzando excepciones cuando no se cumplen condiciones.
+- 'EnergyControlAspect' monitoriza el tiempo de uso de dispositivos para optimización energética.
+
+--- 
+
 Ahora pasaremos a ver el programa de pruebas que hemos utilizado en nuestra clase Main.java que ejecuta distintos escenarios de prueba manuales usando varias instancias de pedido.
-
-## Estructura del archivo
-
-```Java
-Injector injector = Guice.createInjector(new AppModule());
-ProcesadorPedido procesador = injector.getInstance(ProcesadorPedido.class);
-```
-
-- Se crea un contenedor Guice con la configuración definida en AppModule
-- A través del contenedor, se obtiene una instancia de 'ProcesarPedido' con todas sus dependencias inyectadas automáticamente
 
 ---
 
 ## Casos de prueba
 
-### 1. 'Pedido sin descuento'
+### 1. 'Encender y apagar una luz'
 
 ```Java
-Pedido pedido1 = new Pedido("Ratón inalámbrico", 2, 25.0);
-procesador.procesar("clienteA", pedido1);
+sala.turnOn();
+Thread.sleep(2000);
+sala.turnOff();
 ```
 
-- Cantidad baja
-- No se aplica descuento
-- Verifica que el sistema funcione con valores simples
+- Se enciende y apaga la luz del salón
+- Verificar que el dispositivo responde correctamente y que el aspecto de logging registra estas acciones
 
 ---
 
-### 2. 'Pedido con descuento'
+### 2. 'Ajustar la temperatura con el termostato'
 
 ```Java
-Pedido pedido2 = new Pedido("Monitor 27 pulgadas", 7, 120.0);
-procesador.procesar("clienteB", pedido2);
+termostato.turnOn();
+termostato.setTemperature(25);
+termostato.turnOff();
+
 ```
 
-- Cantidad > 5 -> se aplica un 10% de descuento
-- Verifica que la lógica de descuentos funcione correctamente
+- Se enciende el termostato, se ajusta la temperatura a 25ºC, y luego se apaga.
+- Comprobar el correcto funcionamiento del termostato y la interacción con los aspectos (logging y control).
 
 ---
 
-### 3. 'Pedido caro sin descuento'
+### 3. 'Intento de desbloqueo de la puerta sin autenticación'
 
 ```Java
-Pedido pedido3 = new Pedido("Portátil Gaming", 1, 1500.0);
-procesador.procesar("clienteC", pedido3);
+try {
+    puerta.unlock(); // Fallará sin login
+} catch (Exception e) {
+    System.out.println(e.getMessage());
+}
 ```
 
-- Alto valor unitario pero cantidad = 1
-- No hay descuento
-- Evalúa cómo el sistema maneja pedidos de alto coste
+- Se intenta desbloquear la cerradura inteligente sin realizar un login previo.
+- Verificar que el aspecto de seguridad bloquea el acceso y lanza la excepción adecuada.
 
 ---
 
-### 4. 'Pedido en el límite del descuento'
+### 4. 'Autenticarse y desbloquear la puerta correctamente'
 
 ```Java
-Pedido pedido4 = new Pedido("Teclado mecánico", 5, 70.0);
-procesador.procesar("clienteD", pedido4);
+SecurityAspect.login();
+puerta.unlock();
+SecurityAspect.logout();
 ```
 
-- Se espera que no se aplique el descuento
-- Prueba la lógica del límite condicional
+- Se realiza un login mediante 'SecurityAspect.login()', se desbloquea la puerta y luego se hace logOut.
+- Confirmar que tras autenticarse el acceso está permitido y la puerta se desbloquea sin errores.
 
 ---
-
-### 5. 'Pedido grande'
-
-```Java
-Pedido pedido5 = new Pedido("Lote de pendrives", 100, 3.5);
-procesador.procesar("clienteE", pedido5);
-```
-
-- Pedido masivo
-- Se aplica descuento
-- Evalúa rendimiento y precisión de cálculo en grandes cantidades
 
 Este programa sirve como un banco de pruebas básico para:
 
-- Confirmar el correcto ensamblado de dependencias mediante DI.
-- Verificar comportamientos específicos de negocio.
-- Demostrar que el sistema es modular y extensible.
+- Confirmar el correcto uso de aspectos.
+- Verificar comportamientos específicos de nuestro programa.
 
 ---
 
@@ -237,41 +324,74 @@ Por ello, hemos tenido que primero de todo crear un archivo pom.xml que se encar
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.ejemplo</groupId>
-    <artifactId>procesamiento-pedidos</artifactId>
-    <version>1.0</version>
+  <groupId>smart.home</groupId>
+  <artifactId>smart-home</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <aspectj.version>1.9.19</aspectj.version>
+  </properties>
 
-    <dependencies>
-        <!-- Google Guice -->
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>5.1.0</version>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <!-- Plugin para ejecutar la clase Main -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <mainClass>Main</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>1.14.0</version>
+        <configuration>
+          <complianceLevel>11</complianceLevel>
+          <source>11</source>
+          <target>11</target>
+          <showWeaveInfo>true</showWeaveInfo>
+          <verbose>true</verbose>
+          <encoding>UTF-8</encoding>
+          <aspectLibraries>
+            <aspectLibrary>
+              <groupId>org.aspectj</groupId>
+              <artifactId>aspectjrt</artifactId>
+            </aspectLibrary>
+          </aspectLibraries>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>test-compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <mainClass>Main</mainClass>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
 </project>
 ---
 
@@ -402,7 +522,7 @@ pipeline {
     stages {
         stage('Compilar') {
             steps {
-                dir('temas/inyeccion/java') {
+                dir('temas/aspectos/java') {
                     echo 'Compilando el proyecto...'
                     sh 'mvn clean compile'
                 }
@@ -411,7 +531,7 @@ pipeline {
 
         stage('Ejecutar Main.java') {
             steps {
-                dir('temas/inyeccion/java') {
+                dir('temas/aspectos/java') {
                     echo 'Ejecutando programa principal...'
                     sh 'mvn exec:java'
                 }
@@ -430,13 +550,13 @@ pipeline {
 }
 ```
 
-'Compilaar' Se encarga primero de buscar nuestro 'pom.xml' y compilarlo. 
+'Compilar' Se encarga primero de buscar nuestro 'pom.xml' y compilarlo. 
 'Ejecutar Main.java' Entra a la ruta del proyecto ('temas/delegacion/java') y ejecuta 'Maven' para ejecutar las pruebas. 
 'post'  Define acciones según el resultado: éxito o fallo. 
 
 Este setup permite:
 
-- Ejecutar Jenkins en Docker con Java yMaven preinstalado.
+- Ejecutar Jenkins en Docker con Java y Maven preinstalado.
 - Correr pruebas automatizadas de Java usando `Maven`.
 - Integrar pruebas a pipelines CI/CD de forma simple y portable.
 
