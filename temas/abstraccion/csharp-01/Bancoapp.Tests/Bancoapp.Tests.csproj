@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\csharp-01.csproj" />
+    <ProjectReference Include="..\Bancoapp\Bancoapp.csproj" />
   </ItemGroup>
 
 </Project>

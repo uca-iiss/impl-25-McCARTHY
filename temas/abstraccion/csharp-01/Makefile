@@ -1,6 +1,6 @@
 # Definir el nombre del proyecto y la carpeta de pruebas
-PROJECT_NAME = .
-TEST_PROJECT = BancoApp.Tests
+PROJECT_NAME = Bancoapp
+TEST_PROJECT = Bancoapp.Tests
 BUILD_DIR = bin/Debug/net8.0
 
 # Comandos
