@@ -10,19 +10,19 @@ terraform {
 provider "docker" {}
 
 resource "docker_network" "jenkins_net" {
-  name = "jenkins_net"
+  name = "jenkins_net_herencia"
 }
 
 resource "docker_volume" "jenkins_home" {
-  name = "jenkins_home"
+  name = "jenkins_home_herencia"
 }
 
 resource "docker_volume" "docker_certs" {
-  name = "docker_certs"
+  name = "docker_certs_herencia"
 }
 
 resource "docker_image" "jenkins_custom" {
-  name = "jenkins-custom:latest"
+  name = "jenkins-custom-herencia:latest"
   build {
     context    = "${path.module}/."
     dockerfile = "Dockerfile"
@@ -30,7 +30,7 @@ resource "docker_image" "jenkins_custom" {
 }
 
 resource "docker_container" "docker" {
-  name       = "docker"
+  name       = "docker_herencia"
   image      = "docker:dind"
   restart    = "unless-stopped"
   privileged = true
@@ -50,13 +50,13 @@ resource "docker_container" "docker" {
   }
 
   networks_advanced {
-    name = docker_network.jenkins_net.name
-    aliases = ["docker"] # ← importante
+    name    = docker_network.jenkins_net.name
+    aliases = ["docker_herencia"] # ← importante
   }
 }
 
 resource "docker_container" "jenkins" {
-  name    = "jenkins"
+  name    = "jenkins_herencia"
   image   = docker_image.jenkins_custom.name
   restart = "unless-stopped"
 
@@ -71,7 +71,7 @@ resource "docker_container" "jenkins" {
   }
 
   env = [
-    "DOCKER_HOST=tcp://docker:2376",
+    "DOCKER_HOST=tcp://docker_herencia:2376",
     "DOCKER_CERT_PATH=/certs/client",
     "DOCKER_TLS_VERIFY=1"
   ]
@@ -91,4 +91,3 @@ resource "docker_container" "jenkins" {
     name = docker_network.jenkins_net.name
   }
 }
-
