@@ -203,7 +203,6 @@ El repositorio incluye un `Jenkinsfile` que define las fases:
 
 | Stage                | Comando                                  |
 |----------------------|------------------------------------------|
-| Preparar entorno     | `dart --version`                         |
 | Instalar dependencias| `dart pub get`                           |
 | Analizar código      | `dart analyze lib/`                      |
 | Ejecutar tests       | `dart test test/personaje_test.dart`     |
@@ -212,7 +211,7 @@ El repositorio incluye un `Jenkinsfile` que define las fases:
 
 Para que Jenkins lo ejecute:
 
-1. Crea un **Pipeline** → **Pipeline script from SCM**.
+1. Crea un **Pipeline** y selecciona **Pipeline script from SCM**.
 2. URL del repo: `https://github.com/uca-iiss/RITCHIE-impl-25.git`
 3. Branch: `main` (o el que corresponda).
 4. Script Path: `temas/herencia/dart/Jenkinsfile`
