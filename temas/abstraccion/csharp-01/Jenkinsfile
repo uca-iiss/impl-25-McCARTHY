@@ -20,8 +20,8 @@ pipeline {
         stage('Ejecutar pruebas') {
             steps {
                 echo 'Ejecutando pruebas...'
-                dir('temas/abstraccion/csharp-01') {
-                    sh 'make test'
+                dir('temas/abstraccion/csharp-01/Bancoapp.Tests') {
+                    sh 'dotnet test'
                 }
             }
         }
