@@ -11,15 +11,20 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
-# Instalar SDKMAN
-RUN curl -s "https://get.sdkman.io" | bash
-
-# Instalar SBT y Scala con SDKMAN
-RUN bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install sbt && sdk install scala"
-
-# Hacer accesible sbt/scala para el usuario Jenkins
-ENV PATH="/root/.sdkman/candidates/sbt/current/bin:/root/.sdkman/candidates/scala/current/bin:$PATH"
-
-RUN java -version && sbt --version && scala -version
-
 USER jenkins
+
+# Define explícitamente HOME y usa SHELL bash
+ENV HOME=/var/jenkins_home
+SHELL ["/bin/bash", "-c"]
+
+# Instalar SDKMAN, sbt y scala
+RUN curl -s "https://get.sdkman.io" | bash && \
+    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+    sdk install sbt && \
+    sdk install scala
+
+# Agregar sbt y scala al PATH
+ENV PATH="$HOME/.sdkman/candidates/sbt/current/bin:$HOME/.sdkman/candidates/scala/current/bin:$PATH"
+
+# Verificar versiones
+RUN java -version && sbt --version && scala -version

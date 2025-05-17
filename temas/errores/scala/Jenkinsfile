@@ -4,15 +4,19 @@ pipeline {
     stages {
         stage('Compile') {
             steps {
-                echo 'Compilando el proyecto Scala...'
-                sh 'sbt compile'
+		dir('temas/errores/scala') {
+                    echo 'Compilando el proyecto Scala...'
+                    sh 'sbt compile'
+		}
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Ejecutando pruebas automatizadas...'
-                sh 'sbt test'
+		dir('temas/errores/scala') {
+                    echo 'Ejecutando pruebas automatizadas...'
+                    sh 'sbt test'
+		}
             }
         }
     }
