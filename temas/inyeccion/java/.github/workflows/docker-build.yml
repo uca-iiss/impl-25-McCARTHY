@@ -12,10 +12,14 @@ jobs:
     - name: Checkout del código
       uses: actions/checkout@v2
 
+    - name: Ir a la carpeta del proyecto
+      working-directory: temas/inyeccion/java
+
     - name: Configurar Docker
       uses: docker/setup-buildx-action@v2
 
     - name: Construir la imagen Docker
+      working-directory: temas/inyeccion/java
       run: |
         docker build -t redsocial-app .
 
