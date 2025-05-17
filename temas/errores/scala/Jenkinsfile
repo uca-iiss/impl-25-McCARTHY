@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    tools {
+
+    }
+
+    stages {
+        stage('Compile') {
+            steps {
+                echo 'Compilando el proyecto Scala...'
+                sh 'sbt compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Ejecutando pruebas automatizadas...'
+                sh 'sbt test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completado con éxito'
+        }
+        failure {
+            echo 'Algo falló en la ejecución del pipeline'
+        }
+    }
+}
