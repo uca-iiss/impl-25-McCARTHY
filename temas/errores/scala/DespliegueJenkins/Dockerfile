@@ -2,22 +2,24 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# Instalar Java, curl y otras utilidades necesarias
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Instalar Java y herramientas necesarias
 RUN apt-get update && apt-get install -y \
-    openjdk-11-jdk \
+    default-jdk \
     curl \
-    gnupg \
-    apt-transport-https \
-    ca-certificates \
-    git \
+    zip \
     unzip
 
-# Instalar SBT
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
-    curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x99E82A75642AC823" | apt-key add - && \
-    apt-get update && \
-    apt-get install -y sbt
+# Instalar SDKMAN
+RUN curl -s "https://get.sdkman.io" | bash
 
-RUN java -version && sbt sbtVersion
+# Instalar SBT y Scala con SDKMAN
+RUN bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install sbt && sdk install scala"
+
+# Hacer accesible sbt/scala para el usuario Jenkins
+ENV PATH="/root/.sdkman/candidates/sbt/current/bin:/root/.sdkman/candidates/scala/current/bin:$PATH"
+
+RUN java -version && sbt --version && scala -version
 
 USER jenkins
