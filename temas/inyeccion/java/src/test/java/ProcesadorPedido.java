@@ -13,17 +13,18 @@ public class ProcesadorPedido {
         this.pago = pago;
     }
 
-    public void procesar(String cliente, Pedido pedido) {
+    public boolean procesar(String cliente, Pedido pedido) {
         System.out.println("Procesando pedido de: " + cliente);
 
         if (!stock.hayStock(pedido)) {
             System.out.println("No hay stock disponible.");
-            return;
+            return false;
         }
 
         double total = descuentos.aplicarDescuento(pedido);
         pago.cobrar(cliente, total);
 
         System.out.println("Pedido completado.");
+        return true;
     }
 }

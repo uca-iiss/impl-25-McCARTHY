@@ -63,14 +63,20 @@ Contiene los datos de un pedido: producto, cantidad y precio por unidad. Aparte 
 
 ```Java
 public class VerificadorStock {
+    private boolean stockDisponible = true;
+
+    public void setStockDisponible(boolean disponible) {
+        this.stockDisponible = disponible;
+    }
+
     public boolean hayStock(Pedido pedido) {
         System.out.println("Verificando stock para: " + pedido.getProducto());
-        return true; // Simulación
+        return stockDisponible;
     }
 }
 ```
 
-Comprueba si hay stock suficiente para procesar el pedido.
+Comprueba si el stock es suficiente para procesar el pedido.
 
 ### 'CalculadorDescuentos'
 
@@ -91,13 +97,21 @@ Aplica una política simple de descuentos según la cantidad del pedido.
 
 ```Java
 public class ProcesadorPago {
+    private double ultimoCobro = 0.0;
+
     public void cobrar(String cliente, double total) {
+        this.ultimoCobro = total;
         System.out.println("Cobrando a " + cliente + ": $" + total);
+    }
+
+    public double getUltimoCobro() {
+        return ultimoCobro;
     }
 }
 ```
 
 Encargado de cobrar el importe al cliente.
+Obtenemos el último cobro del cliente para hacer la verificación de pruebas.
 
 ### 'ProcesadorPedido'
 
@@ -117,23 +131,25 @@ public class ProcesadorPedido {
         this.pago = pago;
     }
 
-    public void procesar(String cliente, Pedido pedido) {
+    public boolean procesar(String cliente, Pedido pedido) {
         System.out.println("Procesando pedido de: " + cliente);
 
         if (!stock.hayStock(pedido)) {
             System.out.println("No hay stock disponible.");
-            return;
+            return false;
         }
 
         double total = descuentos.aplicarDescuento(pedido);
         pago.cobrar(cliente, total);
 
         System.out.println("Pedido completado.");
+        return true;
     }
 }
 ```
 
 Esta clase central recibe sus dependencias inyectadas por Guice, y coordina el flujo completo de procesamiento de un pedido.
+Devuelve true cuando el pedido es satisfecho.
 
 ## Ventajas del patrón de Inyección
 
@@ -146,80 +162,112 @@ Esta clase central recibe sus dependencias inyectadas por Guice, y coordina el f
 
 Ahora pasaremos a ver el programa de pruebas que hemos utilizado en nuestra clase Main.java que ejecuta distintos escenarios de prueba manuales usando varias instancias de pedido.
 
-## Estructura del archivo
+## Estructura de AppModule
 
-```Java
-Injector injector = Guice.createInjector(new AppModule());
-ProcesadorPedido procesador = injector.getInstance(ProcesadorPedido.class);
+El archivo `AppModule` es una clase que extiende `AbstractModule` de Google Guice y se utiliza para definir cómo se deben crear e inyectar las dependencias en la aplicación. Su función principal es centralizar la configuración de los objetos que serán gestionados por el contenedor de inyección de dependencias.
+
+### Explicación del código
+
+```java
+import com.google.inject.AbstractModule;
+
+public class AppModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(VerificadorStock.class).toInstance(new VerificadorStock());
+        bind(CalculadorDescuentos.class).toInstance(new CalculadorDescuentos());
+        bind(ProcesadorPago.class).toInstance(new ProcesadorPago());
+    }
+}
 ```
 
-- Se crea un contenedor Guice con la configuración definida en AppModule
-- A través del contenedor, se obtiene una instancia de 'ProcesarPedido' con todas sus dependencias inyectadas automáticamente
+- `AppModule` hereda de `AbstractModule`, lo que permite sobreescribir el método `configure()`.
+- Dentro de `configure()`, se definen los *bindings* usando el método `bind()`. Esto le indica a Guice cómo debe proporcionar instancias de cada clase cuando sean requeridas.
+- `toInstance(new VerificadorStock())` significa que siempre se usará la misma instancia de `VerificadorStock` cuando se solicite esa dependencia. Lo mismo ocurre con `CalculadorDescuentos` y `ProcesadorPago`.
+- Así, cuando otra clase (por ejemplo, `ProcesadorPedido`) declare que necesita alguna de estas dependencias, Guice se encargará de inyectar la instancia correspondiente automáticamente.
 
----
+Esta estructura permite desacoplar la creación de objetos del resto de la lógica de la aplicación, facilitando el mantenimiento, la extensión y la realización de pruebas, ya que puedes cambiar fácilmente las implementaciones o el ciclo de vida de los objetos modificando solo este módulo.
 
 ## Casos de prueba
 
 ### 1. 'Pedido sin descuento'
 
 ```Java
-Pedido pedido1 = new Pedido("Ratón inalámbrico", 2, 25.0);
-procesador.procesar("clienteA", pedido1);
+    @Test
+    public void testPedidoSinDescuento() {
+        CalculadorDescuentos desc = new CalculadorDescuentos();
+        Pedido pedido = new Pedido("Ratón inalámbrico", 2, 25.0);
+        assertEquals(50.0, desc.aplicarDescuento(pedido), 0.001);
+    }
 ```
 
-- Cantidad baja
-- No se aplica descuento
-- Verifica que el sistema funcione con valores simples
-
+ - Verifica que el cálculo del total de un pedido sin descuento sea correcto. Crea un pedido pequeño y comprueba que el total calculado coincide con el esperado.
 ---
 
 ### 2. 'Pedido con descuento'
 
 ```Java
-Pedido pedido2 = new Pedido("Monitor 27 pulgadas", 7, 120.0);
-procesador.procesar("clienteB", pedido2);
+    @Test
+    public void testPedidoConDescuento() {
+        CalculadorDescuentos desc = new CalculadorDescuentos();
+        Pedido pedido = new Pedido("Monitor 27", 7, 120.0);
+        assertEquals(7 * 120.0 * 0.9, desc.aplicarDescuento(pedido), 0.001);
+    }
 ```
 
-- Cantidad > 5 -> se aplica un 10% de descuento
-- Verifica que la lógica de descuentos funcione correctamente
+- Comprueba que se aplique correctamente un descuento cuando el pedido supera cierta cantidad. Se espera que el total refleje el descuento aplicado.
 
 ---
 
-### 3. 'Pedido caro sin descuento'
+### 3. 'Verificación de Stock'
 
 ```Java
-Pedido pedido3 = new Pedido("Portátil Gaming", 1, 1500.0);
-procesador.procesar("clienteC", pedido3);
+    @Test
+    public void testVerificacionStock() {
+        VerificadorStock stock = new VerificadorStock();
+        Pedido pedido = new Pedido("Cualquier cosa", 1, 5.0);
+        assertTrue(stock.hayStock(pedido)); // siempre devuelve true
+    }
 ```
 
-- Alto valor unitario pero cantidad = 1
-- No hay descuento
-- Evalúa cómo el sistema maneja pedidos de alto coste
+- Testea que el verificador de stock siempre indique que hay stock disponible (según la implementación actual), devolviendo `true` para cualquier pedido.
 
 ---
 
-### 4. 'Pedido en el límite del descuento'
+### 4. 'Cobro correcto de un pedido'
 
 ```Java
-Pedido pedido4 = new Pedido("Teclado mecánico", 5, 70.0);
-procesador.procesar("clienteD", pedido4);
+    @Test
+    public void testCobroCorrecto() {
+        ProcesadorPago pago = new ProcesadorPago();
+        pago.cobrar("cliente", 200.0);
+        assertEquals(200.0, pago.getUltimoCobro(), 0.001);
+    }
 ```
 
-- Se espera que no se aplique el descuento
-- Prueba la lógica del límite condicional
+-  Valida que el procesador de pagos registre correctamente el último cobro realizado. Después de cobrar una cantidad, se comprueba que el valor almacenado sea el correcto.
 
 ---
 
-### 5. 'Pedido grande'
+### 5. 'Procesamiento del pedido'
 
 ```Java
-Pedido pedido5 = new Pedido("Lote de pendrives", 100, 3.5);
-procesador.procesar("clienteE", pedido5);
+    @Test
+    public void testProcesamientoCompleto() {
+        VerificadorStock stock = new VerificadorStock();
+        CalculadorDescuentos desc = new CalculadorDescuentos();
+        ProcesadorPago pago = new ProcesadorPago();
+        ProcesadorPedido procesador = new ProcesadorPedido(stock, desc, pago);
+
+        Pedido pedido = new Pedido("Producto", 10, 10.0); // debería aplicar descuento
+        procesador.procesar("cliente", pedido);
+
+        double esperado = 10 * 10.0 * 0.9;
+        assertEquals(esperado, pago.getUltimoCobro(), 0.001);
+    }
 ```
 
-- Pedido masivo
-- Se aplica descuento
-- Evalúa rendimiento y precisión de cálculo en grandes cantidades
+- Evalúa el flujo completo de procesamiento de un pedido: verificación de stock, aplicación de descuento y cobro. Al finalizar, verifica que el monto cobrado corresponda al total con descuento.
 
 Este programa sirve como un banco de pruebas básico para:
 
@@ -257,11 +305,17 @@ Por ello, hemos tenido que primero de todo crear un archivo pom.xml que se encar
             <artifactId>guice</artifactId>
             <version>5.1.0</version>
         </dependency>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Plugin para ejecutar la clase Main -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -269,6 +323,11 @@ Por ello, hemos tenido que primero de todo crear un archivo pom.xml que se encar
                 <configuration>
                     <mainClass>Main</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
             </plugin>
         </plugins>
     </build>
@@ -278,7 +337,8 @@ Por ello, hemos tenido que primero de todo crear un archivo pom.xml que se encar
 Con ello, podremos ejecutar dentro de la raiz del directorio donde se encuentra nuestro pom.xml:
 
 - mvn clean compile     # Se encargará de compilar pom.xml 
-- mvn exec:java         # Buscará dentro de nuestro directorio la ruta para ejecutar nuestro main.java (src/main/java/*.java)
+- mvn test        # Se encargará de probar todas las baterías de prueba que estén dentro del directorio (src/test/java/MainTest.java)
+- mvn exec:java   # Si quisieramos que simplemente ejecute el programa, tendriamos que cambiar el nombre de nuestra carpeta "test" a "java" y "MainTest.java" a "Main.java" para que Maven reconozca que estamos haciendo una ejecución de nuestro Main.java.
 
 ---
 
