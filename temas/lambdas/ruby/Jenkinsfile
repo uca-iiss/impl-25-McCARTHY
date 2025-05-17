@@ -6,28 +6,28 @@ pipeline {
     stages {
         stage('Construcción') {
             steps {
-                dir('temas/lambda/ruby'){
+                dir('temas/lambdas/ruby'){
                 echo 'No hay nada que construir'
                 }
             }
         }
         stage('Ejecutar Main') {
             steps {
-                dir('temas/lambda/ruby/code') {
+                dir('temas/lambdas/ruby/code') {
                     sh 'ruby Main.rb'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('temas/lambda/ruby/code') {
+                dir('temas/lambdas/ruby/code') {
                     sh 'ruby TestGestorBD.rb'
                 }
             }
         }
         stage('Deliver') {
             steps {
-                dir('temas/lambda/ruby'){
+                dir('temas/lambdas/ruby'){
                     echo 'Entregando el código'
                     archiveArtifacts artifacts: 'code/Main.rb', fingerprint: true
                     archiveArtifacts artifacts: 'code/TestGestorBD.rb', fingerprint: true
