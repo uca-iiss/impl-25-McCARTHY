@@ -23,4 +23,4 @@ def evaluacion_condicional():
 def concatenar_cadenas():
   #Concatena una lista de cadenas
   fragmentos = ["Python", " ", "es", " ", "genial"]
-  return reduce(lambda acumulador, elemento: acumulador + elemento, fragmentos) 
+  return reduce(lambda acumulador, elemento: acumulador + elemento, fragmentos)
