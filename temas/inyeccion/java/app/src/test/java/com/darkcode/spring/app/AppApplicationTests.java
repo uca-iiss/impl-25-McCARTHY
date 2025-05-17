@@ -38,7 +38,5 @@ class AppApplicationTests
         assertThat(tieneTrabajo).isTrue();
         assertThat(tieneArte).isTrue();
         assertThat(tieneComponent).isTrue();
-
-	System.out.println("\n> Todas las fotos fueron inyectadas correctamente.");
     }
 }
