@@ -21,11 +21,15 @@ puts resultado
 puts "\nAumentando 200€ a los clientes de Madrid:"
 bd.actualizar(->(f) { f[:ciudad] == "Madrid" }, ->(f) { f[:dinero] += 200 })
 
+# buscar sin filtro (mostrar todos)
+puts "\nTodos los clientes actuales:"
+bd.buscar.each { |f| puts f }
+
 # eliminar
 puts "\nEliminando a Luis:"
 bd.eliminar(->(f) { f[:nombre] == "Luis" })
 
-# buscar sin filtro (mostrar todos)
+# mostrar a todos después de eliminar
 puts "\nTodos los clientes actuales:"
 bd.buscar.each { |f| puts f }
 
