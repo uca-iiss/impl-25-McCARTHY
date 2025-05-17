@@ -1,29 +1,28 @@
-import unittest
-from animal import Animal
-from perro import Perro
-from gato import Gato
-from pajaro import Pajaro
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-class TestAnimales(unittest.TestCase):
-
-    def test_perro(self):
-        rex = Perro("Rex")
-        self.assertEqual(rex.hacer_sonido(), "Guau")
-        self.assertEqual(rex.describir(), "Soy un perro y me llamo Rex")
-        self.assertIsInstance(rex, Animal)  # Verifica que Perro es un Animal
-
-    def test_gato(self):
-        misu = Gato("Misu")
-        self.assertEqual(misu.hacer_sonido(), "Miau")
-        self.assertEqual(misu.describir(), "Soy un gato y me llamo Misu")
-        self.assertIsInstance(misu, Animal)  # Verifica que Gato es un Animal
-
-    def test_pajaro(self):
-        piolin = Pajaro("Piolín")
-        self.assertEqual(piolin.hacer_sonido(), "Pío")
-        self.assertEqual(piolin.describir(), "Soy un pájaro y me llamo Piolín")
-        self.assertIsInstance(piolin, Animal)  # Verifica que Pájaro es un Animal
+from animales.animal import Animal
+from animales.perro import Perro
+from animales.gato import Gato
+from animales.pajaro import Pajaro
 
 
-if __name__ == "__main__":
-    unittest.main()
+
+def test_perro():
+    rex = Perro("Rex")
+    assert (rex.hacer_sonido(), "Guau")
+    assert (rex.describir(), "Soy un perro y me llamo Rex")
+    assert isinstance(rex, Animal)  # Verifica que Perro es un Animal
+
+def test_gato():
+    misu = Gato("Misu")
+    assert (misu.hacer_sonido(), "Miau")
+    assert (misu.describir(), "Soy un gato y me llamo Misu")
+    assert isinstance(misu, Animal)  # Verifica que Gato es un Animal
+
+def test_pajaro():
+    piolin = Pajaro("Piolín")
+    assert (piolin.hacer_sonido(), "Pío")
+    assert (piolin.describir(), "Soy un pájaro y me llamo Piolín")
+    assert isinstance(piolin, Animal)  # Verifica que Pájaro es un Animal

@@ -1,4 +1,4 @@
-from animal import Animal
+from .animal import Animal
 
 class Perro(Animal):
     def __init__(self, nombre: str):
