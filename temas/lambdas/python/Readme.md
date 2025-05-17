@@ -6,4 +6,4 @@ Bienvenido al repositorio sobre Lambdas en Python. Aquí encontrarás informaci�
 ## Estructura de Directorio
 ## Estructura de Directorio
 - `/README.md`: Archivo actual, donde explicaremos el concepto de lambda y como podemos utilizarlo
-- `/lambda.py`: Archivo python donde se encuentra el código de ejemplo.
+- `/lambdas.py`: Archivo python donde se encuentra el código de ejemplo.
