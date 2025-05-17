@@ -167,7 +167,7 @@ public void Constructor_DeberiaInicializarSaldoYNumeroCuenta()
 
 ### 2. 'Depositar saldo'
 
-```Java
+```c#
 [Fact]
 public void Depositar_DeberiaAumentarSaldo()
 {
@@ -192,7 +192,7 @@ public void Depositar_DeberiaAumentarSaldo()
 
 ### 3. 'Retirar saldo'
 
-```Java
+```c#
 [Fact]
 public void Retirar_DeberiaReducirSaldo()
 {
@@ -289,7 +289,7 @@ Este programa sirve como un banco de pruebas básico para:
 
 ## Make
 
-Para la realización de pruebas automáticas en Java, hemos utilizado Make para compilar, testear y ejecutar.
+Para la realización de pruebas automáticas en C#, hemos utilizado Make para compilar, testear y ejecutar.
 Por ello, hemos tenido que primero de todo crear un archivo Makefile que se encargará de ejecutar los comandos para cada fase.
 
 ```make
@@ -444,7 +444,7 @@ resource "docker_container" "jenkins" {
 Una vez ejecutado, ahora ya tendremos los contenedores de Jenkins funcionales, ahora procederemos a explicar el JenkinsFile escogido para el lanzamiento de la aplicación mediante un pipeline.
 
 
-## Jenkinsfile para CI/CD en Java y Maven
+## Jenkinsfile para CI/CD en C# y Make
 
 ```groovy
 pipeline {
