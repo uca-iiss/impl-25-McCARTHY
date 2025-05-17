@@ -498,7 +498,7 @@ pipeline {
 Este setup permite:
 
 - Ejecutar Jenkins en Docker con dotnet y make preinstalado.
-- Correr pruebas automatizadas de Java usando `Make`.
+- Correr pruebas automatizadas de C# usando `Make`.
 - Integrar pruebas a pipelines CI/CD de forma simple y portable.
 
 ---
