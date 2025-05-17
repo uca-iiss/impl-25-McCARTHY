@@ -51,6 +51,10 @@ public class Luz implements Device {
         isOn = false;
         System.out.println(name + " apagada.");
     }
+
+    public boolean isOn() {
+        return isOn;
+    }
 }
 ```
 
@@ -74,7 +78,11 @@ public class Termostato implements Device {
         if (t < 5 || t > 35)
             throw new IllegalArgumentException("Temperatura fuera de rango");
         temperature = t;
-        System.out.println(name + " temperatura ajustada a " + temperature + "°C.");
+        System.out.println(name + " temperatura ajustada a " + temperature + "C.");
+    }
+
+    public int getTemperature() {
+        return temperature;
     }
 
     public void turnOn() {
@@ -85,6 +93,10 @@ public class Termostato implements Device {
     public void turnOff() {
         isOn = false;
         System.out.println(name + " apagado.");
+    }
+
+    public boolean isOn() {
+        return isOn;
     }
 }
 ```
@@ -104,7 +116,10 @@ public class SmartLock implements Device {
 
     public String getName() { return name; }
 
-    public void unlock() {
+    public void unlock() throws Exception {
+        if (!SecurityAspect.isLoggedIn()) {
+            throw new Exception("Acceso denegado. Inicie sesión primero.");
+        }
         System.out.println(name + " desbloqueada.");
         locked = false;
     }
@@ -112,6 +127,10 @@ public class SmartLock implements Device {
     public void lock() {
         System.out.println(name + " bloqueada.");
         locked = true;
+    }
+
+    public boolean isUnlocked() {
+        return !locked;
     }
 
     public void turnOn() {} // No-op
@@ -171,14 +190,8 @@ public class SecurityAspect {
         System.out.println("[AUTH] Usuario desconectado.");
     }
 
-    @Pointcut("execution(* SmartLock.unlock(..))")
-    public void unlocking() {}
-
-    @Before("unlocking()")
-    public void checkAuth() {
-        if (!authenticated) {
-            throw new SecurityException("[ERROR] Acceso denegado. No autenticado.");
-        }
+    public static boolean isLoggedIn() {
+        return authenticated;
     }
 }
 ```
@@ -254,41 +267,66 @@ Ahora pasaremos a ver el programa de pruebas que hemos utilizado en nuestra clas
 
 ## Casos de prueba
 
+### SetUp
+
+```Java
+    @BeforeEach
+    public void setUp() {
+        sala = new Luz("Luz del salon");
+        termostato = new Termostato("Termostato");
+        puerta = new SmartLock("Puerta principal");
+    }
+```
+
+- Metodo anotado con @BeforeEach, lo que significa que se ejecuta automáticamente antes de cada prueba.
+- Crear nuevas instancias de los objetos que vamos a probar, asegurando que cada prueba del test comience limpia e independiente
+
 ### 1. 'Encender y apagar una luz'
 
 ```Java
-sala.turnOn();
-Thread.sleep(2000);
-sala.turnOff();
+    @Test
+    public void testLuzTurnOnOff() {
+        sala.turnOn();
+        assertTrue(sala.isOn(), "La luz debería estar encendida");
+
+        sala.turnOff();
+        assertFalse(sala.isOn(), "La luz debería estar apagada");
+    }
 ```
 
 - Se enciende y apaga la luz del salón
-- Verificar que el dispositivo responde correctamente y que el aspecto de logging registra estas acciones
 
 ---
 
 ### 2. 'Ajustar la temperatura con el termostato'
 
 ```Java
-termostato.turnOn();
-termostato.setTemperature(25);
-termostato.turnOff();
+    @Test
+    public void testTermostatoOnOffAndTemperature() {
+        termostato.turnOn();
+        termostato.setTemperature(25);
+        assertEquals(25, termostato.getTemperature(), "La temperatura debería ser 25");
+
+        termostato.turnOff();
+        assertFalse(termostato.isOn(), "El termostato debería estar apagado");
+    }
 
 ```
 
 - Se enciende el termostato, se ajusta la temperatura a 25ºC, y luego se apaga.
-- Comprobar el correcto funcionamiento del termostato y la interacción con los aspectos (logging y control).
 
 ---
 
 ### 3. 'Intento de desbloqueo de la puerta sin autenticación'
 
 ```Java
-try {
-    puerta.unlock(); // Fallará sin login
-} catch (Exception e) {
-    System.out.println(e.getMessage());
-}
+    @Test
+    public void testSmartLockWithoutLoginFails() {
+        Exception exception = assertThrows(Exception.class, () -> {
+            puerta.unlock();
+        });
+        assertEquals("Acceso denegado. Inicie sesión primero.", exception.getMessage());
+    }
 ```
 
 - Se intenta desbloquear la cerradura inteligente sin realizar un login previo.
@@ -299,9 +337,13 @@ try {
 ### 4. 'Autenticarse y desbloquear la puerta correctamente'
 
 ```Java
-SecurityAspect.login();
-puerta.unlock();
-SecurityAspect.logout();
+    @Test
+    public void testSmartLockWithLogin() throws Exception {
+        SecurityAspect.login();
+        puerta.unlock();  // No debe lanzar excepción
+        assertTrue(puerta.isUnlocked(), "La cerradura debería estar desbloqueada");
+        SecurityAspect.logout();
+    }
 ```
 
 - Se realiza un login mediante 'SecurityAspect.login()', se desbloquea la puerta y luego se hace logOut.
@@ -324,81 +366,76 @@ Por ello, hemos tenido que primero de todo crear un archivo pom.xml que se encar
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>smart.home</groupId>
-  <artifactId>smart-home</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <groupId>org.ejemplo</groupId>
+    <artifactId>procesamiento-pedidos</artifactId>
+    <version>1.0</version>
 
-  <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <aspectj.version>1.9.19</aspectj.version>
-  </properties>
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
-      <version>${aspectj.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-      <version>${aspectj.version}</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <!-- Google Guice -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.9.21</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>aspectj-maven-plugin</artifactId>
-        <version>1.14.0</version>
-        <configuration>
-          <complianceLevel>11</complianceLevel>
-          <source>11</source>
-          <target>11</target>
-          <showWeaveInfo>true</showWeaveInfo>
-          <verbose>true</verbose>
-          <encoding>UTF-8</encoding>
-          <aspectLibraries>
-            <aspectLibrary>
-              <groupId>org.aspectj</groupId>
-              <artifactId>aspectjrt</artifactId>
-            </aspectLibrary>
-          </aspectLibraries>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>test-compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <mainClass>Main</mainClass>
-        </configuration>
-      </plugin>
-
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>Main</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ---
 
 Con ello, podremos ejecutar dentro de la raiz del directorio donde se encuentra nuestro pom.xml:
 
-- mvn clean compile     # Se encargará de compilar pom.xml 
-- mvn exec:java         # Buscará dentro de nuestro directorio la ruta para ejecutar nuestro main.java (src/main/java/*.java)
+- mvn clean compile # Se encargará de compilar pom.xml
+- mvn test # Se encargará de probar todas las baterías de prueba que estén dentro del directorio (src/test/java/MainTest.java)
+- mvn exec:java # Si quisieramos que simplemente ejecute el programa, tendriamos que cambiar el nombre de nuestra carpeta "test" a "java" y "MainTest.java" a "Main.java" para que Maven reconozca que estamos haciendo una ejecución de nuestro Main.java.
 
 ---
 
