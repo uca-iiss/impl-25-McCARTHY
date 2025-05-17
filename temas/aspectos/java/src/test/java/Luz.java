@@ -17,4 +17,8 @@ public class Luz implements Device {
         isOn = false;
         System.out.println(name + " apagada.");
     }
+
+    public boolean isOn() {
+        return isOn;
+    }
 }

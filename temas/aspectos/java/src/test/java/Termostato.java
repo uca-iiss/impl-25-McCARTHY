@@ -13,7 +13,11 @@ public class Termostato implements Device {
         if (t < 5 || t > 35)
             throw new IllegalArgumentException("Temperatura fuera de rango");
         temperature = t;
-        System.out.println(name + " temperatura ajustada a " + temperature + "°C.");
+        System.out.println(name + " temperatura ajustada a " + temperature + "C.");
+    }
+
+    public int getTemperature() {
+        return temperature;
     }
 
     public void turnOn() {
@@ -24,5 +28,9 @@ public class Termostato implements Device {
     public void turnOff() {
         isOn = false;
         System.out.println(name + " apagado.");
+    }
+
+    public boolean isOn() {
+        return isOn;
     }
 }

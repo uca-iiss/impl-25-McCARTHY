@@ -20,13 +20,7 @@ public class SecurityAspect {
         System.out.println("[AUTH] Usuario desconectado.");
     }
 
-    @Pointcut("execution(* SmartLock.unlock(..))")
-    public void unlocking() {}
-
-    @Before("unlocking()")
-    public void checkAuth() {
-        if (!authenticated) {
-            throw new SecurityException("[ERROR] Acceso denegado. No autenticado.");
-        }
+    public static boolean isLoggedIn() {
+        return authenticated;
     }
 }

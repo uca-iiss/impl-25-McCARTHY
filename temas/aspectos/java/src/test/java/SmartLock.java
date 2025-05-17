@@ -8,7 +8,10 @@ public class SmartLock implements Device {
 
     public String getName() { return name; }
 
-    public void unlock() {
+    public void unlock() throws Exception {
+        if (!SecurityAspect.isLoggedIn()) {
+            throw new Exception("Acceso denegado. Inicie sesión primero.");
+        }
         System.out.println(name + " desbloqueada.");
         locked = false;
     }
@@ -16,6 +19,10 @@ public class SmartLock implements Device {
     public void lock() {
         System.out.println(name + " bloqueada.");
         locked = true;
+    }
+
+    public boolean isUnlocked() {
+        return !locked;
     }
 
     public void turnOn() {} // No-op

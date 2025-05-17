@@ -11,11 +11,11 @@ pipeline {
             }
         }
 
-        stage('Ejecutar Main.java') {
+        stage('Ejecutar MainTest.java') {
             steps {
                 dir('temas/aspectos/java') {
                     echo 'Ejecutando programa principal...'
-                    sh 'mvn exec:java'
+                    sh 'mvn test'
                 }
             }
         }
