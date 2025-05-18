@@ -4,21 +4,21 @@ pipeline {
         stage('Restore') {
             steps {
                 dir('src') {
-                    sh 'dotnet restore'
+                    sh 'dotnet restore Abstraccion.csproj'
                 }
             }
         }
         stage('Build') {
             steps {
                 dir('src') {
-                    sh 'dotnet build --no-restore'
+                    sh 'dotnet build Abstraccion.csproj --no-restore'
                 }
             }
         }
         stage('Test') {
             steps {
                 dir('tests') {
-                    sh 'dotnet test --no-restore --no-build'
+                    sh 'dotnet test AbstraccionTests.csproj --no-restore --no-build'
                 }
             }
         }
