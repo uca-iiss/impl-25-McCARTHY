@@ -1,9 +1,3 @@
-
----
-
-## ⚙️ Jenkinsfile (CI/CD pipeline con Docker)
-
-```groovy
 pipeline {
     agent {
         docker {
