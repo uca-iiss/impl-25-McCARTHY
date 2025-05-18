@@ -175,3 +175,37 @@ Esto asegura que la delegación se comporta correctamente tanto en ejecución co
 ---
 
 ## Implantación
+
+1. Clona el repositorio si no lo has hecho antes
+
+2. Pon los siguientes comandos dentro de `delegacion/kotlin`:
+```bash
+terraform init
+terraform apply
+```
+3. Accede a `localhost:8080`. En caso de que te pregunte por la constrseña inicial, poner:
+```bash
+docker exec -it jenkins_kotlin cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+4. Crear el Pipeline
+    1. En el panel de Jenkins, haz clic en “New Item”.
+    2. Introduce un nombre para el proyecto.
+    3. Selecciona “Pipeline” como tipo de proyecto y haz clic en OK.
+    4. En “Definition” selecciona Pipeline script from SCM
+    5. En “SCM” elige Git
+    6. En “Repository URL” introduce: `https://github.com/uca-iiss/RITCHIE-impl-25`
+    7. En rama poner la que corresponda
+    8. En Jenkinsfile, poner `temas/delegacion/kotlin/Jenkinsfile`
+    9. Haz clic en Save
+
+5. `Destruir todo (limpieza)`
+
+Ejecuta:
+```bash
+terraform destroy
+```
+Luego, para eliminar todos los archivos generador por **Terraform**:
+```bash
+rm -rf .terraform terraform.tfstate terraform.tfstate.backup
+```
