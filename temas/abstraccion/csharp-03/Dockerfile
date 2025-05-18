@@ -25,12 +25,6 @@ RUN wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/package
     apt-get update && \
     apt-get install -y dotnet-sdk-6.0
 
-# Copiar proyecto .NET (como root)
-COPY src/ /app/src/
-WORKDIR /app
-
-# Volver a usuario Jenkins
-RUN chown -R jenkins:jenkins /app
 USER jenkins
 
 # Instalar plugins de Jenkins
