@@ -3,21 +3,21 @@ pipeline {
     stages {
         stage('Restore') {
             steps {
-                dir('src') {
+                dir('temas/abstraccion/csharp-03/src') {
                     sh 'dotnet restore Abstraccion.csproj'
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('src') {
+                dir('temas/abstraccion/csharp-03/src') {
                     sh 'dotnet build Abstraccion.csproj --no-restore'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('tests') {
+                dir('temas/abstraccion/csharp-03/tests') {
                     sh 'dotnet test AbstraccionTests.csproj --no-restore --no-build'
                 }
             }
