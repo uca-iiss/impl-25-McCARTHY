@@ -1,22 +1,25 @@
 pipeline {
     agent any
-    environment {
-        DOTNET_CLI_HOME = "${WORKSPACE}"
-    }
     stages {
         stage('Restore') {
             steps {
-                sh 'dotnet restore'
+                dir('src') {
+                    sh 'dotnet restore'
+                }
             }
         }
         stage('Build') {
             steps {
-                sh 'dotnet build --no-restore'
+                dir('src') {
+                    sh 'dotnet build --no-restore'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'dotnet test --no-build'
+                dir('tests') {
+                    sh 'dotnet test --no-restore --no-build'
+                }
             }
         }
     }

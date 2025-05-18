@@ -29,10 +29,6 @@ RUN wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/package
 COPY src/ /app/src/
 WORKDIR /app
 
-# Restaurar y compilar
-RUN dotnet restore "src/Abstraccion.csproj"
-RUN dotnet build "src/Abstraccion.csproj"
-
 # Volver a usuario Jenkins
 RUN chown -R jenkins:jenkins /app
 USER jenkins
