@@ -16,12 +16,12 @@ fun main()
     pajaro.nombre = "Canario"
     pajaro.habitat = "Bosque"
 
-    println("Usamos los métodos delegados")
+    println("\n--- USAMOS LOS MÉTODOS DELEGADOS ---")
     leon.describir()
     leon.hacerSonido() 
     leon.moverse()     
 
-    println("═".repeat(20))
+    println("═".repeat(50))
 
     pajaro.describir()
     pajaro.hacerSonido()
