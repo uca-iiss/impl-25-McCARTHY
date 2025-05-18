@@ -1,0 +1,19 @@
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:1:12: object scalatest is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.scalatest.flatspec.AnyFlatSpec[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:2:12: object scalatest is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.scalatest.matchers.should.Matchers[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:4:28: not found: type AnyFlatSpec[0m
+[0m[[0m[31merror[0m] [0m[0mclass HerenciaSpec extends AnyFlatSpec with Matchers {[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:4:45: not found: type Matchers[0m
+[0m[[0m[31merror[0m] [0m[0mclass HerenciaSpec extends AnyFlatSpec with Matchers {[0m
+[0m[[0m[31merror[0m] [0m[0m                                            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:6:19: value should is not a member of String[0m
+[0m[[0m[31merror[0m] [0m[0m  "Un Estudiante" should "saludar correctamente" in {[0m
+[0m[[0m[31merror[0m] [0m[0m                  ^[0m
+[0m[[0m[31merror[0m] [0m[0m/app/HerenciaSpec.scala:7:19: not found: type Estudiante[0m
+[0m[[0m[31merror[0m] [0m[0m    val est = new Estudiante("Ana", 21, "UCA")[0m
+[0m[[0m[31merror[0m] [0m[0m                  ^[0m
+[0m[[0m[31merror[0m] [0m[0m6 errors found[0m
