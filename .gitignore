@@ -117,3 +117,7 @@ build/
 
 # Dart
 .dart_tool/
+
+target/
+**/target/
+
