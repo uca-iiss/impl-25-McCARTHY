@@ -43,8 +43,7 @@ jobs:
         echo "La app no respondió a tiempo"
         exit 1
 
-    - name: Detener y eliminar el contenedor
-      if: always()
+    - name: Mantener el contenedor activo
       run: |
-        docker stop redsocial-container || true
-        docker rm redsocial-container || true
+        echo "La aplicación está ejecutandose. Pulsa 'Cancel Workflow' para detenerla."
+        tail -f /dev/null
