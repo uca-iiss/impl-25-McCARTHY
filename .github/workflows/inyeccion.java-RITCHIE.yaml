@@ -1,0 +1,50 @@
+name: Docker Build, Test and Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-test-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v3
+
+    - name: Ir a la carpeta del proyecto
+      working-directory: temas/inyeccion/java
+      run: echo "Entrando a la carpeta del proyecto"
+
+    - name: Ejecutar tests con Maven
+      working-directory: temas/inyeccion/java
+      run: mvn clean test
+
+    - name: Configurar Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Construir la imagen Docker
+      working-directory: temas/inyeccion/java
+      run: docker build -t redsocial-app .
+
+    - name: Ejecutar la imagen Docker
+      run: docker run -d -p 8080:8080 --name redsocial-container redsocial-app
+
+    - name: Verificar que la aplicación responde
+      run: |
+        echo "Esperando a que arranque la app..."
+        for i in {1..30}; do
+          if curl -s http://localhost:8080/fotos > /dev/null; then
+            echo "¡La aplicación está activa!"
+            exit 0
+          fi
+          echo "Intento $i: esperando..."
+          sleep 2
+        done
+        echo "La app no respondió a tiempo"
+        exit 1
+
+    - name: Detener y eliminar el contenedor
+      if: always()
+      run: |
+        docker stop redsocial-container || true
+        docker rm redsocial-container || true
