@@ -1,4 +1,5 @@
-public static void Main()
+public class BancoMain {
+    public static void Main()
     {
         CuentaBancaria cuenta1 = new CuentaAhorros("Ana", 1000);
         CuentaBancaria cuenta2 = new CuentaCorriente("Luis", 500);
@@ -16,3 +17,4 @@ public static void Main()
         cuenta2.Retirar(1000); 
         cuenta2.MostrarInfo();
     }
+}
