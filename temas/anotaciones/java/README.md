@@ -72,7 +72,7 @@ Ejemplo de pruebas realizadas:
 Desde la carpeta `temas/anotaciones/java`
 
 ```bash
-docker-compose -f anotaciones.java-RICHIE.yml up -d
+docker-compose -f anotaciones.java-RITCHIE.yml up -d
 ```
 
 ### 2. Accede a Jenkins
