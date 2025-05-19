@@ -12,3 +12,8 @@ Compile / run / mainClass := Some("Main")
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % Test
 
+testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-u", "target/test-reports")
+Test / testFrameworks += new TestFramework("org.scalatest.tools.Framework")
+
+
+

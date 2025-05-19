@@ -9,13 +9,18 @@ terraform {
 
 provider "docker" {}
 
-# Imagen personalizada de Jenkins
+# Imagen Jenkins personalizada
 resource "docker_image" "jenkins" {
-  name         = var.jenkins_image
+  name         = "jenkins-herencia:custom"
   keep_locally = true
+
+  build {
+    context    = "${path.module}"
+    dockerfile = "Dockerfile"
+  }
 }
 
-# Volumen para persistencia de Jenkins
+# Volumen para persistencia
 resource "docker_volume" "jenkins_home" {
   name = "jenkins_home"
 }
@@ -37,16 +42,16 @@ resource "docker_container" "jenkins" {
     external = 50000
   }
 
-  # Volumen para datos persistentes de Jenkins
   volumes {
     volume_name    = docker_volume.jenkins_home.name
     container_path = "/var/jenkins_home"
   }
 
-  # Volumen para permitir acceso al Docker del host
+  # Para permitir que Jenkins use el Docker del host
   volumes {
     host_path      = "/var/run/docker.sock"
     container_path = "/var/run/docker.sock"
+    read_only      = false
   }
 }
 
