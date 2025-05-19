@@ -16,7 +16,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'sbt test'
-                sh 'ls -l target/test-reports' 
+                sh 'ls -l target/test-reports || echo "No se encontró el directorio"'
             }
         }
     }
