@@ -4,17 +4,25 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Build') {
-            steps {
-                dir('temas/lambdas/python-04/src') {
-                    sh 'python3 -m py_compile Program.py'
-                }
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         dir('temas/lambdas/python-04/src') {
+        //             sh 'python3 -m py_compile Program.py'
+        //         }
+        //     }
+        // }
         stage('Test') {
+            // steps {
+            //     dir('temas/lambdas/python-04/tests') {
+            //         sh 'python3 -m unittest LambdaTests.py'
+            //     }
+            // }
             steps {
-                dir('temas/lambdas/python-04/tests') {
-                    sh 'python3 -m unittest LambdaTests.py'
+                sh 'pytest --junit-xml=test-reports/results.xml test.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
                 }
             }
         }

@@ -2,7 +2,6 @@ import unittest
 import sys
 import os
 
-# Añadir ../src al path para poder importar Program.py
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from Program import (
