@@ -12,22 +12,9 @@ pipeline {
         //     }
         // }
         stage('Test') {
-            // steps {
-            //     dir('temas/lambdas/python-04/tests') {
-            //         sh 'python3 -m unittest LambdaTests.py'
-            //     }
-            // }
             steps {
                 dir('temas/lambdas/python-04/tests') {
-                    sh '''
-                        mkdir -p test-reports
-                        pytest --junit-xml=test-reports/results.xml LambdaTests.py
-                    '''
-                }
-            }
-            post {
-                always {
-                    junit 'test-reports/results.xml'
+                    sh 'python3 -m unittest LambdaTests.py'
                 }
             }
         }
