@@ -18,7 +18,12 @@ pipeline {
             //     }
             // }
             steps {
-                sh 'pytest --junit-xml=test-reports/results.xml test.py'
+                dir('temas/lambdas/python-04/tests') {
+                    sh '''
+                        mkdir -p test-reports
+                        pytest --junit-xml=test-reports/results.xml LambdaTests.py
+                    '''
+                }
             }
             post {
                 always {
