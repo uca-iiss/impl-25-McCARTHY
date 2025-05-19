@@ -1,5 +1,11 @@
 import unittest
-from ejemplo import (
+import sys
+import os
+
+# Añadir ../src al path para poder importar Program.py
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
+from Program import (
     lambda_add, lambda_even, lambda_order,
     orden_superior_map, orden_superior_filter, orden_superior_reduce, orden_superior_sorted,
     closure, OrdenarPorLongitud, FiltrarPorPar,
