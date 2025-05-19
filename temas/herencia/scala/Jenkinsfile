@@ -47,6 +47,9 @@ pipeline {
         failure {
             echo 'El pipeline falló. Revisa los logs anteriores.'
         }
+        success {
+            archiveArtifacts artifacts: 'target/scala-2.13/*.jar', fingerprint: true
+    	}
     }
 }
 
