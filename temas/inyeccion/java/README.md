@@ -222,6 +222,7 @@ Test con `@SpringBootTest` que verifica que las fotos se inyectan correctamente.
 ---
 
 Para realizar los **test** y comprobar que se levanta la app en `http://localhost:8080/fotos`:
+
     1. En GitHub, ve a la sección **Actions**
     2. Selecciona en la barra lateral izquierda: `inyeccion.java-RITCHIE`
     3. Dale a **run workflow** y selecciona el botón verde donde pone **run workflow**
