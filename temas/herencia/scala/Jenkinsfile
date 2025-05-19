@@ -1,0 +1,29 @@
+pipeline {
+    agent {
+        docker {
+            image 'scala-herencia:dev'
+            args '-v $PWD:/app -w /app'
+        }
+    }
+
+    stages {
+        stage('Compilar') {
+            steps {
+                sh 'sbt compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'sbt test'
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'target/test-reports/*.xml'
+        }
+    }
+}
+
