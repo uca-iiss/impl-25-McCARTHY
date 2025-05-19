@@ -5,8 +5,6 @@ Este documento explora el principio de **abstracción** aplicado en Python, espe
 ---
 
 ## Código
-- [Programa principal (Program.py)](src/Program.py)
-- [Pruebas unitarias (LambdaTests.py)](tests/LambdaTests.py)
 - Programa principal (`Program.py`)
 - Pruebas unitarias (`LambdaTests.py`)
 
