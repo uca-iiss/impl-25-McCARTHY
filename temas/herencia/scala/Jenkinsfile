@@ -1,19 +1,25 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'scala-herencia:dev'
+            args '-v $PWD:/app -w /app'
+        }
+    }
 
     environment {
-        SBT_IMAGE = 'scala-herencia:dev'
+        SBT_OPTS = "-Dsbt.log.noformat=true"
     }
 
     stages {
-        stage('Compilar y testear') {
+        stage('Compilar') {
             steps {
-                script {
-                    docker.image(env.SBT_IMAGE).inside('-v $PWD:/app -w /app') {
-                        sh 'sbt compile'
-                        sh 'sbt test'
-                    }
-                }
+                sh 'sbt compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'sbt test'
             }
         }
     }
