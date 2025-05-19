@@ -16,21 +16,36 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'sbt test'
-                sh 'ls -l target/test-reports || echo "No se encontró el directorio"'
+                script {
+                    if (fileExists('target/test-reports')) {
+                        junit 'target/test-reports/*.xml'
+                    } else {
+                        echo 'No se encontró el directorio target/test-reports, omitiendo publicación de resultados.'
+                    }
+                }
             }
         }
         
         stage('Empaquetar') {
             steps {
                 sh 'sbt package'
-                sh 'ls -l target/scala-2.13/' 
+                script {
+                    if (fileExists('target/scala-2.13')) {
+                        sh 'ls -lh target/scala-2.13'
+                    } else {
+                        echo 'No se generó el jar. target/scala-2.13 no existe.'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            junit 'target/test-reports/*.xml'
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló. Revisa los logs anteriores.'
         }
     }
 }
