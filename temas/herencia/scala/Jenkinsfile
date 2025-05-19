@@ -19,6 +19,13 @@ pipeline {
                 sh 'ls -l target/test-reports || echo "No se encontró el directorio"'
             }
         }
+        
+        stage('Empaquetar') {
+            steps {
+                sh 'sbt package'
+                sh 'ls -l target/scala-2.13/' 
+            }
+        }
     }
 
     post {
