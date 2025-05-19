@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'python3 -m py_compile ejemplo.py'
+            }
+        }
+        stage('Test') {
+            steps {
+                // sh 'python3 -m unittest test.py'
+                sh 'pytest --junit-xml=test-reports/results.xml test.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
+        // stage('Deliver') {
+        //     steps {
+        //         sh 'pyinstaller --onefile ejemplo.py'
+        //     }
+        //     post {
+        //         success {
+        //             archiveArtifacts 'dist/ejemplo'
+        //         }
+        //     }
+        // }
+    }
+}
