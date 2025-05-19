@@ -1,4 +1,4 @@
-name: Docker Build, Test and Run
+name: inyeccion.java-RITCHIE
 
 on:
   workflow_dispatch:
