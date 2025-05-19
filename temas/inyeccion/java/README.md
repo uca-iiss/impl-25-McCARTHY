@@ -220,3 +220,21 @@ Test con `@SpringBootTest` que verifica que las fotos se inyectan correctamente.
 
 ## Implantación
 ---
+
+Para realizar los **test** y comprobar que se levanta la app en `http://localhost:8080/fotos`:
+    1. En GitHub, ve a la sección **Actions**
+    2. Selecciona en la barra lateral izquierda: `inyeccion.java-RITCHIE`
+    3. Dale a **run workflow** y selecciona el botón verde donde pone **run workflow**
+
+Para ejecutar la app introduce los siguientes comandos en `temas/inyeccion/java`:
+```bash
+docker build -t redsocial-app .
+docker run -p 8080:8080 redsocial-app
+```
+Para borrarlo (limpieza):
+Haz `Ctrl+C` en la terminal y ejecuta:
+```bash
+docker rm $(docker ps -a -q --filter ancestor=redsocial-app) 2>/dev/null
+docker rmi redsocial-app
+```
+
