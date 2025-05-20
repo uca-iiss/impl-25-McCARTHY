@@ -197,3 +197,120 @@ fun riskyOperation(value: Int): Int {
 - Si el valor es negativo, lanza una IllegalArgumentException.
 
 - Muestra cómo validar argumentos y manejar posibles fallos lógicos.
+
+## Código de test
+
+[*test.kt*](src/test/kotlin/app/test.kt)
+```` kotlin
+package app
+
+import kotlin.test.*
+import java.io.IOException
+
+class MainTest {
+
+    @Test
+    fun testGreetingIsNotNull() {
+        assertNotNull(MainApp().intro, "app tiene un saludo")
+    }
+
+    @Test
+    fun testInvalidInputThrowsException() {
+        val ex = assertFailsWith<InvalidInputException> {
+            parseInteger("xyz")
+        }
+        assertEquals("El valor 'xyz' no es un número válido.", ex.message)
+    }
+
+    @Test
+    fun testOutOfBoundsAccess() {
+        assertFailsWith<IndexOutOfBoundsException> {
+            accessElement(15)
+        }
+    }
+ @Test
+    fun testIOExceptionOnFileRead() {
+        val ex = assertFailsWith<IOException> {
+            readConfig("no_existe.txt")
+        }
+        assertEquals("Error al leer el archivo de configuración.", ex.message)
+    }
+
+    @Test
+    fun testIllegalArgumentException() {
+        assertFailsWith<IllegalArgumentException> {
+            riskyOperation(-5)
+        }
+    }
+}
+````
+
+
+###  ```Test testGreetingIsNotNull```:
+``` kotlin
+@Test
+    fun testGreetingIsNotNull() {
+        assertNotNull(MainApp().intro, "app tiene un saludo")
+    }
+
+```
+
+- Verifica que la propiedad intro de la clase MainApp no sea nula. Asegura que haya un mensaje de introducción disponible.
+
+###  ```Test testInvalidInputThrowsException```:
+
+```kotlin
+    @Test
+    fun testInvalidInputThrowsException() {
+        val ex = assertFailsWith<InvalidInputException> {
+            parseInteger("xyz")
+        }
+        assertEquals("El valor 'xyz' no es un número válido.", ex.message)
+    }
+```
+
+- Intenta convertir una cadena inválida ("xyz") a entero. Se espera que lance InvalidInputException con un mensaje personalizado.
+
+###  ``` Test testOutOfBoundsAccess```:
+
+```kotlin
+    @Test
+    fun testOutOfBoundsAccess() {
+        assertFailsWith<IndexOutOfBoundsException> {
+            accessElement(15)
+        }
+    }
+```
+
+- Intenta acceder a un índice fuera de rango en una lista. Verifica que se lance IndexOutOfBoundsException.
+
+###  ```Test testIOExceptionOnFileRead```:
+
+```kotlin
+    @Test
+    fun testIOExceptionOnFileRead() {
+        val ex = assertFailsWith<IOException> {
+            readConfig("no_existe.txt")
+        }
+        assertEquals("Error al leer el archivo de configuración.", ex.message)
+    }
+```
+
+- 	Intenta leer un archivo inexistente. Verifica que se lance IOException con un mensaje personalizado.
+
+###  ```Test testIllegalArgumentException``` :
+
+```kotlin
+    @Test
+    fun testIllegalArgumentException() {
+        assertFailsWith<IllegalArgumentException> {
+            riskyOperation(-5)
+        }
+    }
+````
+
+- 	Ejecuta una operación con un valor negativo. Verifica que se lance IllegalArgumentException indicando que los valores negativos no son permitidos.
+
+
+## Ejecución Test
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
