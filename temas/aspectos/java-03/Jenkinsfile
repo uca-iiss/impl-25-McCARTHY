@@ -6,13 +6,13 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                dir('temas/lambdas/java-03/mi-proyecto') {
+                dir('temas/aspectos/java-03/mi-proyecto') {
                     sh 'mvn clean test'
                 }
             }
             post {
                 always {
-                    junit 'temas/lambdas/java-03/mi-proyecto/target/surefire-reports/*.xml'
+                    junit 'temas/aspectos/java-03/mi-proyecto/target/surefire-reports/*.xml'
                 }
             }
         }

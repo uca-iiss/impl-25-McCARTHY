@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     python3 \
     python3-pip \
-    build-essential
+    build-essential \
+    maven
 
 # Agrega el repositorio de Docker
 RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
@@ -22,6 +23,9 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
 
 # Instala Docker CLI
 RUN apt-get update && apt-get install -y docker-ce-cli
+
+# Verifica la instalación de Maven
+RUN mvn -version
 
 # Cambia de nuevo al usuario jenkins
 USER jenkins
