@@ -7,5 +7,7 @@ class Investigador(nombre: String, edad: Int, val especialidad: String)
   def saludar(formal: Boolean): String = 
     if (formal) s"Buenas, mi nombre es Dr. $nombre, especialista en $especialidad."
     else saludar()
+
+  def presentarse(): String = saludar(formal = true)
 }
 
