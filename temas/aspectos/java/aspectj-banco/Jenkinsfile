@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.6-jdk-11' // Usa un contenedor Docker con Maven y JDK 11
+            image 'maven:3.8.6-jdk-8' // Usa un contenedor Docker con Maven y JDK 11
         }
     }
 
