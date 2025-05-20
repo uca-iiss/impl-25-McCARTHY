@@ -1,6 +1,6 @@
-# Tema B.3 - Abstracción en Python
+# Tema C.2 - Lambdas
 
-Este documento explora el principio de **abstracción** aplicado en Python, especialmente en el contexto de la programación funcional. Se presentan conceptos clave como funciones lambda, funciones de orden superior, clausuras, y el uso de funciones o clases como interfaces funcionales.
+Este documento explora el uso de las funciones lambda en Python, especialmente en el contexto de la programación funcional. Se presentan conceptos clave como funciones lambda, funciones de orden superior, clausuras, y el uso de funciones o clases como interfaces funcionales.
 
 ---
 
@@ -16,6 +16,12 @@ Este documento explora el principio de **abstracción** aplicado en Python, espe
 - Dockerfile para construcción de imagen (`Dockerfile`)
 
 **Despliegue:**
+
+Se requiere descargar la imagen necesaria para llevar a cabo el despliegue:
+
+```bash
+docker build -t my-jenkins-python .
+```
 
 Para realizar el despliegue, se debe ejecutar el siguiente script. Este creará los recursos necesarios en Docker y ejecutará los comandos correspondientes de Terraform:
 
