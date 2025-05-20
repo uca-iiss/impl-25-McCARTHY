@@ -1,9 +1,9 @@
 pipeline {
-agent {
-    docker {
-        image 'maven:3.8.6-jdk-11' // Usa un contenedor Docker con Maven y JDK 11
+    agent {
+        docker {
+            image 'maven:3.8.6-jdk-11' // Usa un contenedor Docker con Maven y JDK 11
+        }
     }
-}
 
     stages {
         stage('Checkout SCM') {
@@ -11,7 +11,7 @@ agent {
                 checkout scm
             }
         }
-        
+
         stage('Build & Test') {
             steps {
                 dir('temas/aspectos/java/aspectj-banco') {
@@ -23,25 +23,14 @@ agent {
 
     post {
         always {
-<<<<<<< HEAD
-            
-            junit 'target/surefire-reports/*.xml'
-=======
             junit 'temas/aspectos/java/aspectj-banco/target/surefire-reports/*.xml'
->>>>>>> 6ec2fd7 (archivo -gitignore y Jenkinsfile actualizado)
         }
         success {
             echo 'Build y tests OK!'
         }
         failure {
-<<<<<<< HEAD
-            echo 'Algo falló, revisa los tests o build.'
-        }
-    }
-}
-=======
             echo 'Algo falló, revisa los tests o build!'
         }
     }
 }
->>>>>>> 6ec2fd7 (archivo -gitignore y Jenkinsfile actualizado)
+
