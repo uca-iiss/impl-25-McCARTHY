@@ -1,0 +1,19 @@
+services:
+  jenkins-dotnet:
+    build: 
+      context: .
+      dockerfile: abstraccion.csharp-RITCHIE.Dockerfile
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - type: bind
+        source: ${DOCKER_HOST:-/var/run/docker.sock}
+        target: /var/run/docker.sock
+    restart: unless-stopped
+    environment:
+      - DOCKER_HOST=${DOCKER_HOST:-unix:///var/run/docker.sock}
+
+volumes:
+  jenkins_home:
