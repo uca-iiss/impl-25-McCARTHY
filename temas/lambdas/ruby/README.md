@@ -95,7 +95,7 @@ Aquí:
 * El operador & permite que estos lambdas sean utilizados como bloques por los métodos select y map, que son parte de la API de Enumerable de Ruby. Esto permite a métodos como `.select` y `.map` aplicar lógica dinámica.
 
 
-### Main.rb
+### `Main.rb`
 
 ```ruby
 require_relative 'GestorBD'
