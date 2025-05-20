@@ -23,7 +23,7 @@ describe("NotificationService con inyección", function()
   it("falla si no se inyecta un objeto válido", function()
     assert.has_error(function()
       NotificationService:new({})
-    end, "Debe inyectar un objeto with método 'send'")
+    end, "Debe inyectar un objeto con método 'send'")
   end)
 
 end)
