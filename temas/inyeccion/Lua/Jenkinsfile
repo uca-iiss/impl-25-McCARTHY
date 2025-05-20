@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean') {
+            steps {
+                dir('temas/inyeccion/Lua') {
+                    sh 'rm -rf build/ tmp/ *.log || true'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/inyeccion/Lua') {
+                    sh 'luarocks list'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/inyeccion/Lua') {
+                    sh 'busted test/'
+                }
+            }
+        }
+    }
+}
