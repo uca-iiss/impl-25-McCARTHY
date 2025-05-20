@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     curl \
     gnupg2 \
-    openjdk-11-jdk \
+    openjdk-17-jdk \
     apt-transport-https \
     ca-certificates \
     wget \

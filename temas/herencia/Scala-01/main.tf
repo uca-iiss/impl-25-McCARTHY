@@ -45,9 +45,9 @@ resource "docker_container" "jenkins_dind" {
   command = ["--storage-driver", "overlay2"]
 }
 
-resource "docker_container" "jenkins_dotnet" {
+resource "docker_container" "jenkins_sbt" {
   name  = "jenkins-container"
-  image = "myjenkins-dotnet"
+  image = "myjenkins-sbt"
   restart = "on-failure"
 
   networks_advanced {
