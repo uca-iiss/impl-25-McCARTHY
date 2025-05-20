@@ -1,0 +1,35 @@
+pipeline {
+    agent {
+  docker {
+    image 'maven:3.8.6-jdk-11' // Usa un contenedor Docker con Maven y JDK 11
+  }
+}
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                // Ejecuta Maven clean y test (compilar + tests unitarios)
+                sh 'mvn clean test'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Publicar reporte JUnit para que Jenkins lo muestre
+            junit '/target/surefire-reports/*.xml'
+        }
+        success {
+            echo 'Build y tests OK!'
+        }
+        failure {
+            echo 'Algo falló, revisa los tests o build!'
+        }
+    }
+}
