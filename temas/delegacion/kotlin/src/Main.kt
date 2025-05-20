@@ -10,6 +10,7 @@ fun main()
     val pajaro = Animal(canto, ligera)
     
     // Delegación de propiedades observables
+    println(leon.nombre)
     leon.nombre = "León"
     leon.habitat = "Sabana africana"
 
@@ -18,12 +19,13 @@ fun main()
 
     println("\n--- USAMOS LOS MÉTODOS DELEGADOS ---")
     leon.describir()
-    leon.hacerSonido() 
-    leon.moverse()     
+    leon.hacerSonido() // Delegación de interfaz
+    // leon.sonido.hacerSonido() -> Sin la delegación de interfaz tendríamos que llamar al método de la clase concreta
+    leon.moverse() // Delegación manual
 
     println("═".repeat(50))
 
     pajaro.describir()
-    pajaro.hacerSonido()
-    pajaro.moverse()     
+    pajaro.hacerSonido() // Delegación de interfaz
+    pajaro.moverse() // Delegación manual
 }

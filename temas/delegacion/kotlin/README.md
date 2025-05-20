@@ -1,10 +1,9 @@
 # Ejemplo de Delegación con Kotlin
 ---
 
-## Implementación
+Este ejemplo muestra los mecanismos de delegación en *Kotlin* usando un sistema de clases y comportamientos para simular un zoológico.
 
-Este ejemplo muestra los mecanismos de delegación en Kotlin 
-usando un sistema de clases y comportamientos para simular un zoológico.
+## Implementación
 
 ### `Animal.kt`
 
@@ -78,7 +77,7 @@ class Animal(sonido: Sonido, private val Errante: Errante): Sonido by sonido
     }
 }
 ```
-Este archivo contiene toda la lógica central del modelo. Incluye:
+Este archivo contiene toda la lógica central del ejemplo. Incluye:
 
 #### 1. **Interfaces de comportamiento**
 Se definen dos interfaces:  
@@ -88,7 +87,7 @@ Se definen dos interfaces:
 #### 2. **Implementaciones concretas**
 Clases que implementan los comportamientos anteriores para representar animales distintos:
 
-- `Rugido` y `Canto` implementan `Sonido`.  
+- `Rugido` y `Canto` implementan `Sonido`.
 - `CaminataPesada` y `CaminataLigera` implementan `Errante`.
 
 #### 3. **Delegación de propiedades**
@@ -107,17 +106,21 @@ Es la clase principal donde se puede ver reflejado el uso de la **delegación** 
 class Animal(sonido: Sonido, private val Errante: Errante) : Sonido by sonido
 ```
 
-* *Delegación automática*
+* *Delegación de interfaz con `by`*
 
-    El método **hacerSonido()** no se define en **Animal**, se delegará automáticamente al objeto **Sonido** recibido en el constructor.
+    Aquí, `Animal` implementa la interfaz `Sonido` **delegando su implementación a la instancia sonido** pasada por el constructor.
+
+    Cuando se llame a `hacerSonido()`, realmente se ejecutará el método del objeto **sonido** recibido en el constructor.
 
 * *Composición manual*
 
+    La clase `Animal` no implementa `Errante`, pero usa una instancia de esa interfaz para delegar el comportamiento de `caminar()`.
     El objeto **Errante** se almacena como atributo privado y se invoca manualmente.
 
-* *Delegación de propiedades*
+* *Delegación de propiedades con `by Observacion(...)`*
 
-    Las propiedades **nombre** y **habitat** usan **Observacion** para imprimir acciones cada vez que se modifican o consultan.
+    El acceso y modificación de los atributos `nombre` y `habitat` está controlado por la clase `Observacion`, que implementa los **operadores** `getValue` y `setValue`.
+    Esto permite interceptar **lecturas** y **escrituras** de los atributos, añadiendo lógica personalizada (como imprimir mensajes).
 
 ### `AnimalTest.kt`
 
@@ -178,17 +181,17 @@ Esto asegura que la delegación se comporta correctamente tanto en ejecución co
 
 1. Clona el repositorio si no lo has hecho antes
 
-2. Pon los siguientes comandos dentro de `delegacion/kotlin`:
+2. Pon los siguientes comandos estando en el directorio `delegacion/kotlin`:
 ```bash
 terraform init
 terraform apply
 ```
-3. Accede a `localhost:8080`. En caso de que te pregunte por la constrseña inicial, poner:
+3. Accede a `localhost:8080`. En caso de que te pregunte por la constrseña inicial, introducir en la terminal:
 ```bash
 docker exec -it jenkins_kotlin cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-4. Crear el Pipeline
+4. **Crear el Pipeline**
     1. En el panel de Jenkins, haz clic en “New Item”.
     2. Introduce un nombre para el proyecto.
     3. Selecciona “Pipeline” como tipo de proyecto y haz clic en OK.
@@ -199,7 +202,7 @@ docker exec -it jenkins_kotlin cat /var/jenkins_home/secrets/initialAdminPasswor
     8. En Jenkinsfile, poner `temas/delegacion/kotlin/Jenkinsfile`
     9. Haz clic en Save
 
-5. `Destruir todo (limpieza)`
+5. **Destruir todo (limpieza)**
 
 Ejecuta:
 ```bash
