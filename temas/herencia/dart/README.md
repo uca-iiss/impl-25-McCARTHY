@@ -181,40 +181,36 @@ Contiene pruebas unitarias básicas con `package:test` que verifican getters y s
 
 ## Implantación
 
+1. Clona el repositorio si no lo has hecho antes
+
+2. Pon los siguientes comandos estando en el directorio `herencia/dart`:
 ```bash
-# 1. Clonar el repositorio
-git clone <tu-fork-o-URL>
-
-# 2. Ir a la carpteta herencia/dart/
-cd dart
-
-# 3. Desplegar vía Terraform
 terraform init
 terraform apply
 ```
-
-4. Acceder a `http://localhost:8080/`
-5. Instalar los pluggins recomendados y ejecuta el siguiente comando en el caso de que te pida la contraseña inicial:
+3. Accede a `localhost:8080`. En caso de que te pregunte por la constrseña inicial, introducir en la terminal:
 ```bash
-docker exec jenkins_herencia cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec -it jenkins_herencia cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-El repositorio incluye un `Jenkinsfile` que define las fases:
+4. **Crear el Pipeline**
+    1. En el panel de Jenkins, haz clic en “New Item”.
+    2. Introduce un nombre para el proyecto.
+    3. Selecciona “Pipeline” como tipo de proyecto y haz clic en OK.
+    4. En “Definition” selecciona Pipeline script from SCM
+    5. En “SCM” elige Git
+    6. En “Repository URL” introduce: `https://github.com/uca-iiss/RITCHIE-impl-25`
+    7. En rama poner la que corresponda
+    8. En Jenkinsfile, poner `temas/herencia/dart/Jenkinsfile`
+    9. Haz clic en Save
 
-| Stage                | Comando                                  |
-|----------------------|------------------------------------------|
-| Instalar dependencias| `dart pub get`                           |
-| Analizar código      | `dart analyze lib/`                      |
-| Ejecutar tests       | `dart test test/personaje_test.dart`     |
-|   Ejecutar main      | `dart run bin/main.dart`                 |
-| Empaquetar artefacto | `tar -czvf personaje_package.tar.gz …`   |
+5. **Destruir todo (limpieza)**
 
-Para que Jenkins lo ejecute:
-
-1. Crea un **Pipeline** y selecciona **Pipeline script from SCM**.
-2. URL del repo: `https://github.com/uca-iiss/RITCHIE-impl-25.git`
-3. Branch: `main` (o el que corresponda).
-4. Script Path: `temas/herencia/dart/Jenkinsfile`
-5. Guarda y lanza el pipeline.  
-
----
+Ejecuta:
+```bash
+terraform destroy
+```
+Luego, para eliminar todos los archivos generador por **Terraform**:
+```bash
+rm -rf .terraform terraform.tfstate terraform.tfstate.backup
+```
