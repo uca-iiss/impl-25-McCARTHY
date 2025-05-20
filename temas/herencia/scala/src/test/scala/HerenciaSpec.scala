@@ -15,7 +15,8 @@ class HerenciaSpec extends AnyFunSuite {
 
   test("Investigador debería imprimir su especialidad") {
     val investigadora = new Investigador("Sara", 38, "Inteligencia Artificial")
-    assert(investigadora.presentarse().contains("especialista en Inteligencia Artificial"))
+    assert(investigadora.saludar(formal = true).contains("especialista en Inteligencia Artificial"))
   }
+
 }
 
