@@ -1,28 +1,183 @@
-# Tema B.3 - Abstracción en Python
+# Sistema de Gestión de Biblioteca con AspectJ
 
-Este documento explora el principio de **abstracción** aplicado en Python, especialmente en el contexto de la programación funcional. Se presentan conceptos clave como funciones lambda, funciones de orden superior, clausuras, y el uso de funciones o clases como interfaces funcionales.
+Este documento explora la implementación de un sistema de gestión de biblioteca utilizando **Programación Orientada a Aspectos (AOP)** con AspectJ en Java. El proyecto demuestra cómo separar las preocupaciones transversales, como el registro de actividades, del código principal de la aplicación.
 
 ---
 
-## Código
-- Programa principal (`Program.py`)
-- Pruebas unitarias (`LambdaTests.py`)
+## Clases principales
+- `Book.java`: Representa un libro con título, ISBN y estado de disponibilidad
+- `Member.java`: Representa un miembro de la biblioteca que puede pedir y devolver libros
+- `BookManager.java`: Gestiona el inventario de libros y miembros de la biblioteca
+- `LoggingAspect.java`: Aspecto para registrar las operaciones de préstamo y devolución
+
+---
+
+## Configuración de AspectJ
+
+- Archivo de configuración AspectJ (`aop.xml`)
+- Integración con el sistema de compilación
+
+**Configuración básica:**
+
+Para activar la funcionalidad de AspectJ en el proyecto, se incluye el archivo `aop.xml` que registra los aspectos y define el alcance del tejido (weaving):
+
+```xml
+<aspectj>
+  <aspects>
+    <aspect name="com.ejemplo.proyecto.LoggingAspect"/>
+  </aspects>
+  <weaver>
+    <include within="com.ejemplo.proyecto.*"/>
+  </weaver>
+</aspectj>
+```
+
+---
+
+## Conceptos clave
+
+### Programación Orientada a Aspectos (AOP)
+
+Un paradigma que permite separar las preocupaciones transversales (cross-cutting concerns) del código principal de la aplicación, resultando en un diseño más modular y mantenible.
+
+---
+
+### Puntos de corte (Pointcuts)
+
+Expresiones que definen los puntos de ejecución donde se aplicarán los aspectos. En nuestro sistema definimos:
+
+- `lendBookOperation()`: Captura la ejecución del método de préstamo de libros
+- `returnBookOperation()`: Captura la ejecución del método de devolución de libros
+
+---
+
+### Consejos (Advices)
+
+Código que se ejecuta cuando se alcanza un punto de corte definido:
+
+- `@Before`: Se ejecuta antes de que se ejecute el método interceptado
+- `@After`: Se ejecuta después de que se ejecute el método interceptado, independientemente del resultado
+
+---
+
+### Tejido (Weaving)
+
+Proceso de integrar los aspectos con el código base para crear el comportamiento final. AspectJ puede realizar el tejido:
+
+- En tiempo de compilación (compile-time weaving)
+- En tiempo de carga (load-time weaving)
+- En tiempo de ejecución (runtime weaving)
+
+---
+
+## Pruebas
+
+El proyecto incluye un conjunto completo de pruebas unitarias (`AspectosTests.java`) que verifican:
+
+- Funcionalidad básica de las clases `Book` y `Member`
+- Operaciones de gestión del `BookManager`
+- Casos especiales de préstamo y devolución
+
+---
+
+## Recomendaciones
+
+- Usar aspectos solo para preocupaciones verdaderamente transversales
+- Mantener los pointcuts lo más específicos posible
+- Documentar claramente la interacción entre aspectos y código base
+- Considerar el impacto en el rendimiento de los aspectos en operaciones críticas
+- Incluir pruebas específicas para verificar el comportamiento de los aspectos
+
+---
+
+## Configuración del proyecto con Maven
+
+El proyecto utiliza Maven para la gestión de dependencias y el ciclo de vida de construcción. El archivo `pom.xml` define:
+
+- Dependencias de AspectJ (aspectjrt y aspectjweaver)
+- Dependencias de pruebas unitarias con JUnit Jupiter
+- Configuración del plugin maven-surefire para ejecutar pruebas con AspectJ activado
+
+```xml
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>1.9.7</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.7</version>
+</dependency>
+```
+
+La configuración del plugin maven-surefire asegura que los aspectos se tejan durante la ejecución de las pruebas:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.0.0-M5</version>
+    <configuration>
+        <argLine>
+            -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.9.7/aspectjweaver-1.9.7.jar
+        </argLine>
+    </configuration>
+</plugin>
+```
 
 ---
 
 ## CI/CD y Aprovisionamiento
 
-- Pipeline de integración continua (`Jenkinsfile`)
-- Dockerfile para construcción de imagen (`Dockerfile`)
+### Integración continua con Jenkins
 
-**Despliegue:**
+El proyecto incluye un pipeline de integración continua (`Jenkinsfile`) que automatiza la ejecución de pruebas.
 
-Para realizar el despliegue, se debe ejecutar el siguiente script. Este creará los recursos necesarios en Docker y ejecutará los comandos correspondientes de Terraform:
+<!-- ```groovy
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Test') {
+            steps {
+                dir('temas/aspectos/java-03/mi-proyecto') {
+                    sh 'mvn clean test'
+                }
+            }
+            post {
+                always {
+                    junit 'temas/aspectos/java-03/mi-proyecto/target/surefire-reports/*.xml'
+                }
+            }
+        }
+    }
+}
+``` -->
+
+### Configuración de Docker
+
+Se incluye un `Dockerfile` para la creación de una imagen de Jenkins con todas las herramientas necesarias:
+- Maven para construir el proyecto Java
+- Docker CLI para la integración con contenedores
+- Plugins de Jenkins para orquestación de pipelines
+
+### Despliegue automatizado
+
+Para realizar el despliegue, se proporciona un script Python que ejecuta los comandos de Terraform necesarios:
 
 ```bash
 python deploy_jenkins.py
 ```
-Para liberar el puerto que está utilizando el contenedor en localhost, es necesario detener y eliminar dicho contenedor desde Docker utilizando los siguientes comandos.
+
+El script automatiza los siguientes pasos:
+1. Inicialización de Terraform
+2. Validación de la configuración
+3. Aplicación de la infraestructura
+
+Para liberar recursos después del uso:
 
 ```bash
 docker stop <nombre-contenedor>
@@ -31,54 +186,15 @@ docker rm <nombre-contenedor>
 
 ---
 
-## Conceptos clave
+## Para ejecutar el proyecto
 
-### Funciones lambda
+```bash
+# Compilar y ejecutar pruebas con Maven
+mvn clean test
 
-Una función anónima definida en una sola línea. Se usa para funciones simples y temporales, comúnmente como argumentos de funciones de orden superior.
+# Compilar el proyecto de forma manual con AspectJ
+javac -cp .:aspectjrt.jar com/ejemplo/proyecto/*.java
 
----
-
-### Funciones de orden superior
-
-Funciones que reciben otras funciones como argumentos. Permiten una programación más declarativa y expresiva.
-
-- `map(func, iterable)`: Aplica una función a todos los elementos del iterable.
-- `filter(func, iterable)`: Filtra elementos según una condición.
-- `reduce(func, iterable)`: Reduce una secuencia a un solo valor.
-- `sorted(iterable, key=func)`: Ordena los elementos usando una función como criterio.
-
----
-
-### Clausuras (Closures)
-
-Funciones que retienen el entorno en el que fueron definidas. Permiten encapsular comportamiento junto con su contexto.
-
----
-
-### Interfaces funcionales simuladas
-
-Simulación de interfaces mediante funciones o clases con el método especial `__call__` para abstraer criterios de ordenamiento u operación.
-
----
-
-### Procesamiento tipo "stream"
-
-Encadenamiento de operaciones como filtrado, transformación y agregación sobre colecciones, similar al enfoque de Java 8.
-
----
-
-## Recomendaciones
-
-- Usar `lambda` solo para funciones simples.
-- Emplear `def` si la lógica es más extensa o reutilizable.
-- Utilizar funciones como `map`, `filter`, `reduce` y `sorted` para una programación declarativa.
-- Simular interfaces funcionales con funciones o clases que implementen `__call__`.
-<!-- 
----
-
-## Recursos adicionales
-
-- [Python Docs - Functional Programming HOWTO](https://docs.python.org/3/howto/functional.html)
-- [Fluent Python - Capítulos sobre funciones de orden superior](https://www.oreilly.com/library/view/fluent-python/9781491946237/)
-- [Guía de Lambdas en Java - Oracle](http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html) -->
+# Ejecutar pruebas manualmente
+# java -cp .:aspectjrt.jar:junit-jupiter.jar org.junit.platform.console.ConsoleLauncher --select-class com.ejemplo.proyecto.AspectosTests
+```
