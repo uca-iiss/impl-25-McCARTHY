@@ -23,7 +23,7 @@ pipeline {
 
     post {
         always {
-            junit './temas/errores/kotlin/build/test-results/test/*.xml'  // recoge reportes JUnit
+            junit 'temas/errores/kotlin/build/test-results/test/*.xml'  // recoge reportes JUnit
         }
     }
 }
