@@ -15,8 +15,10 @@ pipeline {
 
         stage('Build and Test') {
             steps {
-                sh 'chmod +x ./temas/errores/kotlin/gradlew'  // si usas gradlew local
-                sh './temas/errores/kotlin/gradlew clean test' // ejecuta build y pruebas
+                dir('temas/errores/kotlin') {
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean test'
+                }
             }
         }
     }
