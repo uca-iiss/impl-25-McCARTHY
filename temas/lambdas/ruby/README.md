@@ -70,15 +70,18 @@ end
 En este archivo podemos observar el uso de:
 
 1. **bloques (do ... end, {})**
+
 En la clase `GestorBD`, los bloques se emplean ampliamente para realizar operaciones sobre colecciones, como la lectura y escritura de datos. Por ejemplo:
 * En el método **cargar**, se utiliza `.each do |linea| ... end` para iterar sobre cada línea del archivo y procesarla.
 * En el método **guardar**, se usa `@tabla.each do |fila| ... end` para recorrer las filas y escribirlas en el archivo
 * También se usa la forma de bloque con llaves `{}` cuando se aplica .map para transformar valores.
 
 2. **Llamadas a lambdas (.call)**
+
 Métodos como `actualizar` y `buscar` reciben lambdas como argumentos y los ejecutan mediante `.call`, permitiendo lógica personalizada sin modificar la clase.
 
 3. **Paso de bloques como parámetros (&bloque)**
+
 La clase también permite pasar lambdas como bloques de forma implícita gracias al uso del operador &, el cual convierte un *Proc* o *lambda* en un bloque de código que puede ser consumido por métodos como `.select` y `.map`.
 
 Esto se observa, por ejemplo, en el método `buscar`:
@@ -146,9 +149,11 @@ puts "\n➡ Total acumulado: #{total_dinero.round(2)} €"
 ```
 
 1. **Expresiones lambda**
+
 Se emplean expresiones lambda como `->(f) { f[:dinero] > 1000 }` para definir funciones anónimas de filtrado o transformación de datos, que se pasan directamente a los métodos de `GestorBD`.
 
 2. **Streams** 
+
 Hacia el final de `Main.rb`, se emplea un estilo de programación funcional encadenada al procesar los datos con una secuencia de operaciones tipo stream. Este patrón facilita operaciones como filtrado, ordenación, transformación y agregación de datos:
 
 ```ruby
