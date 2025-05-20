@@ -61,7 +61,7 @@ public class OcioFoto implements Foto
 }
 ```
 
-`ArteFoto.java` y `TrabajoFoto.java` son prácticamente ideénticas a `OcioFoto.java` la principal diferencia es que el método **getImagen()** devuelve una letra dependiendo del tipo de la foto.
+`ArteFoto.java` y `TrabajoFoto.java` son prácticamente idénticas a `OcioFoto.java` la principal diferencia es que el método **getImagen()** devuelve una letra dependiendo del tipo de la foto.
 
 ### `FotoComponent.java`
 
@@ -221,21 +221,19 @@ Test con `@SpringBootTest` que verifica que las fotos se inyectan correctamente.
 ## Implantación
 ---
 
-Para realizar los **test** y comprobar que se levanta la app en `http://localhost:8080/fotos`:
+- Para realizar los **test** y comprobar que se levanta la app en`http://localhost:8080/fotos`:
+    1. En GitHub, ve a la sección **Actions**
+    2. Selecciona en la barra lateral izquierda: `inyeccion.java-RITCHIE`
+    3. Dale a **run workflow** y selecciona el botón verde donde pone **run workflow**
 
-1. En GitHub, ve a la sección **Actions**
-2. Selecciona en la barra lateral izquierda: `inyeccion.java-RITCHIE`
-3. Dale a **run workflow** y selecciona el botón verde donde pone **run workflow**
-
-Para ejecutar la app introduce los siguientes comandos en `temas/inyeccion/java`:
+- Para **ejecutar** la app introduce los siguientes comandos en `temas/inyeccion/java`:
 ```bash
 docker build -t redsocial-app .
 docker run -p 8080:8080 redsocial-app
 ```
 Al acceder a `http://localhost:8080/fotos` debería aparecer las fotos publicadas.
 
-Para borrarlo (limpieza):
-Haz `Ctrl+C` en la terminal y ejecuta:
+- Para borrarlo (limpieza) haz `Ctrl+C` en la terminal y ejecuta:
 ```bash
 docker rm $(docker ps -a -q --filter ancestor=redsocial-app) 2>/dev/null
 docker rmi redsocial-app
