@@ -307,10 +307,58 @@ class MainTest {
             riskyOperation(-5)
         }
     }
-````
+```
 
 - 	Ejecuta una operación con un valor negativo. Verifica que se lance IllegalArgumentException indicando que los valores negativos no son permitidos.
 
 
 ## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+
+### 1. Creación Jenkinsfile
+A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código. Es importante que esta tenga un agente que permite ejecutar en Kotlin junto a Gradle.
+
+```Jenkinsfile
+pipeline {
+    agent {
+        docker {
+            image 'gradle:jdk17'  // imagen oficial con Gradle y JDK 17
+            args '-v $HOME/.gradle:/home/gradle/.gradle'  // para cachear dependencias
+        }
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                sh 'chmod +x ./gradlew'  // si usas gradlew local
+                sh './gradlew clean test' // ejecuta build y pruebas
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/build/test-results/test/*.xml'  // recoge reportes JUnit
+        }
+    }
+}
+```
+
+### 2. Crear Pipeline
+Una vez realizados los pasos anteriores, abrimos Jenkins y creamos un nuevo Pipeline. Para ello: 
+
+ - Lo definimos como `Pipeline script from SCM` y como SCM seleccionamos `Git`.
+ - Ponemos la siguiente URL: `https://github.com/uca-iiss/WIRTH-impl-25`.
+ - En branch ponemos `*/feature-errores`.
+ - Por último, en Script Path añadimos `temas/errores/kotlin/Jenkinsfile`
+
+Y con esta configuración hemos creado el pipeline necesario para la ejecución de los test
+
+### 3. Ejecutar los Tests
+Una vez creado el pipeline, ejecutamos dando a `Construir ahora` y el propion Jenkins pasará los test automaticamente.
