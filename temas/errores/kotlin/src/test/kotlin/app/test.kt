@@ -36,6 +36,6 @@ class MainTest {
     fun testIllegalArgumentException() {
         assertFailsWith<IllegalArgumentException> {
             riskyOperation(-5)
-        }
-    }
+        }
+    }
 }
