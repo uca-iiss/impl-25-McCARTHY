@@ -26,7 +26,7 @@ Antes de explorar los ejemplos proporcionados en este repositorio, es esencial e
 
 ## Código de Ejemplo
 A continuación, se muestran los ejemplos de cómo se pueden utilizar los aspectos:
-[**AuditoriaAspect.java**](AuditoriaAspect.java)
+[**AuditoriaAspect.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/AuditoriaAspect.java)
 
 ```java
 package com.ejemplo;
@@ -69,7 +69,7 @@ Explicación de AuditoriaAspect:
     - Se ejecute después de la ejecución original para, por ejemplo, medir tiempo o modificar el resultado
 
 A continuación, la clase Usuario:
-[**Usuario.java**](Usuario.java)
+[**Usuario.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Usuario.java)
 
 ```java
 package com.ejemplo;
@@ -91,7 +91,7 @@ public class Usuario {
 Clase que define le usuario que vamos a tener en el sistema simplificamos la clase teniendo unicamente un nombre
 
 La clase BancoServicio que se encarga de las principales tareas:
-[**BancoServicio.java**](BancoServicio.java)
+[**BancoServicio.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/BancoServicio.java)
 
 ```java
 package com.ejemplo;
@@ -115,7 +115,7 @@ public class BancoServicio {
 Tenemos los métodos transferir(), retirar y consultarSaldo que serán los métodos base para nuestro ejemplo que nos proporcionaran transfererir cantidad de dinero, retirar una cierta cantidad de dinero de una cuenta y consultar el saldo de una cuenta 
 
 Y esta es la clase Auditable
-[**Auditable.java**](Auditable.java)
+[**Auditable.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Auditable.java)
 ```java
 package com.ejemplo;
 
@@ -129,7 +129,7 @@ public @interface Auditable {
 La funcion de esta clase es tener una anotacion personalizada que definiremos para marcar la clase Usuario como "auditables", es decir, queremos que la clase Usuario tenga un comportamiento especial (ser sujetos de auditoría)
 
 Y esta es la clase main.java que la hemos usado para las pruebas
-[**Main.java**](Main.java)
+[**Main.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Main.java)
 ```java
 package com.ejemplo;
 
@@ -147,7 +147,7 @@ public class Main {
 ```
 ## Código de tests
 Ahora, se muestra unos tests para probar el correcto del ejemplo:
-[**BancoServicioTest.java**](BancoServicioTest.java)
+[**BancoServicioTest.java**](/temas/aspectos/java/aspectj-banco/src/test/java/com/ejemplo/BancoServicioTest.java)
 
 ```java
 package com.ejemplo;
@@ -188,7 +188,7 @@ El sistema de gestión de proyectos utilizado en el código es **Maven**, una he
 Maven integra soporte para correr pruebas automáticamente durante el proceso de construcción utilizando frameworks de pruebas como JUnit. Al definir las dependencias y configurar los plugins adecuados en el archivo `pom.xml`, Maven puede compilar el proyecto y ejecutar todas las pruebas unitarias definidas, garantizando que el software cumpla con los requisitos especificados antes de cualquier despliegue o entrega. Esto asegura una integración continua eficiente y efectiva, y es esencial para mantener la calidad del código en desarrollos colaborativos y dinámicos.
 
 Aquí vemos el archivo `pom.xml`:
-[**pom.xml**](pom.xml)
+[**pom.xml**](/temas/aspectos/java/aspectj-banco/pom.xml)
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
