@@ -2,14 +2,13 @@ FROM jenkins/jenkins:lts
 
 USER root
 
+# Instala cliente de Docker
 RUN apt-get update && \
-    apt-get install -y docker.io python3 python3-pip && \
-    pip install --break-system-packages --upgrade pip
+    apt-get install -y docker.io && \
+    apt-get clean
 
+# Añade el usuario jenkins al grupo docker 
+RUN usermod -aG docker jenkins
 
-# Cambia al usuario Jenkins
 USER jenkins
 
-# Instala plugins necesarios
-RUN jenkins-plugin-cli --plugins \
-    "workflow-aggregator docker-workflow git junit"
