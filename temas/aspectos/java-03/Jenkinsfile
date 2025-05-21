@@ -4,10 +4,17 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
+        stage('Restore') {
+            steps {
+                dir('temas/aspectos/java-03/mi-proyecto') {
+                    sh 'mvn clean'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 dir('temas/aspectos/java-03/mi-proyecto') {
-                    sh 'mvn clean compile'
+                    sh 'mvn compile'
                 }
             }
         }
