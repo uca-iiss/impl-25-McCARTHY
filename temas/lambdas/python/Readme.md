@@ -80,7 +80,7 @@ Utiliza `reduce()` y una lambda para concatenar los elementos de una lista de ca
 
 ## Código de tests
 Ahora, se muestra unos tests para probar el correcto uso de las funciones lambda en Python:
-[**tests.py**](tests.py)
+[**test.py**](test.py)
 
 ```python
 import unittest
