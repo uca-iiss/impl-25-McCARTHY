@@ -19,19 +19,17 @@ resource "docker_volume" "jenkins_home_lambdas" {
   name = "jenkins_home_lambdas"
 }
 
-resource "docker_image" "jenkins_dind" {
+resource "docker_image" "jenkins_custom_lambdas" {
   name         = "jenkins-lambdas"
-  keep_locally = true
-
   build {
-    context    = "${path.module}/."
-    dockerfile = "Dockerfile"
+    context    = "${path.module}"
+    dockerfile = "${path.module}/Dockerfile"
   }
 }
 
-resource "docker_container" "jenkins" {
+resource "docker_container" "jenkins_lambdas" {
   name    = "jenkins-lambdas"
-  image   = docker_image.jenkins_dind.name
+  image   = docker_image.jenkins_custom_lambdas.name
   restart = "unless-stopped"
 
   ports {
@@ -49,6 +47,12 @@ resource "docker_container" "jenkins" {
     container_path = "/var/jenkins_home"
   }
 
+  mounts {
+    target = "/var/run/docker.sock"
+    source = "/var/run/docker.sock"
+    type   = "bind"
+  }
+
   networks_advanced {
     name = docker_network.jenkins_net_lambdas.name
   }
@@ -56,11 +60,5 @@ resource "docker_container" "jenkins" {
   env = [
     "DOCKER_HOST=unix:///var/run/docker.sock"
   ]
-
-  mounts {
-    target = "/var/run/docker.sock"
-    source = "/var/run/docker.sock"
-    type   = "bind"
-  }
 }
 

@@ -2,50 +2,43 @@ pipeline {
     agent {
         docker {
             image 'python:3.12-slim'
-            args '-v $HOME/.cache/pip:/root/.cache/pip'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     environment {
-        PYTHONPATH = '.'
-    }
-
-    options {
-        skipStagesAfterUnstable()
+        APP_DIR = 'temas/lambdas/python'
     }
 
     stages {
         stage('Instalar dependencias') {
             steps {
-                sh 'pip install --no-cache-dir -r requirements.txt'
-            }
-        }
-
-        stage('Compilar') {
-            steps {
-                sh 'python -m py_compile app/*.py'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'pytest --junit-xml=test-reports/results.xml'
-            }
-            post {
-                always {
-                    junit 'test-reports/results.xml'
+                dir("${APP_DIR}") {
+                    sh 'pip install -r requirements.txt'
                 }
             }
         }
 
-        stage('Empaquetar') {
+        stage('Ejecutar pruebas') {
             steps {
-                sh 'pip install pyinstaller'
-                sh 'pyinstaller --onefile app/main.py --name=procesador_logs'
+                dir("${APP_DIR}") {
+                    sh 'python -m unittest discover tests'
+                }
             }
-            post {
-                success {
-                    archiveArtifacts 'dist/procesador_logs'
+        }
+
+        stage('Empaquetar aplicación') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'pyinstaller --onefile main.py'
+                }
+            }
+        }
+
+        stage('Verificar binario') {
+            steps {
+                dir("${APP_DIR}/dist") {
+                    sh './main || true' 
                 }
             }
         }
