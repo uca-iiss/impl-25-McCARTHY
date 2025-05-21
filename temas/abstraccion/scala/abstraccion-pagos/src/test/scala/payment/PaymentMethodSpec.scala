@@ -31,6 +31,6 @@ class PaymentMethodSpec extends AnyFunSuite {
   test("Paypal recarga saldo corretamente"){
     val paypal = new PayPal("user@example.com", 0.0)
     paypal.recharge(100.0)
-    assert(paypal.getBalance = 100.0)
+    assert(paypal.getBalance == 100.0)
   }
 }
