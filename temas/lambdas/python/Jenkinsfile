@@ -1,0 +1,47 @@
+pipeline {
+    agent {
+        docker {
+            image 'docker:24.0.7-dind'
+            args  '--privileged'
+        }
+    }
+
+    environment {
+        DOCKER_BUILDKIT = 1
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                echo 'No hay compilación en Python, pero verificamos que el código es válido.'
+                sh 'python -m py_compile main.py app/procesador.py'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'docker build -t lambdas-python .'
+                sh 'docker run --rm --name lambdas-python-test lambdas-python'
+            }
+        }
+
+        stage('Empaquetar') {
+            steps {
+                echo 'Empaquetando el proyecto como imagen Docker.'
+                sh 'docker save lambdas-python -o lambdas-python.tar'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+    }
+}
