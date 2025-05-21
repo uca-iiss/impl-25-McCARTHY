@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparar entorno') {
+            steps {
+                echo 'Preparando entorno C#...'
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                echo 'Compilando proyecto...'
+                dir('temas/abstraccion/csharp-01') {
+                    sh 'make build'
+                }
+            }
+        }
+
+        stage('Ejecutar pruebas') {
+            steps {
+                echo 'Ejecutando pruebas...'
+                dir('temas/abstraccion/csharp-01/Bancoapp.Tests') {
+                    sh 'dotnet test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'La ejecución falló.'
+        }
+        success {
+            echo 'La ejecución fue exitosa.'
+        }
+    }
+}
