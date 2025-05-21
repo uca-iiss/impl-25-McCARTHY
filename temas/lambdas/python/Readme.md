@@ -30,6 +30,7 @@ Antes de ver los ejemplos, es importante comprender algunos conceptos esenciales
 ## Código de Ejemplo
 A continuación un fragmento de `lambdas.py` con las funciones y su uso:
 
+[**lambdas.py**](lambdas.py)
 ```python
 from functools import reduce
 
