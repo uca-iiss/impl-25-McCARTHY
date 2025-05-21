@@ -26,21 +26,21 @@ pipeline {
 
         stage('Restaurar dependencias') {
             steps {
-                sh 'dotnet restore anotaciones/anotaciones_csharp/main.csproj'
-                sh 'dotnet restore anotaciones/test_csharp/test.csproj'
+                sh 'dotnet restore anotaciones/csharp/anotaciones_csharp/main.csproj'
+                sh 'dotnet restore anotaciones/csharp/test_csharp/test.csproj'
             }
         }
 
         stage('Compilar') {
             steps {
-                sh 'dotnet build anotaciones/anotaciones_csharp/main.csproj --configuration Release'
-                sh 'dotnet build anotaciones/test_csharp/test.csproj --configuration Release'
+                sh 'dotnet build anotaciones/csharp/anotaciones_csharp/main.csproj --configuration Release'
+                sh 'dotnet build anotaciones/csharp/test_csharp/test.csproj --configuration Release'
             }
         }
 
         stage('Ejecutar Tests') {
             steps {
-                sh 'dotnet test anotaciones/test_csharp/test.csproj --logger trx;LogFileName=test_results.trx'
+                sh 'dotnet test anotaciones/csharp/test_csharp/test.csproj --logger trx;LogFileName=test_results.trx'
             }
         }
 
