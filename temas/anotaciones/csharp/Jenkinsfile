@@ -26,8 +26,8 @@ pipeline {
 
         stage('Restaurar dependencias') {
             steps {
-                sh 'dotnet restore csharp/anotaciones_csharp/main.csproj'
-                sh 'dotnet restore csharp/test_csharp/test.csproj'
+                sh 'dotnet restore temas/anotaciones/csharp/anotaciones_csharp/main.csproj'
+                sh 'dotnet restore temas/anotaciones/csharp/test_csharp/test.csproj'
             }
         }
 
