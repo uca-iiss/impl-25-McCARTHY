@@ -11,7 +11,7 @@ class CreditCard(cardNumber: String, var CreditLimit: Money) extends PaymentMeth
             Success
         } else {
             logTransaction(amount, Failure)
-            Failure
+         
         }
     }
 }

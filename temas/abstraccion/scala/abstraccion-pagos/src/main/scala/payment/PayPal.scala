@@ -19,5 +19,5 @@ class PayPal(private val email: String, private var balance: Money) extends Paym
         balance += amount
     }
 
-    def getBalance: Money = balance
+    
 }
