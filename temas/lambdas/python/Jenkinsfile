@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.12-slim'
+            args '-v $HOME/.cache/pip:/root/.cache/pip'
+        }
+    }
 
     environment {
         PYTHONPATH = '.'
@@ -10,6 +15,12 @@ pipeline {
     }
 
     stages {
+        stage('Instalar dependencias') {
+            steps {
+                sh 'pip install --no-cache-dir -r requirements.txt'
+            }
+        }
+
         stage('Compilar') {
             steps {
                 sh 'python -m py_compile app/*.py'
@@ -29,6 +40,7 @@ pipeline {
 
         stage('Empaquetar') {
             steps {
+                sh 'pip install pyinstaller'
                 sh 'pyinstaller --onefile app/main.py --name=procesador_logs'
             }
             post {
