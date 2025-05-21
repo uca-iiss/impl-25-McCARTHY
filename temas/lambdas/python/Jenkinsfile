@@ -1,40 +1,40 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:24.0.7-dind'
-            args  '--privileged'
-        }
-    }
+    agent any
 
     environment {
-        DOCKER_BUILDKIT = 1
+        PYTHONPATH = '.'
+    }
+
+    options {
+        skipStagesAfterUnstable()
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Compilar') {
             steps {
-                echo 'No hay compilación en Python, pero verificamos que el código es válido.'
-                sh 'python -m py_compile main.py app/procesador.py'
+                sh 'python -m py_compile app/*.py'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'docker build -t lambdas-python .'
-                sh 'docker run --rm --name lambdas-python-test lambdas-python'
+                sh 'pytest --junit-xml=test-reports/results.xml'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
             }
         }
 
         stage('Empaquetar') {
             steps {
-                echo 'Empaquetando el proyecto como imagen Docker.'
-                sh 'docker save lambdas-python -o lambdas-python.tar'
+                sh 'pyinstaller --onefile app/main.py --name=procesador_logs'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/procesador_logs'
+                }
             }
         }
     }
@@ -45,3 +45,4 @@ pipeline {
         }
     }
 }
+
