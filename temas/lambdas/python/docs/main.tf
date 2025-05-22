@@ -74,11 +74,11 @@ resource "docker_container" "jenkins" {
 
   ports {
     internal = 8080
-    external = 8080
+    external = 8082
   }
 
   ports {
     internal = 50000
-    external = 50000
+    external = 50002
   }
 }
