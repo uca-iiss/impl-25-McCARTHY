@@ -11,4 +11,9 @@ public class Notificador
     {
         estrategia = nuevaEstrategia;
     }
+
+    public void Notificar(string mensaje)
+    {
+        estrategia.enviar(mensaje);
+    }
 }
