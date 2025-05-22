@@ -21,15 +21,13 @@ pipeline {
             }
         }
 
-        
-
         stage('Tests') {
             steps {
                 echo 'Ejecutando tests...'
-                sh '''
-			docker run --rm -v "$PWD":/app -w /app python:3.12-slim bash -c "pip install pytest && pytest"
-		'''
-
+                sh """
+                    docker run --rm -v "\$PWD":/app -w /app/\${WORKDIR} ${IMAGE_NAME} \
+                    bash -c "pip install pytest && pytest"
+                """
             }
         }
 
