@@ -2,11 +2,10 @@ pipeline {
     agent any
 
     environment {
-       IMAGE_NAME = "python:3.12-slim"
-       APP_DIR = "temas/lambdas/python"
-       DOCKER_HOST = "unix:///var/run/docker.sock"
-   }
-
+        IMAGE_NAME = "python:3.12-slim"
+        APP_DIR = "temas/lambdas/python"
+        DOCKER_HOST = "unix:///var/run/docker.sock"
+    }
 
     stages {
         stage('Preparar') {
@@ -20,11 +19,9 @@ pipeline {
             steps {
                 echo 'Instalando dependencias...'
                 sh """
-		    docker run --rm -v "\$PWD":/app -w /app/${APP_DIR} ${IMAGE_NAME} \
-		    sh -c 'ls -l . && echo "---" && cat requirements.txt && echo "---" && pip install -r requirements.txt'
-		"""
-
-
+                    docker run --rm -v "\$PWD/${APP_DIR}":/app -w /app ${IMAGE_NAME} \
+                    pip install -r requirements.txt
+                """
             }
         }
 
@@ -32,7 +29,7 @@ pipeline {
             steps {
                 echo 'Ejecutando tests...'
                 sh """
-                    docker run --rm -v "\$PWD":/app -w /app/${APP_DIR} ${IMAGE_NAME} \
+                    docker run --rm -v "\$PWD/${APP_DIR}":/app -w /app ${IMAGE_NAME} \
                     python3 -m unittest discover tests
                 """
             }
@@ -42,7 +39,7 @@ pipeline {
             steps {
                 echo 'Empaquetando aplicación...'
                 sh """
-                    docker run --rm -v "\$PWD":/app -w /app/${APP_DIR} ${IMAGE_NAME} \
+                    docker run --rm -v "\$PWD/${APP_DIR}":/app -w /app ${IMAGE_NAME} \
                     python3 setup.py sdist
                 """
             }
