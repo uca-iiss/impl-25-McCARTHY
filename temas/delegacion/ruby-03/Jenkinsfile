@@ -5,8 +5,11 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Ejecutando tests con minitest...'
-                sh 'ruby -Ilib:test test/test_orquesta.rb'
+                dir('temas/delegacion/ruby-03/test') {
+                    echo 'Ejecutando tests con minitest...'
+                    sh 'ruby -Ilib:test testOrquesta.rb'
+                }
+
             }
         }
     }
