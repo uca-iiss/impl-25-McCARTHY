@@ -1,7 +1,8 @@
 require_relative '../instrumento'
 
 # Instrumento de percusión que hereda de Instrumento
-class Percusion < Instrumento
+class Percusion 
+  include Instrumento
   def tocar
     golpear
   end

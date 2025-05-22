@@ -1,7 +1,8 @@
 require_relative '../instrumento'
 
-# Instrumento de viento que hereda de Instrumento
-class Viento < Instrumento
+# Instrumento de viento que delega de Instrumento
+class viento
+  include Instrumento
   def tocar
     soplar
   end
