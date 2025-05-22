@@ -1,7 +1,9 @@
 require_relative '../instrumento'
 
 # Instrumento de cuerda que hereda de Instrumento
-class Cuerda < Instrumento
+class Cuerda
+  include Instrumento
+  
   def tocar
     rasgar
   end

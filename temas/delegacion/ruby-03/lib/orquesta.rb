@@ -1,54 +1,65 @@
-# Clase base abstracta para todos los instrumentos musicales
-# Implementa el patrón Template Method definiendo la interfaz común
-require_relative './cuerda'
-require_relative './percusion'
-require_relative './viento'
+require_relative 'instrumento'
+require_relative 'instrumentos/cuerda'
+require_relative 'instrumentos/percusion'
+require_relative 'instrumentos/viento'
 
-module Instrumento
-  def tocar
-    raise NotImplementedError, "El método 'tocar' debe implementarse en las subclases"
-  end
-  
-  def afinar
-    raise NotImplementedError, "El método 'afinar' debe implementarse en las subclases"
-  end
-  
-  def tipo
-    self.class.name
-  end
-  
-  def to_s
-    "#{tipo} (#{object_id})"
-  end
-end
-
+# Clase que representa una orquesta de instrumentos musicales
+# Implementa el patrón Composite para manejar colecciones de instrumentos
 class Orquesta
   include Enumerable
 
   def initialize
-    @orquesta = []
+    @instrumentos = []
   end
 
   def add_instrumento(instrumento)
-    @orquesta << instrumento
+    raise ArgumentError, "El objeto debe implementar el módulo Instrumento" unless instrumento.is_a?(Instrumento)
+    @instrumentos << instrumento
+    self
   end
 
   def remove_instrumento(instrumento)
-    @orquesta.delete(instrumento)
+    @instrumentos.delete(instrumento)
+    self
   end
 
   def each(&block)
-    @orquesta.each(&block)
+    @instrumentos.each(&block)
+  end
+
+  def size
+    @instrumentos.size
+  end
+
+  def empty?
+    @instrumentos.empty?
   end
 
   def tocar
-    @orquesta.each { |instrumento| instrumento.tocar }
+    puts "La orquesta comienza a tocar:"
+    @instrumentos.each_with_index do |instrumento, index|
+      puts "  [#{index + 1}] #{instrumento.tipo}:"
+      instrumento.tocar
+    end
+    puts "Fin de la interpretación\n\n"
   end
 
   def afinar
-    @orquesta.each do |instrumento|
+    puts "Afinando la orquesta:"
+    @instrumentos.each_with_index do |instrumento, index|
+      puts "  [#{index + 1}] #{instrumento.tipo}:"
       instrumento.afinar
       instrumento.tocar
+      puts
     end
+    puts "Afinación completada\n\n"
+  end
+
+  def to_a
+    @instrumentos.dup
+  end
+
+  def to_s
+    "Orquesta con #{size} instrumentos: #{@instrumentos.map(&:tipo).join(', ')}"
   end
 end
