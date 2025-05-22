@@ -1,4 +1,4 @@
-# Sistema de Gestión de Biblioteca con AspectJ
+# Tema B.3 - Aspectos
 
 Este documento explora la implementación de un sistema de gestión de biblioteca utilizando **Programación Orientada a Aspectos (AOP)** con AspectJ en Java. El proyecto demuestra cómo separar las preocupaciones transversales, como el registro de actividades, del código principal de la aplicación.
 
