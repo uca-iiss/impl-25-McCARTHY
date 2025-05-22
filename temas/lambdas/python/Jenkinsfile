@@ -21,8 +21,9 @@ pipeline {
                 echo 'Instalando dependencias...'
                 sh """
 		    docker run --rm -v "\$PWD":/app -w /app/${APP_DIR} ${IMAGE_NAME} \
-		    sh -c 'ls -l && cat requirements.txt && pip install -r requirements.txt'
+		    sh -c 'ls -l . && echo "---" && cat requirements.txt && echo "---" && pip install -r requirements.txt'
 		"""
+
 
             }
         }
