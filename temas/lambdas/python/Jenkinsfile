@@ -1,28 +1,45 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9' 
-        }
-    }
-
+    agent none
     stages {
-        stage('Preparar entorno') {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'python:2-alpine'
+                }
+            }
             steps {
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install --upgrade pip'
+                sh 'python -m py_compile ./app/procesador.py'
             }
         }
-
-        stage('Ejecutar pruebas') {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'qnib/pytest'
+                }
+            }
             steps {
-                sh './venv/bin/python temas/lambdas/python/test.py'
+                sh 'py.test --verbose --junit-xml ./test-reports/results.xml ./tests/test_procesador.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
             }
         }
-    }
-
-    post {
-        always {
-            echo 'Pipeline finalizado.'
+        stage('Deliver') {
+            agent {
+                docker {
+                    image 'cdrx/pyinstaller-linux:python2'
+                }
+            }
+            steps {
+                sh 'pyinstaller --onefile ./app/procesador.py'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/procesador'
+                }
+            }
         }
     }
 }
