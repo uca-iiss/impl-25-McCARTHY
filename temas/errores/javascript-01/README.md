@@ -1,130 +1,74 @@
-# Sistema de Gestión de Biblioteca con AspectJ
+# Sistema de Manejo de Errores en JavaScript
 
-Este documento explora la implementación de un sistema de gestión de biblioteca utilizando **Programación Orientada a Aspectos (AOP)** con AspectJ en Java. El proyecto demuestra cómo separar las preocupaciones transversales, como el registro de actividades, del código principal de la aplicación.
+Este documento explora la implementación de un sistema robusto de manejo de errores en JavaScript, demostrando diferentes estrategias para capturar, procesar y responder a errores en aplicaciones Node.js. El proyecto incluye ejemplos prácticos de manejo de valores no definidos, errores de procesamiento de álbumes musicales y técnicas de validación de datos.
 
 ---
 
 ## Clases principales
-- `Book.java`: Representa un libro con título, ISBN y estado de disponibilidad
-- `Member.java`: Representa un miembro de la biblioteca que puede pedir y devolver libros
-- `BookManager.java`: Gestiona el inventario de libros y miembros de la biblioteca
-- `LoggingAspect.java`: Aspecto para registrar las operaciones de préstamo y devolución
+- `./album-handling-js/model.js`: Define las clases base `Track` y `Album` con validación de entrada
+- `./album-handling-js/database.js`: Simula una base de datos con manejo de casos edge y errores
+- `./services/traditional-service.js`: Implementa manejo de errores tradicional con try-catch
+- `./services/modern-service.js`: Utiliza técnicas modernas de manejo de errores con Optional patterns
+- `./services/optional-service.js`: Demuestra el patrón Optional para evitar valores null/undefined
+- `./services/optional.js`: Crea una clase que envuelve valores opcionales (que pueden no existir) y ofrece métodos seguros para usarlos sin errores.
+- `./services/stream-processing.js`: Procesa streams de datos con manejo robusto de errores
+- `./tests/functional-tests.js`: Suite de pruebas que valida el comportamiento ante errores
 
 ---
 
-## Configuración de AspectJ
+## Configuración del proyecto con Node.js
 
-- Archivo de configuración AspectJ (`aop.xml`)
-- Integración con el sistema de compilación
+El proyecto utiliza ES6 modules y está configurado para ejecutarse con Node.js moderno. El archivo `package.json` define:
 
-**Configuración básica:**
+- Configuración de módulos ES6 con `"type": "module"`
+- Scripts de construcción y pruebas automatizadas
+- Dependencias mínimas para maximizar la compatibilidad
 
-Para activar la funcionalidad de AspectJ en el proyecto, se incluye el archivo `aop.xml` que registra los aspectos y define el alcance del tejido (weaving):
-
-```xml
-<aspectj>
-  <aspects>
-    <aspect name="com.ejemplo.proyecto.LoggingAspect"/>
-  </aspects>
-  <weaver>
-    <include within="com.ejemplo.proyecto.*"/>
-  </weaver>
-</aspectj>
+```json
+{
+  "name": "album-handling-js",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node ./tests/functional-tests.js",
+    "build": "echo 'Build completado exitosamente' && node -c ./tests/functional-tests.js",
+    "test": "node ./tests/functional-tests.js"
+  }
+}
 ```
 
 ---
 
 ## Conceptos clave
 
-### Programación Orientada a Aspectos (AOP)
+### Manejo de Errores Tradicional
 
-Un paradigma que permite separar las preocupaciones transversales (cross-cutting concerns) del código principal de la aplicación, resultando en un diseño más modular y mantenible.
-
----
-
-### Puntos de corte (Pointcuts)
-
-Expresiones que definen los puntos de ejecución donde se aplicarán los aspectos. En nuestro sistema definimos:
-
-- `lendBookOperation()`: Captura la ejecución del método de préstamo de libros
-- `returnBookOperation()`: Captura la ejecución del método de devolución de libros
+Utiliza bloques `try-catch` para capturar y manejar excepciones de manera explícita.
 
 ---
 
-### Consejos (Advices)
+### Manejo de Errores Moderno
 
-Código que se ejecuta cuando se alcanza un punto de corte definido:
-
-- `@Before`: Se ejecuta antes de que se ejecute el método interceptado
-- `@After`: Se ejecuta después de que se ejecute el método interceptado, independientemente del resultado
+Emplea técnicas funcionales y validaciones tempranas para prevenir errores.
 
 ---
 
-### Tejido (Weaving)
+### Patrón Optional
 
-Proceso de integrar los aspectos con el código base para crear el comportamiento final. AspectJ puede realizar el tejido:
-
-- En tiempo de compilación (compile-time weaving)
-- En tiempo de carga (load-time weaving)
-- En tiempo de ejecución (runtime weaving)
+Implementa un wrapper que encapsula valores que pueden ser null o undefined, proporcionando métodos seguros para su manipulación.
 
 ---
 
-## Pruebas
 
-El proyecto incluye un conjunto completo de pruebas unitarias (`AspectosTests.java`) que verifican:
+## Pruebas de Manejo de Errores
 
-- Funcionalidad básica de las clases `Book` y `Member`
-- Operaciones de gestión del `BookManager`
-- Casos especiales de préstamo y devolución
+El proyecto incluye un conjunto completo de pruebas (`functional-tests.js`) que verifican:
 
----
-
-## Recomendaciones
-
-- Usar aspectos solo para preocupaciones verdaderamente transversales
-- Mantener los pointcuts lo más específicos posible
-- Documentar claramente la interacción entre aspectos y código base
-- Considerar el impacto en el rendimiento de los aspectos en operaciones críticas
-- Incluir pruebas específicas para verificar el comportamiento de los aspectos
-
----
-
-## Configuración del proyecto con Maven
-
-El proyecto utiliza Maven para la gestión de dependencias y el ciclo de vida de construcción. El archivo `pom.xml` define:
-
-- Dependencias de AspectJ (aspectjrt y aspectjweaver)
-- Dependencias de pruebas unitarias con JUnit Jupiter
-- Configuración del plugin maven-surefire para ejecutar pruebas con AspectJ activado
-
-```xml
-<dependency>
-    <groupId>org.aspectj</groupId>
-    <artifactId>aspectjrt</artifactId>
-    <version>1.9.7</version>
-</dependency>
-<dependency>
-    <groupId>org.aspectj</groupId>
-    <artifactId>aspectjweaver</artifactId>
-    <version>1.9.7</version>
-</dependency>
-```
-
-La configuración del plugin maven-surefire asegura que los aspectos se tejan durante la ejecución de las pruebas:
-
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <version>3.0.0-M5</version>
-    <configuration>
-        <argLine>
-            -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.9.7/aspectjweaver-1.9.7.jar
-        </argLine>
-    </configuration>
-</plugin>
-```
+- Comportamiento correcto ante datos válidos
+- Respuesta apropiada a datos inválidos
+- Manejo de casos edge (álbumes sin tracks, valores null)
+- Consistencia entre diferentes enfoques de manejo de errores
+- Performance bajo condiciones de error
 
 ---
 
@@ -134,33 +78,10 @@ La configuración del plugin maven-surefire asegura que los aspectos se tejan du
 
 El proyecto incluye un pipeline de integración continua (`Jenkinsfile`) que automatiza la ejecución de pruebas.
 
-<!-- ```groovy
-pipeline {
-    agent any
-    options {
-        skipStagesAfterUnstable()
-    }
-    stages {
-        stage('Test') {
-            steps {
-                dir('temas/aspectos/java-03/mi-proyecto') {
-                    sh 'mvn clean test'
-                }
-            }
-            post {
-                always {
-                    junit 'temas/aspectos/java-03/mi-proyecto/target/surefire-reports/*.xml'
-                }
-            }
-        }
-    }
-}
-``` -->
-
 ### Configuración de Docker
 
 Se incluye un `Dockerfile` para la creación de una imagen de Jenkins con todas las herramientas necesarias:
-- Maven para construir el proyecto Java
+- Node.js con soporte para ES6 modules
 - Docker CLI para la integración con contenedores
 - Plugins de Jenkins para orquestación de pipelines
 
@@ -189,10 +110,13 @@ docker rm <nombre-contenedor>
 ## Para ejecutar el proyecto
 
 ```bash
-# Compilar y ejecutar pruebas con Maven
-mvn clean test
+# Instalar dependencias (si las hubiera)
+npm install
 
-# Compilar el proyecto de forma manual con AspectJ
-javac -cp .:aspectjrt.jar com/ejemplo/proyecto/*.java
+# Ejecutar build y validación
+npm run build
+
+# Ejecutar todas las pruebas
+npm test
 
 ```
