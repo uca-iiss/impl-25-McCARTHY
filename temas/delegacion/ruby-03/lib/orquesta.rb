@@ -50,7 +50,7 @@ class Orquesta
       # puts "  [#{index + 1}] #{instrumento.tipo}:"
       instrumento.afinar
       instrumento.tocar
-      puts
+      # puts
     end
     # puts "Afinación completada\n\n"
   end
