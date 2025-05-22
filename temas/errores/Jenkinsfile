@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Restore') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'npm run build'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'npm test'
+                }
+            }
+        }
+    }
+}
