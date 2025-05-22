@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('temas/errores/javascript-01') {
-                    sh 'mvn run build'
+                    sh 'npm run build'
                 }
             }
         }
