@@ -21,15 +21,7 @@ pipeline {
             }
         }
 
-        stage('Instalar dependencias') {
-            steps {
-                echo 'Instalando dependencias...'
-                sh """
-                    docker run --rm -v "\$PWD/${WORKDIR}":/app -w /app ${IMAGE_NAME} \
-                    pip install -r requirements.txt
-                """
-            }
-        }
+        
 
         stage('Tests') {
             steps {
