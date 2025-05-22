@@ -1,0 +1,22 @@
+{
+  "name": "album-handling-js",
+  "version": "1.0.0",
+  "description": "Ejemplo de manejo de valores no definidos en JavaScript",
+  "main": "functional-tests.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./tests/functional-tests.js",
+    "build": "echo 'Build completado exitosamente' && node -c ./tests/functional-tests.js",
+    "test": "node ./tests/functional-tests.js"
+  },
+  "keywords": [
+    "javascript",
+    "optional",
+    "null",
+    "undefined",
+    "jenkins",
+    "ci-cd"
+  ],
+  "author": "",
+  "license": "MIT"
+}
