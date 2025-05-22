@@ -14,6 +14,14 @@ pipeline {
                 sh "docker version"
             }
         }
+        
+        stage('Verificar archivos') {
+	    steps {
+		echo 'Listando archivos en el workspace...'
+		sh 'find . -type f'
+	    }
+	}
+
 
         stage('Instalar dependencias') {
             steps {
