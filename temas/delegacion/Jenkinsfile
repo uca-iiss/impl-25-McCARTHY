@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Test') {
+            steps {
+                echo 'Ejecutando tests con minitest...'
+                sh 'ruby -Ilib:test test/test_orquesta.rb'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}
