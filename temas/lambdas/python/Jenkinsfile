@@ -25,7 +25,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'temas/lambdas/python/tests/test-reports/results.xml/results.xml'
+                    junit 'temas/lambdas/python/tests/test-reports/results.xml'
                 }
             }
         }
