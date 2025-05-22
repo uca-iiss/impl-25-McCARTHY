@@ -13,7 +13,6 @@ pipeline {
             steps {
                 echo 'Verificando entorno Docker y repositorio...'
                 sh "docker version"
-                sh "docker pull ${IMAGE_NAME}"
             }
         }
 
