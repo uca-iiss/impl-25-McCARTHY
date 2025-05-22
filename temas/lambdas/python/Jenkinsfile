@@ -8,7 +8,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile ./app/procesador.py'
+                sh 'python -m py_compile temas/lambdas/python/app/procesador.py'
             }
         }
         stage('Test') {
@@ -18,7 +18,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'py.test --verbose --junit-xml ./test-reports/results.xml ./tests/test_procesador.py'
+                sh 'py.test --verbose --junit-xml temas/lambdas/python/app/test-reports/results.xml temas/lambdas/python/app/tests/test_procesador.py'
             }
             post {
                 always {
@@ -33,7 +33,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'pyinstaller --onefile ./app/procesador.py'
+                sh 'pyinstaller --onefile temas/lambdas/python/app/procesador.py'
             }
             post {
                 success {
