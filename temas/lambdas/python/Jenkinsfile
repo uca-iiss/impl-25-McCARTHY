@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "python:3.12-slim"
-        APP_DIR = "temas/lambdas/python"
-    }
+       IMAGE_NAME = "python:3.12-slim"
+       APP_DIR = "temas/lambdas/python"
+       DOCKER_HOST = "unix:///var/run/docker.sock"
+   }
+
 
     stages {
         stage('Preparar') {
