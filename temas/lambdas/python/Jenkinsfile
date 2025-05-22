@@ -18,11 +18,12 @@ pipeline {
                 }
             }
             steps {
-                sh 'py.test --verbose --junit-xml temas/lambdas/python/app/test-reports/results.xml temas/lambdas/python/tests/test_procesador.py'
+            	pip install pytest
+                sh 'py.test --verbose --junit-xml temas/lambdas/python/tests/test-reports/results.xml temas/lambdas/python/tests/test_procesador.py'
             }
             post {
                 always {
-                    junit 'test-reports/results.xml'
+                    junit 'temas/lambdas/python/tests/test-reports/results.xml/results.xml'
                 }
             }
         }
