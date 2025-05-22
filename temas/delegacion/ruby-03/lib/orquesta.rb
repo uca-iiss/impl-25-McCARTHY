@@ -36,23 +36,23 @@ class Orquesta
   end
 
   def tocar
-    puts "La orquesta comienza a tocar:"
+    # puts "La orquesta comienza a tocar:"
     @instrumentos.each_with_index do |instrumento, index|
-      puts "  [#{index + 1}] #{instrumento.tipo}:"
+      # puts "  [#{index + 1}] #{instrumento.tipo}:"
       instrumento.tocar
     end
-    puts "Fin de la interpretación\n\n"
+    # puts "Fin de la interpretación\n\n"
   end
 
   def afinar
-    puts "Afinando la orquesta:"
+    # puts "Afinando la orquesta:"
     @instrumentos.each_with_index do |instrumento, index|
-      puts "  [#{index + 1}] #{instrumento.tipo}:"
+      # puts "  [#{index + 1}] #{instrumento.tipo}:"
       instrumento.afinar
       instrumento.tocar
       puts
     end
-    puts "Afinación completada\n\n"
+    # puts "Afinación completada\n\n"
   end
 
   def to_a
