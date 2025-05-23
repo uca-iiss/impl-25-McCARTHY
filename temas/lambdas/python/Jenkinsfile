@@ -19,7 +19,6 @@ pipeline {
 	    }
 	    steps {
 		sh 'py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py'
-		'
 	    }
 	    post {
 		always {
