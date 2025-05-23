@@ -2,50 +2,91 @@ using NUnit.Framework;
 using System;
 using System.IO;
 
-namespace PrinterDelegationExample.Tests
+namespace PrinterTests
 {
+    [TestFixture]
     public class PrinterManagerTests
     {
-        [Test]
-        public void ShouldDelegateToPdfPrinter()
+        private StringWriter output;
+        private PrinterManager manager;
+
+        [SetUp]
+        public void Setup()
         {
-            // Arrange
-            var manager = new PrinterManager();
-            var printer = new PdfPrinter();
-            var expectedOutput = "Printing PDF: Test Document";
+            output = new StringWriter();
+            Console.SetOut(output);
+            manager = new PrinterManager();
+        }
 
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-
-                // Act
-                manager.SetPrinter(printer.Print);
-                manager.PrintDocument("Test Document");
-
-                // Assert
-                var output = sw.ToString().Trim();
-                Assert.AreEqual(expectedOutput, output);
-            }
+        [TearDown]
+        public void TearDown()
+        {
+            output.Dispose();
         }
 
         [Test]
-        public void ShouldWarnWhenNoPrinterConfigured()
+        public void TestPdfPrinter()
         {
-            // Arrange
-            var manager = new PrinterManager();
-            var expectedOutput = "No printer configured.";
+            IPrinter printer = new PdfPrinter();
+            manager.SetPrinter(printer.Print);
+            manager.PrintDocument("Reporte anual");
 
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
+            Assert.IsTrue(output.ToString().Contains("Printing PDF: Reporte anual"));
+        }
 
-                // Act
-                manager.PrintDocument("Anything");
+        [Test]
+        public void TestWordPrinter()
+        {
+            IPrinter printer = new WordPrinter();
+            manager.SetPrinter(printer.Print);
+            manager.PrintDocument("Carta laboral");
 
-                // Assert
-                var output = sw.ToString().Trim();
-                Assert.AreEqual(expectedOutput, output);
-            }
+            Assert.IsTrue(output.ToString().Contains("Printing Word Document: Carta laboral"));
+        }
+
+        [Test]
+        public void TestImagePrinter()
+        {
+            IPrinter printer = new ImagePrinter();
+            manager.SetPrinter(printer.Print);
+            manager.PrintDocument("Logo corporativo");
+
+            Assert.IsTrue(output.ToString().Contains("Printing Image: Logo corporativo"));
+        }
+
+        [Test]
+        public void TestNoPrinterConfigured()
+        {
+            manager.PrintDocument("Sin impresora configurada");
+
+            Assert.IsTrue(output.ToString().Contains("No printer configured."));
+        }
+
+        [Test]
+        public void TestChangePrinterAtRuntime()
+        {
+            IPrinter pdfPrinter = new PdfPrinter();
+            IPrinter wordPrinter = new WordPrinter();
+
+            manager.SetPrinter(pdfPrinter.Print);
+            manager.PrintDocument("Archivo PDF");
+
+            manager.SetPrinter(wordPrinter.Print);
+            manager.PrintDocument("Archivo Word");
+
+            string result = output.ToString();
+            Assert.IsTrue(result.Contains("Printing PDF: Archivo PDF"));
+            Assert.IsTrue(result.Contains("Printing Word Document: Archivo Word"));
+        }
+
+        [Test]
+        public void TestEmptyContentPrint()
+        {
+            IPrinter printer = new PdfPrinter();
+            manager.SetPrinter(printer.Print);
+            manager.PrintDocument("");
+
+            Assert.IsTrue(output.ToString().Contains("Printing PDF: "));
         }
     }
 }
