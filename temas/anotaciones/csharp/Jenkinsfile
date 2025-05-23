@@ -1,0 +1,73 @@
+pipeline {
+    agent {
+        docker {
+            image 'mcr.microsoft.com/dotnet/sdk:6.0'
+            args '-u root:root'
+        }
+    }
+
+    environment {
+        DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
+        PATH = "${env.HOME}/.dotnet/tools:${env.PATH}" // Asegura que las herramientas globales estén accesibles
+    }
+
+    options {
+        timestamps()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Clonando el repositorio...'
+                checkout scm
+            }
+        }
+
+        stage('Restaurar dependencias') {
+            steps {
+                sh 'dotnet restore temas/anotaciones/csharp/anotaciones_csharp/main.csproj'
+                sh 'dotnet restore temas/anotaciones/csharp/test_csharp/test.csproj'
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                sh 'dotnet build temas/anotaciones/csharp/anotaciones_csharp/main.csproj --configuration Release'
+                sh 'dotnet build temas/anotaciones/csharp/test_csharp/test.csproj --configuration Release'
+            }
+        }
+
+        stage('Ejecutar Tests') {
+            steps {
+                sh 'dotnet test temas/anotaciones/csharp/test_csharp/test.csproj --logger trx;LogFileName=test_results.trx'
+            }
+        }
+
+        stage('Convertir TRX a JUnit XML') {
+            steps {
+                // Instala trx2junit si no está disponible
+                sh 'dotnet tool install -g trx2junit || true'
+
+                sh '/root/.dotnet/tools/trx2junit temas/anotaciones/csharp/test_csharp/TestResults/*.trx'
+
+            }
+        }
+
+        stage('Publicar resultados de test') {
+            steps {
+                junit 'temas/anotaciones/csharp/test_csharp/TestResults/*.xml'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizada con éxito.'
+        }
+
+        failure {
+            echo 'La compilación o pruebas fallaron.'
+        }
+    }
+}
