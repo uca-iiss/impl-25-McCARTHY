@@ -1,4 +1,4 @@
-# Tema A.1 - Abstraccón
+# Tema A.1 - Abstracción
 
 Este proyecto demuestra el concepto de **abstracción** en programación orientada a objetos utilizando el lenguaje **C#**. Se modelan distintos tipos de cuentas bancarias (`CuentaCorriente` y `CuentaAhorros`) que heredan de una clase base abstracta (`CuentaBancaria`). El programa principal (`BancoMain.cs`) muestra cómo utilizar estas clases de manera polimórfica.
 
@@ -6,7 +6,7 @@ Este proyecto demuestra el concepto de **abstracción** en programación orienta
 
 ### [`CuentaBancaria`](src/CuentaBancaria.cs) (Clase abstracta)
 
-- **Propiedades:**
+- **Atributos:**
     - `Titular`: nombre del dueño (solo lectura).
     - `Saldo`: saldo disponible (lectura pública, modificación protegida).
 
@@ -29,7 +29,7 @@ Este proyecto demuestra el concepto de **abstracción** en programación orienta
 - **Atributos**:
     - `tasaInteres`: fija en 3% (0.03).
 
-- Constructor:
+- **Constructor:**
     - Llama al constructor de la clase base con titular y saldo inicial.
 
 - **Métodos sobrescritos**:
