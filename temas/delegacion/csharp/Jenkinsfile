@@ -33,8 +33,8 @@ pipeline {
 
         stage('Compilar') {
             steps {
-                sh 'dotnet build temas/delegacion/chsarp/PrinterDelegationExample/csharp/PrinterDelegationExample.csproj --configuration Release'
-                sh 'dotnet build temas/delegacion/chsarp/PrinterDelegationExample/test/test.csproj --configuration Release'
+                sh 'dotnet build temas/delegacion/csharp/PrinterDelegationExample/csharp/PrinterDelegationExample.csproj --configuration Release'
+                sh 'dotnet build temas/delegacion/csharp/PrinterDelegationExample/test/test.csproj --configuration Release'
             }
         }
 
