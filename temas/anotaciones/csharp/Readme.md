@@ -1,7 +1,7 @@
 # Anotaciones en C#
 
 ## Introducción
-Bienvenido al repositorio sobre Anotaciones en C#. Aquí encontrarás información detallada sobre cómo utilizar las anotaciones en C# para escribir código más limpio y eficiente gracias a AspectJ de java
+Bienvenido al repositorio sobre Anotaciones en C#. Aquí encontrarás información detallada sobre cómo utilizar las anotaciones en C#.
 
 ## Estructura de Directorio
 - `/README.md`: Archivo actual.
@@ -11,12 +11,73 @@ Bienvenido al repositorio sobre Anotaciones en C#. Aquí encontrarás informaci�
 - `/test.csproj`: Archivo de configuración esencial en cualquier proyecto de C# basado en .NET. Define cómo debe compilarse y ejecutarse el archivo test.cs, así como sus dependencias, el framework objetivo y otros parámetros clave.
 
 ## Conceptos Previos
-En este proyecto, los métodos implementados demuestran cómo los atributos personalizados y las anotaciones de serialización pueden utilizarse en C# para validar datos y controlar la representación de objetos al serializarlos en formatos como JSON. A continuación se describe detalladamente el propósito y funcionamiento de cada componente clave.
+Los atributos en C# permiten agregar metadatos declarativos a elementos del código (clases, métodos, propiedades, etc.). Son útiles en tiempo de compilación y ejecución para modificar el comportamiento del programa o facilitar tareas como validación, serialización, pruebas, entre otros.
+
+- **Definición y Uso de Atributos**:
+
+Los atributos en C# se definen como clases que heredan del tipo System.Attribute. Estas clases pueden contener propiedades, campos y constructores que permiten configurar su comportamiento y datos asociados. Además, utilizando el atributo AttributeUsage, se puede indicar a qué elementos del código se puede aplicar el atributo (por ejemplo, clases, métodos, propiedades, etc.), y si es posible aplicar múltiples instancias del mismo atributo en un solo elemento. Esta configuración proporciona flexibilidad a la hora de utilizar atributos personalizados de forma controlada y estructurada.
+
+```csharp 
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+public class ExampleAttribute : Attribute
+{
+    public string Description { get; set; }
+    public ExampleAttribute(string description)
+    {
+        Description = description;
+    }
+}
+```
+
+- **Aplicación de Atributos**:
+
+Los atributos se aplican escribiéndolos entre corchetes [ ] justo antes del elemento del código al que se refieren. Esto puede incluir clases, métodos, propiedades, campos, parámetros, ensamblados y más. Al aplicar un atributo, es posible pasarle argumentos definidos en su constructor, así como establecer valores para sus propiedades públicas. Esto hace que los atributos sean altamente configurables y útiles para describir el propósito o comportamiento esperado de los elementos del programa.
+
+```csharp 
+[Example("This is a class attribute.")]
+public class MyClass
+{
+    [Example("This is a method attribute.")]
+    public void MyMethod() { }
+}
+
+```
+
+- **Atributos Intrínsecos y Personalizados**:
+
+C# incluye una variedad de atributos integrados en el .NET Framework que cumplen funciones específicas. Algunos ejemplos comunes incluyen [Obsolete], que marca un elemento como obsoleto y genera una advertencia en tiempo de compilación; [Serializable], que indica que una clase puede ser serializada; y [DllImport], que permite importar funciones de bibliotecas externas. Sin embargo, cuando los atributos estándar no son suficientes, los desarrolladores pueden definir atributos personalizados que se ajusten a necesidades específicas del dominio de la aplicación. Esta capacidad de extensión permite crear soluciones más flexibles y mantenible
+
+- **Reflexión y Atributos**:
+
+La reflexión es una característica de C# que permite inspeccionar la estructura del programa en tiempo de ejecución. Usando reflexión, es posible acceder a los atributos aplicados a una clase, método o cualquier otro miembro, y actuar en consecuencia. Esto es especialmente útil en frameworks, bibliotecas de validación, motores de pruebas automáticas, herramientas de documentación y otros escenarios donde se requiere comportamiento dinámico basado en metadatos.
+
+```csharp
+var attributes = typeof(MyClass).GetCustomAttributes(false);
+foreach (Attribute attr in attributes)
+{
+    Console.WriteLine(attr);
+}
+```
+
+- **Atributos y Serialización**:
+
+Los atributos juegan un papel importante en la serialización de objetos, especialmente en el contexto de APIs y servicios web. En .NET, atributos como [JsonPropertyName] permiten cambiar el nombre con el que se serializa una propiedad, mientras que [JsonIgnore] evita que una propiedad sea incluida en la salida serializada. Esta capacidad de control detallado sobre la salida serializada permite que los objetos se adapten mejor a los requerimientos de comunicación externa sin modificar su estructura interna.
+
+```csharp
+public class Product
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
+    [JsonIgnore]
+    public string InternalData { get; set; }
+}
+```
 
 ## Código de Ejemplo
 A continuación, se muestran los ejemplos de cómo se pueden utilizar las anotaciones:
 
-[**main.cs**](/temas/anotaciones/csharp/anotaciones_csharp/main.cs)
+[**main.cs**](./anotaciones_csharp/main.cs)
 
 ```cs
 using System;
@@ -148,7 +209,7 @@ public class RangoSalarioAttribute : Attribute
 
 - Propiedades de Solo Lectura: Min y Max definen los límites inferior y superior del rango. Estas propiedades se inicializan a través del constructor y no pueden modificarse después, lo que garantiza la integridad de la validación.
 
-### Validación en la clase: `Trabajado`:
+### Validación en la clase: `Trabajador`:
 
 El método `Validar` es esencial para verificar si los valores de las propiedades cumplen con las restricciones definidas por el atributo RangoSalarioAttribute. Se basa en la reflexión para obtener las propiedades de la instancia y validar su contenido.
 
@@ -265,7 +326,7 @@ class Program
 
 ## Código de tests
 Ahora, se muestra unos tests para probar el correcto del ejemplo:
-[**test.cs**](/temas/anotaciones/csharp/test_csharp/test.cs)
+[**test.cs**](./test_csharp/test.cs)
 
 ```C#
 using NUnit.Framework;
