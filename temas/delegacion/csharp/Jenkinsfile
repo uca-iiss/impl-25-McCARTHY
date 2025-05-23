@@ -27,20 +27,20 @@ pipeline {
         stage('Restaurar dependencias') {
             steps {
                 sh 'dotnet restore temas/delegacion/csharp/PrinterDelegationExample/csharp/PrinterDelegationExample.csproj'
-                sh 'dotnet restore temas/delegacion/csharp/PrinterDelegationExample/test/Test.csproj'
+                sh 'dotnet restore temas/delegacion/csharp/PrinterDelegationExample/test/test.csproj'
             }
         }
 
         stage('Compilar') {
             steps {
                 sh 'dotnet build temas/delegacion/chsarp/PrinterDelegationExample/csharp/PrinterDelegationExample.csproj --configuration Release'
-                sh 'dotnet build temas/delegacion/chsarp/PrinterDelegationExample/test/Test.csproj --configuration Release'
+                sh 'dotnet build temas/delegacion/chsarp/PrinterDelegationExample/test/test.csproj --configuration Release'
             }
         }
 
         stage('Ejecutar Tests') {
             steps {
-                sh 'dotnet test temas/delegacion/csharp/PrinterDelegationExample/test/Test.csproj --logger trx;LogFileName=test_results.trx'
+                sh 'dotnet test temas/delegacion/csharp/PrinterDelegationExample/test/test.csproj --logger trx;LogFileName=test_results.trx'
             }
         }
 
