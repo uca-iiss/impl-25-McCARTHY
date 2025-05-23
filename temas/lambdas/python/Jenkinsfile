@@ -12,23 +12,28 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'python'
-                }
-            }
-            steps {
-             	sh '''
-		    pip install --no-cache-dir --break-system-packages pytest
-		    pytest --verbose --junit-xml=temas/lambdas/python/app/test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+	    agent {
+		docker {
+		    image 'python:3.9-slim'
+		}
+	    }
+	    steps {
+		sh '''
+		    apt-get update && apt-get install -y python3-pip
+		    pip install --prefix=/tmp/pytest pytest
+		    export PYTHONPATH=/tmp/pytest/lib/python3.9/site-packages:$PYTHONPATH
+		    mkdir -p test-reports
+		    python3 -m pytest --verbose --junit-xml=test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+		    ls -la test-reports/
 		'''
-            }
-            post {
-                always {
-                    junit 'temas/lambdas/python/tests/test-reports/results.xml'
-                }
-            }
-        }
+	    }
+	    post {
+		always {
+		    junit 'test-reports/results.xml'
+		}
+	    }
+	}
+
         stage('Deliver') {
             agent {
                 docker {
