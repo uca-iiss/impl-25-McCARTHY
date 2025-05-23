@@ -21,9 +21,9 @@ pipeline {
 		sh '''
 		    apt-get update && apt-get install -y python3-pip
 		    pip install --prefix=/tmp/pytest pytest
-		    export PYTHONPATH=/tmp/pytest/lib/python3.9/site-packages:$PYTHONPATH
+		    export PYTHONPATH=/var/jenkins_home/workspace/lambdas/temas/lambdas/python:/tmp/pytest/lib/python3.9/site-packages
 		    mkdir -p test-reports
-		    python3 -m pytest --verbose --junit-xml=test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+		    python3 -m pytest --verbose --junit-xml=test-reports/results.xml tests/test_procesador.py
 		    ls -la test-reports/
 		'''
 	    }
@@ -33,7 +33,6 @@ pipeline {
 		}
 	    }
 	}
-
         stage('Deliver') {
             agent {
                 docker {
