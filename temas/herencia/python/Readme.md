@@ -1,334 +1,344 @@
-# Herencia en Python
+# Ejemplo de uso de Herencia con python
 
-## Introducción
-Bienvenido a este repositorio donde explicaremos y mostraremos los conceptos de Herencia y Polimorfismo en Python, mediante un ejemplo sencillo con un codigo limpio y accesible para cualquiera
+Este documento describe:
 
-## Estructura de Directorio
-- `/README.md`: Archivo actual, donde explicaremos los conceptos y mostraremos los pasos a seguir para comprobar el funcionamiento del     ejemplo
-- `/herencia.py`: Archivo python donde se encuentra el codigo de ejemplo.
-- `/test.py`: Archivo python donde se encuentra el codigo de los test
-- `/Jenkinsfile`: configuración de pipeline para la comprobación del funcionamiento del código
+- Cómo hemos implementado un ejemplo de herencia utilizando Python.
+- Batería de pruebas y automatización con pytest.
+- Cómo se construye una imagen personalizada de Jenkins con python y se crean los contenedores.
+- Ejecución de pruebas automatizadas usando un `Jenkinsfile`.
 
+---
 
-## Conceptos Previos
-Antes de comenzar con el codigo donde se muestra los conceptos de herencia y polimorfismo, vamos a explicar algunos conceptos claves necesarios para entender el funcionamiento de la herencia y el polimorfismo en Python.
+## Análisis de herencia con python
 
-- **Herencia Básica**:
-  La herencia (o herencia básica) permite que una clase (subclase) herede atributos y métodos de otra clase (superclase). En el ejemplo, las clases `Diseñador`, `Desarrollador` y `EspecialistaDeAccesibilidad` actúan como subclases de la superclase `Trabajador` la cual proporciona atributos como `nombre` o `id del empleado`y métodos básicos como `trabajar` o `calcular salario anual`, que son heredados por las otras clases.
+La **abstracción** es un mecanismo de la programación orientada a objetos (POO) que permite a una clase (clase hija o derivada) heredar las características (atributos y métodos) de otra clase (clase padre o base).
 
-- **Herencia Múltiple**:
-  Python permite que una clase herede de múltiples clases, proporcionando una forma de combinar funcionalidades de múltiples superclases. Esto puede resultar en una situación compleja cuando diferentes clases base tienen métodos con el mismo nombre. Python utiliza el método de resolución de orden de método (MRO) para determinar el orden en el que se buscan los métodos. Este orden está definido por el algoritmo C3 linearization. En el código, la clase `FullStack` hereda tanto de la clase `Desarrollador` como de `Diseñador`, combinando sus atributos y métodos. 
+En el ejemplo que veremos, hemos implementado una clase abstracta base llamada Animal, de la que heredan otras como Perro o Gato. Utilizamos herencia para:
 
-- **Uso de kwargs con super().__init__()**:
-    Vamos a explicar primeramente el concepto de kwargs. **kwargs sirve para aceptar una cantidad varible de argumentos nombrados en un función o método, es decir, kwargs actua como un diccionario que recoge todos los argumentos que se pasen con nombre y que no estén explícitamente definidos en los parámetros. 
-    Hemos usado **kwargs porque cuando trabajamos con herencia (sobretodo la herencia multiple), **kwargs nos da una flexibilidad para pasar los argumentos entre las distintas clases evitando errores por el paso masivo de parámetros entre las distintas capas de herencia.
-    Una vez explicado esto, porque lo usamos con super().__init__(*kwargs)? Bueno el uso de super() hace que se llame al constructor de la clase padre directamente, cosa que es muy importante porque se debe de seguir el MRO como hemos explicado previamente. Entonces al usar **kwargs, no necesitamos preocuparnos por cuáles parámetros son de qué clase, esto nos proporciona una mayor flexibilidad y un código mucho más limpio
+- Estructurar la orientación a objetos.
+- Facilitar la escalabilidad.
+- Ocultar información y abstraerse.
 
-- **Polimorfismo**:
-  El polimorfismo permite que métodos con el mismo nombre actúen de manera diferente en diferentes clases. Por ejemplo, el método `trabajar` se define tanto en `Trabajador` como en `Diseñador`, `Desarrollador` y `EspecialistaDeAccesibilidad`, pero su implementación puede ser diferente en cada clase.
+---
 
-- **Composición de Clases**:
-  Además de la herencia, las clases `Diseñador`, `Desarollador` y `EspecialistaDeAccesibilidad` demuestran cómo la composición puede ser utilizada para agregar diferentes capacidades a las clases. Estas clases introducen nuevos métodos como `crear_prototipo`,  `escribir_codigo` y `auditar_interfaz` que son específicos para sus respectivas funcionalidades.
+## Explicación del código en python
 
-- **Inicialización de Superclases en Herencia Múltiple**:
-  En herencia múltiple, es importante inicializar correctamente todas las superclases para asegurarse de que todos los atributos de la clase base se configuren adecuadamente. En la clase `FullStack`, por ejemplo, se llama explícitamente a los inicializadores de `Desarrollador` y `Diseñador` para asegurar una inicialización completa.
+Este proyecto define una clase llamada `Animal`, de la que heredan las clases `Gato`, `Perro` y `Pajaro`. Cada una en un archivo aparte.
 
-Tras esta breve explicación de ciertos conceptos claves del funcionamiento de la herencia y del polimorfismo, mostraremos a continuación el codigo que se ha usado como ejemplo
+---
 
-## Código de Ejemplo
-A continuación, se muestra un ejemplo de cómo se pueden utilizar la herencia en Python:
-[**herencia.py**](herencia.py)
+### Clases
+
+### 'Animal'
 
 ```python
-# Clase base
-class Trabajador:
-    def __init__(self, nombre, id_empleado, salario_base, **kwargs):
-        self.nombre = nombre
-        self.id_empleado = id_empleado
-        self.salario_base = salario_base
+from abc import ABC, abstractmethod
 
-    def __str__(self):
-        return f"Nombre: {self.nombre}, ID: {self.id_empleado}"
+class Animal(ABC):
+    def __init__(self, name: str):
+        self.name = name
 
-    def trabajar(self):
-        return f"{self.nombre} está realizando tareas generales."
+    @abstractmethod
+    def hacer_sonido(self) -> str:
+        pass
 
-    def calcular_salario_anual(self):
-        return self.salario_base
-
-# Herencia Simple
-
-class Disenador(Trabajador):
-    def __init__(self, herramienta_preferida, **kwargs):
-        super().__init__(**kwargs)
-        self.herramienta_preferida = herramienta_preferida
-        self.bonus_disenador = 5000
-
-    def trabajar(self):
-        return f"{self.nombre} está diseñando interfaces con {self.herramienta_preferida}."
-
-    def crear_prototipo(self):
-        return f"{self.nombre} está creando un prototipo interactivo."
-
-    def calcular_salario_anual(self):
-        return self.salario_base + self.bonus_disenador
-
-class Desarrollador(Trabajador):
-    def __init__(self, lenguaje_principal, **kwargs):
-        super().__init__(**kwargs)
-        self.lenguaje_principal = lenguaje_principal
-        self.bonus_desarrollador = 8000
-
-    def trabajar(self):
-        return f"{self.nombre} está desarrollando software en {self.lenguaje_principal}."
-
-    def escribir_codigo(self):
-        return f"{self.nombre} está escribiendo código limpio y eficiente."
-
-    def calcular_salario_anual(self):
-        return self.salario_base + self.bonus_desarrollador
-
-class EspecialistaDeAccesibilidad(Trabajador):
-    def __init__(self, normativa_referencia, **kwargs):
-        super().__init__(**kwargs)
-        self.normativa_referencia = normativa_referencia
-        self.bonus_accesibilidad = 6000
-
-    def trabajar(self):
-        return f"{self.nombre} está evaluando accesibilidad según la normativa {self.normativa_referencia}."
-
-    def auditar_interfaz(self):
-        return f"{self.nombre} está auditando la interfaz para garantizar accesibilidad."
-
-    def calcular_salario_anual(self):
-        return self.salario_base + self.bonus_accesibilidad
-
-# Herencia Múltiple
-
-class Fullstack(Desarrollador, Disenador):
-    def __init__(self, anos_experiencia, **kwargs):
-        super().__init__(**kwargs)
-        self.anos_experiencia = anos_experiencia
-        self.bonus_fullstack = 10000
-
-    def trabajar(self):
-        trabajo_dev = Desarrollador.trabajar(self)
-        trabajo_dis = Disenador.trabajar(self)
-        return f"{self.nombre} (Fullstack) está:\n  - {trabajo_dev}\n  - {trabajo_dis}\n  - Integrando frontend y backend."
-
-    def gestionar_proyecto_completo(self):
-        return f"{self.nombre} está gestionando un proyecto de desarrollo completo."
-
-    def calcular_salario_anual(self):
-        return self.salario_base + (self.anos_experiencia * 1000) + self.bonus_fullstack
-
-class UXEngineer(Disenador, EspecialistaDeAccesibilidad):
-    def __init__(self, especialidad_ux, anos_experiencia, **kwargs):
-        super().__init__(**kwargs)
-        self.especialidad_ux = especialidad_ux
-        self.anos_experiencia = anos_experiencia
-        self.bonus_ux = 9000
-
-    def trabajar(self):
-        trabajo_dis = Disenador.trabajar(self)
-        trabajo_acc = EspecialistaDeAccesibilidad.trabajar(self)
-        return f"{self.nombre} (UX Engineer) está:\n  - {trabajo_dis}\n  - {trabajo_acc}\n  - Diseñando experiencias centradas en el usuario ({self.especialidad_ux})."
-
-    def realizar_pruebas_usabilidad(self):
-        return f"{self.nombre} está conduciendo pruebas de usabilidad."
-
-    def calcular_salario_anual(self):
-        return self.salario_base + (self.anos_experiencia * 1000) + self.bonus_ux
+    @abstractmethod
+    def describir(self) -> str:
+        pass
 ```
 
-Ahora vamos a explicar los métodos que se han usado en el ejemplo:
-
-### Clase `Trabajador`:
-
-- `__init__(self, nombre, id_empleado, salario_base, **kwargs)`: Constructor que inicializa los atributos comunes a todos los trabajadores: nombre, ID y salario base.
-
-- `__str__(self)`: Método que devuelve una representación legible del objeto trabajador, incluyendo el nombre y el ID.
-
-- `trabajar(self)`: Método que representa una acción genérica de trabajo. Este método muestra cómo se puede proporcionar un comportamiento básico en una superclase que otras clases pueden heredar o sobrescribir.
-
-- `calcular_salario_anual(self)`: Método que devuelve el salario base anual del trabajador. Este método se sobrescribirá en las diferentes subclases. 
-
-### Clase `Diseñador`:
-- `__init__(self, herramienta_preferida, **kwargs)`: Constructor que inicializa al diseñador con su herramienta preferida, además de los atributos comunes heredados de Trabajador.
-
-- `trabajar(self)`: Sobrescribe el método de Trabajador, indicando que el diseñador está trabajando con una herramienta de diseño específica.
-
-- `crear_prototipo(self)`: Método propio de la clase Diseñador que simula la creación de un prototipo interactivo.
-
-- `calcular_salario_anual(self)`: Sobrescribe el cálculo de salario para incluir un bonus de diseñador.
-
-### Clase `Desarrollador`:
-- `__init__(self, lenguaje_principal, **kwargs)`: Constructor que inicializa al desarrollador con su lenguaje de programación principal y los atributos comunes heredados de Trabajador
-
-- `trabajar(self)`: Sobrescribe el método de Trabajador para reflejar que el desarrollador está escribiendo código.
-
-- `escribir_codigo(self)`: Método propio que indica que el desarrollador está escribiendo código eficiente.
-
-- `calcular_salario_anual(self)`: Sobrescribe el cálculo de salario para añadir un bonus de desarrollador.
-
-#### Clase `EspecialistaDeAccesibilidad`:
-- `__init__(self, normativa_referencia, **kwargs)`: Constructor que inicializa al especialista con la normativa de accesibilidad que utiliza, además de los atributos comunes hereados de la clase Trabajador
-
-- `trabajar(self)`: Sobrescribe el método de Trabajador para indicar que el especialista está evaluando la accesibilidad.
-
-- `auditar_interfaz(self)`: Método propio que simula una auditoría de accesibilidad.
-
-- `calcular_salario_anual(self)`: Sobrescribe el cálculo de salario para añadir un bonus específico de accesibilidad.
-
-### Clase `Fullstack`: 
-- `__init__(self, anos_experiencia, **kwargs)`: Constructor que inicializa el número de años de experiencia y llama al constructor de sus clases padre usando super().
-
-`trabajar(self)`: Sobrescribe el método trabajar combinando las acciones de diseñador y desarrollador, además de agregar una capa de integración.
-
-- `gestionar_proyecto_completo(self)`: Método propio que indica que el fullstack puede encargarse de todo el proyecto.
-
-- `calcular_salario_anual(self)`: Sobrescribe el cálculo de salario para incluir la experiencia y un bonus adicional por ser fullstack.
-
-### Clase `UXEngineer`: 
-- `__init__(self, especialidad_ux, anos_experiencia, **kwargs)`: Constructor que inicializa la especialidad UX y la experiencia, además de llamar al constructor de sus clases padre usando super().
-
-- `trabajar(self)`: Sobrescribe el método trabajar combinando las acciones del diseñador y del especialista en accesibilidad, enfocándose en la experiencia de usuario.
-
-- `realizar_pruebas_usabilidad(self)`: Método propio que representa la realización de pruebas de usabilidad.
-
-- `calcular_salario_anual(self)`: Sobrescribe el cálculo de salario para incluir años de experiencia y un bonus específico por su rol.
+Clase abstracta de la que heredarán las demás. Al ser abstracta no se puede instanciar y es por ello que sus métodos deben ser definidas en las clases hijas. Define un constructor que inicializa su nombre.
 
 
-A continuacion mostraremos como hemos comprobado el funcionamiento del código
-
-## Código de test
-[**test.py**](test.py)
+### 'Gato'
 
 ```python
+from .animal import Animal
 
-import unittest
-from herencia import *
+class Gato(Animal):
+    def __init__(self, nombre: str):
+        super().__init__(nombre)
 
-class TestTrabajadores(unittest.TestCase):
+    def hacer_sonido(self) -> str:
+        return "Miau"
 
-    def test_instancias(self):
-        t = Trabajador(nombre="Ana", id_empleado=1, salario_base=30000)
-        d = Disenador(nombre="Luis", id_empleado=2, salario_base=35000, herramienta_preferida="Figma")
-        dev = Desarrollador(nombre="María", id_empleado=3, salario_base=40000, lenguaje_principal="Python")
-        acc = EspecialistaDeAccesibilidad(nombre="Carlos", id_empleado=4, salario_base=37000, normativa_referencia="WCAG")
-        fs = Fullstack(nombre="Laura", id_empleado=5, salario_base=45000, lenguaje_principal="JavaScript", herramienta_preferida="Sketch", anos_experiencia=3)
-        ux = UXEngineer(nombre="Pepe", id_empleado=6, salario_base=42000, herramienta_preferida="Adobe XD", normativa_referencia="ADA", especialidad_ux="UX Writing", anos_experiencia=2)
-
-        self.assertIsInstance(d, Trabajador)
-        self.assertIsInstance(dev, Trabajador)
-        self.assertIsInstance(acc, Trabajador)
-        self.assertIsInstance(fs, Desarrollador)
-        self.assertIsInstance(fs, Disenador)
-        self.assertIsInstance(fs, Trabajador)
-        self.assertIsInstance(ux, Disenador)
-        self.assertIsInstance(ux, EspecialistaDeAccesibilidad)
-        self.assertIsInstance(ux, Trabajador)
-
-    def test_herencia(self):
-        self.assertTrue(issubclass(Disenador, Trabajador))
-        self.assertTrue(issubclass(Desarrollador, Trabajador))
-        self.assertTrue(issubclass(EspecialistaDeAccesibilidad, Trabajador))
-        self.assertTrue(issubclass(Fullstack, Desarrollador))
-        self.assertTrue(issubclass(Fullstack, Disenador))
-        self.assertTrue(issubclass(UXEngineer, Disenador))
-        self.assertTrue(issubclass(UXEngineer, EspecialistaDeAccesibilidad))
-
-    def test_trabajar(self):
-        dev = Desarrollador(nombre="Mario", id_empleado=7, salario_base=41000, lenguaje_principal="Java")
-        self.assertEqual(dev.trabajar(), "Mario está desarrollando software en Java.")
-
-        dis = Disenador(nombre="Julia", id_empleado=8, salario_base=36000, herramienta_preferida="Figma")
-        self.assertEqual(dis.trabajar(), "Julia está diseñando interfaces con Figma.")
-
-        acc = EspecialistaDeAccesibilidad(nombre="Sonia", id_empleado=9, salario_base=38000, normativa_referencia="WCAG")
-        self.assertEqual(acc.trabajar(), "Sonia está evaluando accesibilidad según la normativa WCAG.")
-
-        fs = Fullstack(nombre="Fran", id_empleado=10, salario_base=50000, lenguaje_principal="Python", herramienta_preferida="Figma", anos_experiencia=2)
-        self.assertIn("Fran (Fullstack) está:", fs.trabajar())
-
-        ux = UXEngineer(nombre="Leo", id_empleado=11, salario_base=43000, herramienta_preferida="Sketch", normativa_referencia="ADA", especialidad_ux="Research", anos_experiencia=4)
-        self.assertIn("Leo (UX Engineer) está:", ux.trabajar())
-
-    def test_salario_anual(self):
-        d = Disenador(nombre="Luis", id_empleado=2, salario_base=35000, herramienta_preferida="Figma")
-        self.assertEqual(d.calcular_salario_anual(), 35000 + 5000)
-
-        dev = Desarrollador(nombre="María", id_empleado=3, salario_base=40000, lenguaje_principal="Python")
-        self.assertEqual(dev.calcular_salario_anual(), 40000 + 8000)
-
-        acc = EspecialistaDeAccesibilidad(nombre="Carlos", id_empleado=4, salario_base=37000, normativa_referencia="WCAG")
-        self.assertEqual(acc.calcular_salario_anual(), 37000 + 6000)
-
-        fs = Fullstack(nombre="Laura", id_empleado=5, salario_base=45000, lenguaje_principal="JavaScript", herramienta_preferida="Sketch", anos_experiencia=3)
-        self.assertEqual(fs.calcular_salario_anual(), 45000 + (3 * 1000) + 10000)
-
-        ux = UXEngineer(nombre="Pepe", id_empleado=6, salario_base=42000, herramienta_preferida="Adobe XD", normativa_referencia="ADA", especialidad_ux="UX Writing", anos_experiencia=2)
-        self.assertEqual(ux.calcular_salario_anual(), 42000 + (2 * 1000) + 9000)
-
-    def test_metodos_propios(self):
-        d = Disenador(nombre="Paula", id_empleado=12, salario_base=30000, herramienta_preferida="Figma")
-        self.assertEqual(d.crear_prototipo(), "Paula está creando un prototipo interactivo.")
-
-        dev = Desarrollador(nombre="Mario", id_empleado=13, salario_base=31000, lenguaje_principal="C++")
-        self.assertEqual(dev.escribir_codigo(), "Mario está escribiendo código limpio y eficiente.")
-
-        acc = EspecialistaDeAccesibilidad(nombre="Lucía", id_empleado=14, salario_base=32000, normativa_referencia="EN301549")
-        self.assertEqual(acc.auditar_interfaz(), "Lucía está auditando la interfaz para garantizar accesibilidad.")
-
-        fs = Fullstack(nombre="Fran", id_empleado=15, salario_base=47000, lenguaje_principal="Java", herramienta_preferida="Sketch", anos_experiencia=5)
-        self.assertEqual(fs.gestionar_proyecto_completo(), "Fran está gestionando un proyecto de desarrollo completo.")
-
-        ux = UXEngineer(nombre="Leo", id_empleado=16, salario_base=41000, herramienta_preferida="Adobe XD", normativa_referencia="WCAG", especialidad_ux="Visual Design", anos_experiencia=4)
-        self.assertEqual(ux.realizar_pruebas_usabilidad(), "Leo está conduciendo pruebas de usabilidad.")
-
-if __name__ == '__main__':
-    unittest.main()
-
+    def describir(self) -> str:
+        return f"Soy un gato y me llamo {self.name}"
 ```
 
-## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Clase hija que redefine los métodos abstractos.
 
-### 1. Instalación de Python
-Primero, necesitas asegurarte de que Python está instalado en tu sistema.
-Puedes descargar e instalar Python desde:
-(https://www.python.org/downloads/)
-Sigue las instrucciones específicas para tu sistema operativo.
+### 'Perro'
 
-Verifica la instalación ejecutando:
+```python
+from .animal import Animal
+
+class Perro(Animal):
+    def __init__(self, nombre: str):
+        super().__init__(nombre)
+
+    def hacer_sonido(self) -> str:
+        return "Guau"
+
+    def describir(self) -> str:
+        return f"Soy un perro y me llamo {self.name}"
+```
+
+Clase hija que redefine los métodos abstractos.
+
+### 'Pajaro'
+
+```python
+from .animal import Animal
+
+class Pajaro(Animal):
+    def __init__(self, nombre: str):
+        super().__init__(nombre)
+
+    def hacer_sonido(self) -> str:
+        return "Pío"
+
+    def describir(self) -> str:
+        return f"Soy un pájaro y me llamo {self.name}"
+```
+
+Clase hija que redefine los métodos abstractos.
+
+**Nota:** Las clases hijas no agregan métodos nuevos ni modifican lo que reciben ya que esto puede dar problemas a largo plazo. 
+
+## Ventajas de la herencia
+
+1. **Extensibilidad:** Facilita la extensión del comportamiento de las clases.
+
+2. **Reutilización de código:** Facilita la creación de componentes modulares y reutilizables, mejorando la eficiencia en el desarrollo.
+
+3. **Polimorfismo:** Permite tratar objetos de diferentes clases derivadas de la misma clase base de manera uniforme, haciendo el código más flexible y escalable.
+
+---
+
+Ahora pasaremos a ver el programa de pruebas implementada en el directorio de [tests](animales/tests) con el uso de pytest.
+
+---
+
+## Casos de prueba
+
+### 1. Comprobación de métodos y si es instancia de la superclase de Perro
+
+```python
+def test_perro():
+    rex = Perro("Rex")
+    assert (rex.hacer_sonido(), "Guau")
+    assert (rex.describir(), "Soy un perro y me llamo Rex")
+    assert isinstance(rex, Animal)  # Verifica que Perro es un Animal
+```
+
+- El constructor inicializa el nombre
+- Comprobación de que hace sonido de perro
+- Comprobación de que se describe correctamente
+- Comprobación de que es una instancia de Animal
+---
+
+### 2. Comprobación de métodos y si es instancia de la superclase de Gato
+
+```python
+def test_gato():
+    misu = Gato("Misu")
+    assert (misu.hacer_sonido(), "Miau")
+    assert (misu.describir(), "Soy un gato y me llamo Misu")
+    assert isinstance(misu, Animal)  # Verifica que Gato es un Animal
+```
+
+- El constructor inicializa el nombre
+- Comprobación de que hace sonido de gato
+- Comprobación de que se describe correctamente
+- Comprobación de que es una instancia de Animal
+
+---
+### 3. Comprobación de métodos y si es instancia de la superclase de Pajaro
+
+```python
+def test_pajaro():
+    piolin = Pajaro("Piolín")
+    assert (piolin.hacer_sonido(), "Pío")
+    assert (piolin.describir(), "Soy un pájaro y me llamo Piolín")
+    assert isinstance(piolin, Animal)  # Verifica que Pájaro es un Animal
+```
+
+- El constructor inicializa el nombre
+- Comprobación de que hace sonido de pájaro
+- Comprobación de que se describe correctamente
+- Comprobación de que es una instancia de Animal
+
+---
+
+Este programa sirve como un banco de pruebas básico para:
+
+- Confirmar el correcto uso de la herencia.
+- Verificar comportamientos específicos de nuestro programa.
+
+---
+
+## Pytest
+
+Para la realización de pruebas automáticas en python, hemos utilizado pytest.
+Simplemente necesitamos ejecutar pytest en el directorio de animales para realizar las pruebas correctamente, habiendo instalado previamente pytest.
+
+## Dockerfile: Jenkins con python
+
+```dockerfile
+FROM jenkins/jenkins:lts
+
+# Cambiar a usuario root para instalar dependencias del sistema
+USER root
+
+# Instalar dependencias necesarias para Ruby y compilación de gemas
+RUN apt-get update && \
+    apt-get install -y \ 
+        python3 \
+        python3-pip \
+        python3-venv && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/list/*
+
+# Crear entorno virtual
+RUN python3 -m venv /opt/venv
+
+# Activar entorno virtual y actualizar pip
+RUN /opt/venv/bin/pip install --upgrade pip
+
+# Copiar requirements.txt al contenedor
+COPY requirements.txt /tmp/requirements.txt
+
+# Instalar dependencias en el entorno virtual
+RUN /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Añadir el entorno virtual al PATH
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Volver al usuario Jenkins
+USER jenkins
+
+# Comprobar que todo esté correcto
+RUN python3 --version && pip --version
+```
+
+- Parte de la imagen oficial 'jenkins/jenkins:lts'.
+- Instala python3 y herramientas de desarrollo necesarias.
+- Realizamos un entorno virtual con pytest para mayor seguridad.
+- Instalamos dependencias en ese entorno.
+- Vuelve al usuario 'jenkins' para mayor seguridad al ejecutar procesos.
+
+---
+
+## Creación del contenedor Jenkins personalizado
+
+### 1. Construir la imagen
 
 ```bash
-python --version
+docker build -t my-jenkins-image .
 ```
-o
-```bash
-python3 --version
-```
-Esto debería mostrar la versión de Python instalada.
 
-### 2. Creación Jenkinsfile
-A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código
+### 2. Crear y ejecutar el contenedor mediante Terraform
 
-```Jenkinsfile
+Mediante un main.tf el cual incluirá todo lo necesario para poder proceder con la instalación de los contenedores de Jenkins, podremos tener los contenedores funcionales y operativos colocando los comandos de **Terraform Init** y **Terraform Apply**
+
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "docker" {
+  host = "npipe:////./pipe/docker_engine"
+}
+
+# Crear una red Docker para Jenkins y DinD
+resource "docker_network" "ci_network" {
+  name = "ci_network"
+}
+
+# Imagen Docker-in-Docker
+resource "docker_image" "dind" {
+  name = "docker:dind"
+}
+
+# Contenedor Docker-in-Docker
+resource "docker_container" "dind" {
+  image = docker_image.dind.image_id
+  name  = "dind"
+  privileged = true
+  restart    = "always"
+
+  env = [
+    "DOCKER_TLS_CERTDIR="
+  ]
+
+  networks_advanced {
+    name = docker_network.ci_network.name
+  }
+
+  ports {
+    internal = 2375
+    external = 2375
+  }
+}
+
+# Contenedor Jenkins usando la imagen personalizada creada previamente
+resource "docker_container" "jenkins" {
+  image   = "my-jenkins-image"  # Usamos la imagen creada manualmente
+  name    = "jenkins"
+  restart = "always"
+
+  ports {
+    internal = 8080
+    external = 8080
+  }
+
+  networks_advanced {
+    name = docker_network.ci_network.name
+  }
+
+  # Esto permite que Jenkins use Docker del host
+  volumes {
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
+  }
+}
+
+Una vez ejecutado, ahora ya tendremos los contenedores de Jenkins funcionales, ahora procederemos a explicar el JenkinsFile escogido para el lanzamiento de la aplicación mediante un pipeline.
+
+
+## Jenkinsfile para CI/CD en python y pytest
+
+```groovy
 pipeline {
     agent any
 
     stages {
         stage('Preparar entorno') {
             steps {
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install --upgrade pip'
+                echo 'Preparando entorno Python...'
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                echo 'Instalando dependencias...'
+                dir('temas/herencia/python/JenkinsDespliegue') {
+                    sh 'pip install -r requirements.txt'
+                }
             }
         }
 
         stage('Ejecutar pruebas') {
             steps {
-                sh './venv/bin/python temas/herencia/python/test.py'
+                echo 'Ejecutando pruebas con pytest...'
+                dir('temas/herencia/python/animales') {
+                    sh 'pytest'
+                }
             }
         }
     }
@@ -337,20 +347,24 @@ pipeline {
         always {
             echo 'Pipeline finalizado.'
         }
+        failure {
+            echo 'La ejecución falló.'
+        }
+        success {
+            echo 'La ejecución fue exitosa.'
+        }
     }
 }
 ```
 
-### 3. Crear Pipeline
-Una vez realizados los pasos anteriores, abrimos Jenkins y creamos un nuevo Pipeline. Para ello: 
+'Instalar dependencias' Se encarga de instalar las dependencias de requirements.txt. 
+'Ejecutar pruebas' Se encarga de realizar los tests con pytest. 
+'post'  Define acciones según el resultado: éxito o fallo. 
 
- - Lo definimos como `Pipeline script from SCM` y como SCM seleccionamos `Git`.
- - Ponemos la siguiente URL: `https://github.com/uca-iiss/WIRTH-impl-25`.
- - En branch ponemos `*/feature-herencia`.
- - Por último, en Script Path añadimos `temas/herencia/Jenkinsfile`
+Este setup permite:
 
-Y con esta configuración hemos creado el pipeline necesario para la ejecución de los test
+- Ejecutar Jenkins en Docker con python3 y pytest preinstalado.
+- Correr pruebas automatizadas de python usando `pytest`.
+- Integrar pruebas a pipelines CI/CD de forma simple y portable.
 
-### 4. Ejecutar los Tests
-Una vez creado el pipeline, ejecutamos dando a `Construir ahora` y el propion Jenkins pasará los test automaticamente.
-
+---

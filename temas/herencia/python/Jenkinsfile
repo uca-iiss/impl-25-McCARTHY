@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Preparar entorno') {
             steps {
-<<<<<<< HEAD
                 echo 'Preparando entorno Python...'
             }
         }
@@ -15,23 +14,15 @@ pipeline {
                 dir('temas/herencia/python/JenkinsDespliegue') {
                     sh 'pip install -r requirements.txt'
                 }
-=======
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install --upgrade pip'
->>>>>>> feature-abstraccion
             }
         }
 
         stage('Ejecutar pruebas') {
             steps {
-<<<<<<< HEAD
                 echo 'Ejecutando pruebas con pytest...'
                 dir('temas/herencia/python/animales') {
                     sh 'pytest'
                 }
-=======
-                sh './venv/bin/python temas/herencia/python/test.py'
->>>>>>> feature-abstraccion
             }
         }
     }
@@ -40,7 +31,6 @@ pipeline {
         always {
             echo 'Pipeline finalizado.'
         }
-<<<<<<< HEAD
         failure {
             echo 'La ejecución falló.'
         }
@@ -49,7 +39,3 @@ pipeline {
         }
     }
 }
-=======
-    }
-}
->>>>>>> feature-abstraccion
