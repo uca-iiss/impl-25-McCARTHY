@@ -1,19 +1,38 @@
 # Abstraccion en Lambdas
 
 ## Introducción
- 
+ Bienvenido a este repositorio donde explicaremos y mostraremos el concepto de abstraccion en Scala, mediante un ejemplo sencillo con un codigo limpio y accesible para cualquiera
 
 ## Estructura de Directorio
 
 - `/README.md`: Archivo actual.
-- `/common.scala`: 
-- `/CreditCard.scala`: 
-- `/PaymentMethod.scala`: 
-- `/Paypal.scala`: 
-- `/PaymentMethodSpec.scala`: 
+- `/common.scala`: Archivo para definir cosas comunes o compartidas entre distintas clases.
+- `/CreditCard.scala`: Archivo que define una implementación concreta del método de pago usando tarjeta de crédito.
+- `/PaymentMethod.scala`: Archivo que define una clase abstracta que sirve como base para todos los métodos de pago.
+- `/Paypal.scala`: Archivo que define una implementación concreta del método de pago usando PayPal.
+- `/PaymentMethodSpec.scala`: test del proyecto para comprobar que todo funciona correctamente.
 
 ## Conceptos Previos
+Antes de comenzar con el codigo donde se muestra el concepto de abstraccion, vamos a explicar algunos conceptos claves necesarios para entender su funcionamiento.
 
+Para representar la abstracción en Java tenemos varios elementos y modificadores de visibilidad que nos ayudan a crear un codigo más limpio y accesible. 
+
+- **Abstract class**: con `abstract`declara que la clase asociada no puede instanciarse directamente. En nuestro caso la clase `PaymentMethod`define un contrato común para todos los métodos de pago y delega los detalles de pay y balance a las subclases, ocultando el cómo se hace el pago (aquí la idea de la abstracción).
+
+- **Sealed trait**: un `trait` es como una interfaz con posible implementacion. Al usar sealed estamo cerradon la jerarquía de subtipos al archivo, favoreciendo el control del diseño. Esto nos proporciona una mejor seguridad y mantenibilidad del diseño, evitando que otros componentes definan estados no contemplados. 
+En nuestro caso el archivo `Common.scala` muestra este concepto. 
+
+- **Modificadores de visibilidad**: los modificadores de visibilidad como su nombre indica cambian los permisos de visibilidad de una clase, es decir, encapsulación con diferentes grados de acceso. 
+  - `private`: limita el acceso solo a la clase donde se define. En nuestro caso `creditLimit` solo lo puede usar la clase `CreditCard`.
+  - `protected`: permite el acceso desde subclaes. En nuestro caso `balance` es visible en CreditCard y PayPal, pero no desde fuera
+  - `public`: permite el acceso desde cualquier clase. 
+
+- **Diferencia entre inmutable y mutable**: En nuestro ejemplo se puede diferencia entre lo inmutable (lo que no se puede cambiar), por ejemplo con `val owner: String`, usando val de lo mutable (lo que si se puede cambiar), por ejemplo `var balance`. Esta diferenciación refuerza el diseño robusto del ejemplo 
+
+- **Type**: usando la variable `type` abstraemos un tipo , por ejemplo en `type Money = Double` para abstraer el tipo de dinero. Esto sirve para que el cliente que use un sistema parecido a esto piense en "Money" y no en "Double"
+
+
+Tras esta breve explicación de ciertos conceptos claves del funcionamiento de la herencia y del polimorfismo, mostraremos a continuación el codigo que 
 
 ## Código de Ejemplo
 A continuacion tenemos el codigo principal de abstracción en Scala:
