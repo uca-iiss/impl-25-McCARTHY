@@ -30,7 +30,7 @@ Antes de ver los ejemplos, es importante comprender algunos conceptos esenciales
 ## Código de Ejemplo
 A continuación un fragmento de `lambdas.py` con las funciones y su uso:
 
-[**lambdas.py**](lambdas.py)
+[**lambdas.py**](./lambdas.py)
 ```python
 from functools import reduce
 
@@ -80,7 +80,7 @@ Utiliza `reduce()` y una lambda para concatenar los elementos de una lista de ca
 
 ## Código de tests
 Ahora, se muestra unos tests para probar el correcto uso de las funciones lambda en Python:
-[**test.py**](test.py)
+[**test.py**](./test.py)
 
 ```python
 import unittest
@@ -137,25 +137,9 @@ Evalúa si la función evaluacion_condicional() identifica correctamente si un n
 Verifica que la función concatenar_cadenas() utilice correctamente reduce() para concatenar una lista de cadenas. La salida esperada es "Python es genial", confirmando la correcta acumulación de los fragmentos.
 
 ## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
 
-### 1. Instalación de Python
-Primero, necesitas asegurarte de que Python está instalado en tu sistema.
-Puedes descargar e instalar Python desde:
-(https://www.python.org/downloads/)
-Sigue las instrucciones específicas para tu sistema operativo.
-
-Verifica la instalación ejecutando:
-```bash
-python --version
-```
-o
-```bash
-python3 --version
-```
-Esto debería mostrar la versión de Python instalada.
-
-### 2. Creación Jenkinsfile
+### 1. Creación Jenkinsfile
 A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código
 
 ```Jenkinsfile
@@ -185,7 +169,7 @@ pipeline {
 }
 ```
 
-### 3. Crear Pipeline
+### 2. Crear Pipeline
 Una vez realizados los pasos anteriores, abrimos Jenkins y creamos un nuevo Pipeline. Para ello: 
 
  - Lo definimos como `Pipeline script from SCM` y como SCM seleccionamos `Git`.
@@ -195,5 +179,5 @@ Una vez realizados los pasos anteriores, abrimos Jenkins y creamos un nuevo Pipe
 
 Y con esta configuración hemos creado el pipeline necesario para la ejecución de los test
 
-### 4. Ejecutar los Tests
+### 3. Ejecutar los Tests
 Una vez creado el pipeline, ejecutamos dando a `Construir ahora` y el propion Jenkins pasará los test automaticamente.
