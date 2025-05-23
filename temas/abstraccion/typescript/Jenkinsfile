@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar Repo') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Compilar TypeScript') {
+            steps {
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'npx tsc'
+                }
+            }
+        }
+
+        stage('Ejecutar Script') {
+            steps {
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'node dist/index.js'
+                }
+            }
+        }
+    }
+}
