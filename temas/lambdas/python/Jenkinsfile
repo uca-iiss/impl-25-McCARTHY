@@ -18,7 +18,10 @@ pipeline {
 		}
 	    }
 	    steps {
-		sh 'py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py'
+		sh '''
+		    export PYTHONPATH=$(pwd)/temas/lambdas/python:$PYTHONPATH
+		    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+		'''
 	    }
 	    post {
 		always {
@@ -26,6 +29,7 @@ pipeline {
 		}
 	    }
 	}
+
         stage('Deliver') {
             agent {
                 docker {
