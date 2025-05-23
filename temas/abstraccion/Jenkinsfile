@@ -5,7 +5,7 @@ pipeline {
             image 'abstraccion-app:latest'
             // Para builds más rápidas, puedes construir la imagen directamente:
             // args '--build -f Dockerfile .'
-            args '-v var/run/docker.sock:/var/run/docker.sock'
+            args '-v var/run/docker.sock:var/run/docker.sock'
             reuseNode true
         }
     }
