@@ -21,12 +21,17 @@ Antes de explorar los ejemplos proporcionados en este repositorio, es esencial e
     - Pointcut: Un pointcut define en qué punto del código se aplicará un aspecto, como métodos específicos donde se desea interceptar la ejecución. 
 
     - Advice: Los advices son acciones tomadas por un aspecto en un punto de ejecución. 
+        -Before Advice: Se ejecuta antes de que el método interceptado se ejecute. En nuestro proyecto, beforeAccessUser() se utiliza para loguear antes de acceder a los datos del usuario.
+        
+        - After Advice: Se ejecuta después de que el método interceptado se complete. afterModifyUser() se utiliza para loguear después de que la información del usuario haya sido modificada, advirtiendo sobre posibles cambios en datos sensibles.
+        
+        - Around Advice: Envuelve completamente la ejecución del método interceptado, permitiendo controlar el comportamiento antes y después de la llamada al método, e incluso alterar el resultado. aroundUserPropertyChange() maneja cambios en las propiedades del usuario y registra esos eventos.
 
     - Join Point: Un join point es un punto en la ejecución del programa, como la llamada a un método o el manejo de una excepción, donde un aspecto puede ser aplicado.En nuestro caso tendremos el join point @Around("execution(* com.ejemplo.BancoServicio.*(..))"). 
 
 ## Código de Ejemplo
 A continuación, se muestran los ejemplos de cómo se pueden utilizar los aspectos:
-[**AuditoriaAspect.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/AuditoriaAspect.java)
+[**AuditoriaAspect.java**](./src/main/java/com/ejemplo/AuditoriaAspect.java)
 
 ```java
 package com.ejemplo;
@@ -57,7 +62,6 @@ public class AuditoriaAspect {
         return resultado;
     }
 }
-
 ```
 Explicación de AuditoriaAspect: 
 
@@ -69,7 +73,8 @@ Explicación de AuditoriaAspect:
     - Se ejecute después de la ejecución original para, por ejemplo, medir tiempo o modificar el resultado
 
 A continuación, la clase Usuario:
-[**Usuario.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Usuario.java)
+
+[**Usuario.java**](./src/main/java/com/ejemplo/Usuario.java)
 
 ```java
 package com.ejemplo;
@@ -91,7 +96,7 @@ public class Usuario {
 Clase que define le usuario que vamos a tener en el sistema simplificamos la clase teniendo unicamente un nombre
 
 La clase BancoServicio que se encarga de las principales tareas:
-[**BancoServicio.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/BancoServicio.java)
+[**BancoServicio.java**](./src/main/java/com/ejemplo/BancoServicio.java)
 
 ```java
 package com.ejemplo;
@@ -115,7 +120,7 @@ public class BancoServicio {
 Tenemos los métodos transferir(), retirar y consultarSaldo que serán los métodos base para nuestro ejemplo que nos proporcionaran transfererir cantidad de dinero, retirar una cierta cantidad de dinero de una cuenta y consultar el saldo de una cuenta 
 
 Y esta es la clase Auditable
-[**Auditable.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Auditable.java)
+[**Auditable.java**](./src/main/java/com/ejemplo/Auditable.java)
 ```java
 package com.ejemplo;
 
@@ -129,7 +134,7 @@ public @interface Auditable {
 La funcion de esta clase es tener una anotacion personalizada que definiremos para marcar la clase Usuario como "auditables", es decir, queremos que la clase Usuario tenga un comportamiento especial (ser sujetos de auditoría)
 
 Y esta es la clase main.java que la hemos usado para las pruebas
-[**Main.java**](/temas/aspectos/java/aspectj-banco/src/main/java/com/ejemplo/Main.java)
+[**Main.java**](./src/main/java/com/ejemplo/Main.java)
 ```java
 package com.ejemplo;
 
@@ -147,7 +152,7 @@ public class Main {
 ```
 ## Código de tests
 Ahora, se muestra unos tests para probar el correcto del ejemplo:
-[**BancoServicioTest.java**](/temas/aspectos/java/aspectj-banco/src/test/java/com/ejemplo/BancoServicioTest.java)
+[**BancoServicioTest.java**](./src/main/java/com/ejemplo/BancoServicio.java)
 
 ```java
 package com.ejemplo;
@@ -188,7 +193,7 @@ El sistema de gestión de proyectos utilizado en el código es **Maven**, una he
 Maven integra soporte para correr pruebas automáticamente durante el proceso de construcción utilizando frameworks de pruebas como JUnit. Al definir las dependencias y configurar los plugins adecuados en el archivo `pom.xml`, Maven puede compilar el proyecto y ejecutar todas las pruebas unitarias definidas, garantizando que el software cumpla con los requisitos especificados antes de cualquier despliegue o entrega. Esto asegura una integración continua eficiente y efectiva, y es esencial para mantener la calidad del código en desarrollos colaborativos y dinámicos.
 
 Aquí vemos el archivo `pom.xml`:
-[**pom.xml**](/temas/aspectos/java/aspectj-banco/pom.xml)
+[**pom.xml**](./pom.xml)
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -300,7 +305,7 @@ Este archivo `pom.xml` es fundamental para el manejo eficiente del ciclo de vida
 
 
 ## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
 
 ### 1. Creación Jenkinsfile
 A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código
