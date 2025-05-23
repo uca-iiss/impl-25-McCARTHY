@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\anotaciones_csharp\main.csproj" />
+    <ProjectReference Include="..\inyeccion_csharp\main.csproj" />
   </ItemGroup>
 
   <ItemGroup>
