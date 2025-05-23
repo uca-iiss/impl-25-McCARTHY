@@ -5,9 +5,9 @@ Bienvenido a este repositorio donde explicaremos y mostraremos los conceptos de 
 
 ## Estructura de Directorio
 - `/README.md`: Archivo actual, donde explicaremos los conceptos y mostraremos los pasos a seguir para comprobar el funcionamiento del ejemplo.
-- `/kotlin/src/main/kotlin/app/MainApp.kt`: Archivo Kotlin donde se encuentra el código de ejemplo.
+- `src/main/kotlin/app/MainApp.kt`: Archivo Kotlin donde se encuentra el código de ejemplo.
 - `/build.gradle.kts`: Archvio de configuración de Gradle para manejar dependencias y otras configuraciones.
-- `/kotlin/src/main/kotlin/app/test.kt`: Archivo Kotlin donde se encuentran las pruebas unitarias.
+- `src/main/kotlin/app/test.kt`: Archivo Kotlin donde se encuentran las pruebas unitarias.
 - `/Jenkinsfile`: Configuración del pipeline para la comprobación automática del funcionamiento del código.
 
 ## Conceptos Previos
@@ -228,7 +228,7 @@ class MainTest {
             accessElement(15)
         }
     }
- @Test
+    @Test
     fun testIOExceptionOnFileRead() {
         val ex = assertFailsWith<IOException> {
             readConfig("no_existe.txt")
@@ -313,7 +313,7 @@ class MainTest {
 
 
 ## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
 
 ### 1. Creación Jenkinsfile
 A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código. Es importante que esta tenga un agente que permite ejecutar en Kotlin junto a Gradle.
