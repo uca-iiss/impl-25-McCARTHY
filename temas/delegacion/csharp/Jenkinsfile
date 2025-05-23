@@ -47,13 +47,13 @@ pipeline {
         stage('Convertir TRX a JUnit XML') {
             steps {
                 sh 'dotnet tool install -g trx2junit || true'
-                sh '/root/.dotnet/tools/trx2junit temas/delegacion/chsarp/PrinterDelegationExample/test/TestResults/*.trx'
+                sh '/root/.dotnet/tools/trx2junit temas/delegacion/csharp/PrinterDelegationExample/test/TestResults/*.trx'
             }
         }
 
         stage('Publicar resultados de test') {
             steps {
-                junit 'temas/delegacion/chsarp/PrinterDelegationExample/test/TestResults/*.xml'
+                junit 'temas/delegacion/csharp/PrinterDelegationExample/test/TestResults/*.xml'
             }
         }
     }
