@@ -45,9 +45,9 @@ resource "docker_container" "jenkins_dind" {
   command = ["--storage-driver", "overlay2"]
 }
 
-resource "docker_container" "jenkins_nodejs" {
+resource "docker_container" "jenkins_nodejsTS" {
   name  = "jenkins-container"
-  image = "myjenkins-nodejs"
+  image = "myjenkins-nodejsTS"
   restart = "on-failure"
 
   networks_advanced {
