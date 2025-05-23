@@ -1,8 +1,9 @@
 # Delegación en C#
 
 ## Introducción
- 
 
+Bienvenido a este repositorio donde explicaremos y mostramos el concepto de Delgacion en C#, mediante un ejemplo sencillo con un codigo limpio y accesible para cualquiera
+ 
 ## Estructura de Directorio
 
 - `/README.md`: Archivo actual.
@@ -13,9 +14,18 @@
 
 ## Conceptos Previos
 
+Antes de comenzar con el codigo donde se muestra el concepto de delegación, vamos a explicar algunos conceptos claves necesarios para entender su funcionamiento correctamente: 
+
+- **Delegación**: la delegación consiste en que un objeto no implementa directamente una funcionalidad, sino que delegará la ejecución de esa funcionalidad a otro objeto permitiendo asi separar responsabilidades, mejorar la flexibilidad y reutilizar código. 
+
+- **Composicion**: la composición se encarga de construir objetos a partir de otros objetos permitiendo un acoplamiento debil y pudiendo cambiar el comportamiento en tiempo de ejecución. Un ejemplo en nuestro código es: `manager.SetPrinter(pdfPrinter.Print)`.
+
+- **Delegación Polimórfica**: todos los objetos tienen una interfaz comun, pero su implementación cambia, esto lo haremos con una interfaz como contrato. En nuestro caso `IPrinter` define un contrato común: cualquier impresora debe tener un método `Print(string)`, asi podemos cambiar entre impresoras sin modificar `PrinterManager`
+
+- **Delegates en C#**: un `delegate`es un tipo seguro de puntero a método, es como una función que puedes pasar como variable. Permite que una clase no conozca nada sobre la implementación del objeto que ejecutará la impresión. En nuestro caso tenemos esto: `public delegate void PrintDelegate (string content)`. 
 
 ## Código de Ejemplo
-A continuacion tenemos el codigo principal de abstracción en Scala:
+A continuacion tenemos el codigo principal de abstracción en C#:
 
 [**Program.cs**](./PrinterDelegationExample/csharp/Program.cs)
 ```csharp
