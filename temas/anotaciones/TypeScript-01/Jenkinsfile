@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                dir('temas/anotaciones/TypeScript-01') {
+                dir('temas/anotaciones/typescript-01') {
                     sh 'npm install'
                 }
             }
@@ -16,7 +16,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('temas/anotaciones/TypeScript-01') {
+                dir('temas/anotaciones/typescript-01') {
                     sh 'npm run build'
                 }
             }
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('temas/anotaciones/TypeScript-01') {
+                dir('temas/anotaciones/typescript-01') {
                     sh 'npm run test'
                 }
             }
