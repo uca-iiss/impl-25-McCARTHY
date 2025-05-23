@@ -4,21 +4,21 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                dir('temas/inyeccion/Lua') {
+                dir('temas/inyeccion/lua') {
                     sh 'rm -rf build/ tmp/ *.log || true'
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('temas/inyeccion/Lua') {
+                dir('temas/inyeccion/lua') {
                     sh 'luarocks list'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('temas/inyeccion/Lua') {
+                dir('temas/inyeccion/lua') {
                     sh 'busted test/'
                 }
             }
