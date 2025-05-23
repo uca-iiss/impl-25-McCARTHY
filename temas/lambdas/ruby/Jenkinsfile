@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Construcción') {
+            steps {
+                dir('temas/lambdas/ruby'){
+                echo 'No hay nada que construir'
+                }
+            }
+        }
+        stage('Ejecutar Main') {
+            steps {
+                dir('temas/lambdas/ruby/code') {
+                    sh 'ruby Main.rb'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/lambdas/ruby/code') {
+                    sh 'ruby TestGestorBD.rb'
+                }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                dir('temas/lambdas/ruby'){
+                    echo 'Entregando el código'
+                    archiveArtifacts artifacts: 'code/Main.rb', fingerprint: true
+                    archiveArtifacts artifacts: 'code/TestGestorBD.rb', fingerprint: true
+                    archiveArtifacts artifacts: 'code/GestorBD.rb', fingerprint: true
+                }
+            }
+        }
+    }
+}
