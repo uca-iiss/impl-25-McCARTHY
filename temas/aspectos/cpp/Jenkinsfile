@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                dir('temas/aspectos/cpp') {
+                    sh 'make'
+                }
+            }
+        }
+
+        stage('Ejecutar') {
+            steps {
+                sh './temas/aspectos/cpp/main'
+            }
+        }
+    }
+}
