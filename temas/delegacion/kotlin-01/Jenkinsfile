@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Construir Kotlin') {
+            steps {
+                dir('temas/delegacion/kotlin') {
+                    sh './gradlew build'
+                }
+            }
+        }
+
+        stage('Ejecutar') {
+            steps {
+                sh 'java -jar temas/delegacion/kotlin/build/libs/*.jar'
+            }
+        }
+    }
+}
