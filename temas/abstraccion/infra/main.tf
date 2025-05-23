@@ -18,6 +18,10 @@ resource "docker_image" "jenkins" {
   }
 }
 
+resource "docker_volume" "jenkins_data"{
+  name = "jenkins_data"
+}
+
 resource "docker_container" "jenkins" {
   image = docker_image.jenkins.image_id
   name  = "jenkins-csharp"
@@ -33,8 +37,8 @@ resource "docker_container" "jenkins" {
   }
   
   volumes {
+    volume_name = docker_volume.jenkins_data.name
     container_path = "/var/jenkins_home"
-    host_path      = abspath("jenkins_data")
   }
   
   restart = "unless-stopped"
