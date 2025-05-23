@@ -51,6 +51,8 @@ La correcta implementación de la inyección de dependencias en C# puede llevar 
 ## Código de Ejemplo
 Este proyecto proporciona un enfoque práctico y funcional para implementar la inyección de dependencias en C# utilizando el contenedor de servicios `Microsoft.Extensions.DependencyInjection`. A través del código de ejemplo, exploramos cómo configurar y utilizar un sistema de inyección de dependencias para mejorar la escalabilidad, la prueba y el mantenimiento de las aplicaciones .NET.
 
+[**main.cs**](./inyeccion_csharp/main.cs)
+
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -317,6 +319,8 @@ public static void Main(string[] args)
 
 ## Código de Test
 Ahora, se muestra unos tests para probar el correcto del ejemplo:
+
+[**test_csharp.cs**](./test_csharp/test_csharp.cs)
 ```csharp
 using Moq;
 using NUnit.Framework;
@@ -497,7 +501,7 @@ EL objetivo es validar que si ocurre un error durante el envío de alertas, este
 Los tests aseguran que cada componente del sistema se comporta como se espera cuando se ejecuta de forma aislada. Gracias a la inyección de dependencias, es posible sustituir servicios reales por versiones simuladas, facilitando pruebas rápidas y precisas. Este enfoque fomenta una arquitectura desacoplada, mantenible y preparada para cambios futuros.
 
 ## Ejecución Test
-Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la instalacion de python, la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
+Para ejecutar el código y pasar los test de dicho código, realiza los siguientes pasos detallados que incluyen la creación de un Jenkinsfile, creación pipeline y ejecución del pipeline
 
 ### 1. Creación Jenkinsfile
 A continuación, hemos creado el Jenkinsfile necesario para realizar el pipeline, este se encuentra en la carpeta con el resto de código
