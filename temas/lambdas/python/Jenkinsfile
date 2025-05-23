@@ -19,7 +19,7 @@ pipeline {
             }
             steps {
              	sh '''
-		    pip install pytest
+		    pip install --no-cache-dir --break-system-packages pytest
 		    pytest --verbose --junit-xml=temas/lambdas/python/app/test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
 		'''
             }
