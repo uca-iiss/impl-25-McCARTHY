@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'python'
+                    image 'arevalo8/custom-lambdas'
                 }
             }
             steps {
@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
 	    agent {
 		docker {
-		    image 'databricksdocs/pytest'
+		    image 'arevalo8/custom-lambdas'
 		}
 	    }
 	    steps {
