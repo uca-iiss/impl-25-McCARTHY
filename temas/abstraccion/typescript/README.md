@@ -16,3 +16,5 @@ Este ejemplo demuestra el uso de clases abstractas, encapsulación y acceso unif
 ```bash
 npm install
 npm run start
+
+---

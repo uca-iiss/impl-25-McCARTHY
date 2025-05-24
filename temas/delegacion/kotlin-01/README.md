@@ -16,3 +16,7 @@ Este ejemplo muestra cómo Kotlin permite delegar interfaces usando la palabra c
 
 ```bash
 ./gradlew run
+docker build -t delegacion-kotlin .
+docker run --rm delegacion-kotlin
+
+---

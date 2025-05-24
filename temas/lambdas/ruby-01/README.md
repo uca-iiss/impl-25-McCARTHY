@@ -5,6 +5,7 @@ Este ejemplo demuestra:
 - Uso de `lambda`
 - Uso de `proc`
 - Paso de bloques con `yield`
+- Procesamiento de streams de datos usando `.map` con lambdas
 
 ## Estructura
 
@@ -20,7 +21,3 @@ docker build -t lambdas-ruby .
 docker run --rm lambdas-ruby
 
 ---
-
-✅ Con esto, cubres todos los requisitos académicos del tema **Lambdas** en Ruby.
-
-¿Quieres que te pase ahora todos los ficheros separados para copiar y pegar manualmente, como hicimos antes?
