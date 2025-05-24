@@ -3,11 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0@sha256:3fcf6f1e809c0553f9feb222369f58749af
 WORKDIR /src
 
 # Copia solo el archivo del proyecto primero (para optimizar caché)
-COPY ./temas/abstraccion/src/c#/abstraccion.csproj .
+COPY ./src/c#/abstraccion.csproj .
 RUN dotnet restore
 
 # Copia el resto del código fuente
-COPY ./temas/abstraccion/src/c#/ .
+COPY ./src/c#/ .
 
 # Compila y publica la aplicación
 RUN dotnet publish -c Release -o /app/publish
