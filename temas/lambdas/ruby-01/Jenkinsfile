@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Ejecutar Ruby') {
+            steps {
+                dir('temas/lambdas/ruby') {
+                    sh 'ruby main.rb'
+                }
+            }
+        }
+    }
+}
