@@ -39,14 +39,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            junit '**/TestResults/*.trx'
-            echo "Pipeline completado - Resultado: ${currentBuild.currentResult}"
-        }
-        failure {
-            echo '¡Pipeline fallido! Revisa los logs.'
-            archiveArtifacts artifacts: '**/*.log', fingerprint: true
-        }
-    }
 }
