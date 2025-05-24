@@ -1,12 +1,7 @@
 pipeline {
     agent {
         docker {
-            // Usa la imagen que construiste con tu Dockerfile
-            image 'abstraccion-app:latest'
-            // Para builds más rápidas, puedes construir la imagen directamente:
-            // args '--build -f Dockerfile .'
-            args '-v var/run/docker.sock:var/run/docker.sock'
-            reuseNode true
+            image: "csharp"
         }
     }
 

@@ -2,65 +2,71 @@ terraform {
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
-      version = "~> 3.0"  
+      version = "~> 3.0"
     }
   }
 }
 
 provider "docker" {}
 
-resource "docker_image" "jenkins" {
-  name         = "jenkins-dotnet:latest"
+# Red personalizada para conectar los contenedores
+resource "docker_network" "jenkins_network" {
+  name = "jenkins_network"
+}
+
+# Imagen de Jenkins con Docker instalado
+resource "docker_image" "custom_jenkins" {
+  name         = "custom-jenkins"
   keep_locally = true
-  build {
-    context    = "."
-    dockerfile = "Dockerfile"
-  }
 }
 
-resource "docker_volume" "jenkins_data"{
-  name = "jenkins_data"
-}
-
+# Contenedor Jenkins
 resource "docker_container" "jenkins" {
-  image = docker_image.jenkins.image_id
-  name  = "jenkins-csharp"
-  
+  name  = "jenkins"
+  image = docker_image.custom_jenkins.name
+  user  = "root"
+
   ports {
     internal = 8080
     external = 8080
   }
-  
-  ports {
-    internal = 50000
-    external = 50000
-  }
-  
+
   volumes {
-    volume_name = docker_volume.jenkins_data.name
-    container_path = "/var/jenkins_home"
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
   }
-  
-  restart = "unless-stopped"
-  privileged = true
-  
- 
-  shm_size = 1073741824
-  
-  env = [
-    "JAVA_OPTS=-Djenkins.install.runSetupWizard=false",
-    "JENKINS_OPTS=--argumentsRealm.passwd.admin=admin --argumentsRealm.roles.admin=admin"
-  ]
-  
-  healthcheck {
-    test         = ["CMD", "curl", "-f", "http://localhost:8080"]
-    interval     = "30s"
-    timeout      = "10s"
-    start_period = "30s"
-    retries      = 5
+
+  volumes {
+    volume_name       = "jenkins_volume"
+    container_path    = "/var/jenkins_home"
+  }
+
+  networks_advanced {
+    name = docker_network.jenkins_network.name
   }
 }
 
-output "jenkins_url" {
-  value = "http://localhost:8080"
+# Imagen Docker-in-Docker
+resource "docker_image" "dind" {
+  name         = "docker:dind"
+  keep_locally = false
+}
+
+# Contenedor DinD configurado correctamente
+resource "docker_container" "dind" {
+  name       = "dind"
+  image      = docker_image.dind.name
+  privileged = true
+  env = [
+    "DOCKER_TLS_CERTDIR=/certs"
+  ]
+
+  volumes {
+    volume_name = "dind_volume"
+    container_path = "/var/lib/docker"
+  }
+
+  networks_advanced {
+    name = docker_network.jenkins_network.name
+  }
 }
