@@ -33,13 +33,11 @@ pipeline {
         stage('Deliver') {
             agent {
                 docker {
-                    image 'python:3.9-slim'
+                    image 'pschmitt/pyinstaller'
                 }
             }
             steps {
                 sh '''
-                    set -ex
-                    pip install pyinstaller
                     pyinstaller --onefile temas/lambdas/python/app/procesador.py
                 '''
             }
