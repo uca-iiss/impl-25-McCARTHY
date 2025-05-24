@@ -31,23 +31,19 @@ pipeline {
 	}
 
         stage('Deliver') {
-	    agent {
-		docker {
-		    image 'cdrx/pyinstaller-linux:python2'
-		    args '-u root -v /var/jenkins_home:/var/jenkins_home' 
-		}
-	    }
-	    steps {
-		sh '''
-		    pyinstaller --onefile temas/lambdas/python/app/procesador.py
-		'''
-	    }
-	    post {
-		success {
-		    archiveArtifacts 'dist/procesador'
-		}
-	    }
-	}
-
+            agent {
+                docker {
+                    image 'cdrx/pyinstaller-linux:python3'
+                }
+            }
+            steps {
+                sh 'pyinstaller --onefile temas/lambdas/python/app/procesador.py'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/procesador'
+                }
+            }
+        }
     }
 }
