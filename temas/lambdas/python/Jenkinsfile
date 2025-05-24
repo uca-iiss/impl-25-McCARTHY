@@ -33,7 +33,7 @@ pipeline {
         stage('Deliver') {
             agent {
                 docker { 
-                    image 'custom-lambdas'
+                    image 'arevalo8/custom-lambdas'
                 }
 
             }
