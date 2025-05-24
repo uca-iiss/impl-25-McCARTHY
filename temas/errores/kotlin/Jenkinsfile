@@ -1,0 +1,31 @@
+pipeline {
+    agent {
+        docker {
+            image 'gradle:jdk17'  // imagen oficial con Gradle y JDK 17
+            args '-v $HOME/.gradle:/home/gradle/.gradle'  // para cachear dependencias
+        }
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                dir('temas/errores/kotlin') {
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'temas/errores/kotlin/build/test-results/test/*.xml'  // recoge reportes JUnit
+        }
+    }
+}
