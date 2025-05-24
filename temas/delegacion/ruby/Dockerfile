@@ -8,12 +8,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
+    
+
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler && bundle install    
 
 # Copiar el código antes de instalar las dependencias para aprovechar cache
 COPY . .
 
-# Instalar las dependencias del proyecto
-RUN gem install bundler && bundle install
+
 
 # Comando por defecto (ejecuta tests con RSpec)
 CMD ["rake"]
