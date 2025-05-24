@@ -40,10 +40,11 @@ pipeline {
                 sh 'pyinstaller --onefile temas/lambdas/python/app/procesador.py'
             }
             post {
-                success {
-                    archiveArtifacts 'dist/procesador'
-                }
-            }
+		    success {
+			sh 'ls -la dist/'
+			archiveArtifacts 'dist/procesador'
+		    }
+	}
         }
     }
 }
