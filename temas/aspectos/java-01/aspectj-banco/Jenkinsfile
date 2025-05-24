@@ -1,0 +1,36 @@
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.8.6-jdk-8' // Usa un contenedor Docker con Maven y JDK 11
+        }
+    }
+
+    stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                dir('temas/aspectos/java/aspectj-banco') {
+                    sh 'mvn clean test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'temas/aspectos/java/aspectj-banco/target/surefire-reports/*.xml'
+        }
+        success {
+            echo 'Build y tests OK!'
+        }
+        failure {
+            echo 'Algo falló, revisa los tests o build!'
+        }
+    }
+}
+

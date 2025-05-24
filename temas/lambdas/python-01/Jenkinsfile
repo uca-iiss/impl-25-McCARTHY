@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparar entorno') {
+            steps {
+                echo 'Preparando entorno Python...'
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                echo 'Instalando dependencias...'
+                dir('temas/lambdas/python-01/JenkinsDespliegue') {
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Ejecutar pruebas') {
+            steps {
+                echo 'Ejecutando pruebas con pytest...'
+                dir('temas/lambdas/python-01/Item') {
+                    sh 'pytest'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'La ejecución falló.'
+        }
+        success {
+            echo 'La ejecución fue exitosa.'
+        }
+    }
+}
