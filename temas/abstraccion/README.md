@@ -1,1 +1,0 @@
-Aqui va a ir la abstracción.
