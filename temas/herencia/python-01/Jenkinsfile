@@ -1,0 +1,20 @@
+pipeline {
+    agent {
+        dockerfile {
+            filename 'Dockerfile'
+            dir 'Despliegue'
+        }
+    }
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'pip install -r Despliegue/requirements.txt'
+            }
+        }
+        stage('Run tests') {
+            steps {
+                sh 'pytest Empresa/tests'
+            }
+        }
+    }
+}
