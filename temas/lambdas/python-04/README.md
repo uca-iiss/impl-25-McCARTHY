@@ -5,10 +5,56 @@ Este documento explora el principio de **abstracción** aplicado en Python, espe
 ---
 
 ## Código fuente
-<!-- - Programa principal (`Program.py`) -->
-### [Program](src/Program.py) (Programa principal)
-<!-- - Pruebas unitarias (`LambdaTests.py`) -->
-### [LambdaTests](tests/LambdaTests.py) (Pruebas unitarias)
+
+### [Program](src/Program.py) (Programa principal):
+
+- **Lambdas:**
+    - `lambda_add`: función lambda que suma dos números (x + y).
+    - `lambda_even`: función lambda que verifica si un número es par (x % 2 == 0).
+    - `lambda_order`: función lambda que devuelve la longitud de una cadena (len(x)).
+
+- **Funciones de orden superior:**
+    - `orden_superior_map(funcion, lista)`: aplica una función a cada elemento de una lista usando map().
+    - `orden_superior_filter(funcion, lista)`: filtra elementos de una lista según un predicado usando filter().
+    - `orden_superior_reduce(funcion, lista)`: reduce una lista a un solo valor usando reduce().
+    - `orden_superior_sorted(funcion, lista)`: ordena una lista usando una función como criterio de ordenamiento.
+
+- **Clausura (Closure):**
+    - `closure(n)`: devuelve una función lambda que multiplica su argumento por n, demostrando el concepto de clausura.
+
+- **Interfaz funcional simulada:**
+    - `OrdenarPorLongitud`: clase callable que actúa como función para ordenar por longitud de cadena.
+    - `FiltrarPorPar`: clase callable que actúa como predicado para filtrar números pares.
+
+- **Procesamiento estilo Stream:**
+    - `ejemplo_procesamiento_stream(lista)`: demuestra el encadenamiento funcional filtrando números pares, elevándolos al cuadrado y sumándolos.
+
+- **Uso:**
+    - Implementa conceptos fundamentales de programación funcional incluyendo funciones de orden superior, lambdas, clausuras e interfaces funcionales simuladas.
+
+### [LambdaTests](tests/LambdaTests.py) (Pruebas unitarias):
+
+- **Configuración:**
+    - `setUp()`: inicializa datos de prueba con lista de números `[1, 2, 3, 4, 5]` y cadenas `["python", "universidad", "hola"]`.
+
+- **Tests de funciones de orden superior:**
+    - `test_map()`: verifica que map duplique correctamente cada elemento de la lista `[2, 4, 6, 8, 10]`.
+    - `test_filter()`: valida que filter extraiga solo números pares `[2, 4]`.
+    - `test_reduce()`: comprueba que reduce sume todos los elementos obteniendo `15`.
+    - `test_sorted()`: verifica que sorted ordene cadenas por longitud `["hola", "python", "universidad"]`.
+
+- **Tests de clausura:**
+    - `test_closure()`: prueba que la clausura `closure(2)` genere una función que duplica el valor `duplicar(10) = 20`.
+
+- **Tests de interfaces funcionales:**
+    - `test_interface_sorted()`: valida que la clase `OrdenarPorLongitud` funcione como criterio de ordenamiento.
+    - `test_interface_filter()`: verifica que la clase `FiltrarPorPar` funcione como predicado de filtrado.
+
+- **Tests de procesamiento stream:**
+    - `test_stream()`: comprueba el procesamiento encadenado que filtra pares [2,4], los eleva al cuadrado [4,16] y los suma `20`.
+
+- **Uso:**
+    - Conjunto completo de pruebas unitarias que valida la funcionalidad de todas las características de programación funcional implementadas, incluyendo lambdas, funciones de orden superior, clausuras e interfaces funcionales.
 
 ---
 
