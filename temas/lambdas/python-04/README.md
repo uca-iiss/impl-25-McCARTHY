@@ -1,39 +1,14 @@
 # Tema C.2 - Lambdas
 
-Este documento explora el uso de las funciones lambda en Python, especialmente en el contexto de la programación funcional. Se presentan conceptos clave como funciones lambda, funciones de orden superior, clausuras, y el uso de funciones o clases como interfaces funcionales.
+Este documento explora el principio de **abstracción** aplicado en Python, especialmente en el contexto de la programación funcional. Se presentan conceptos clave como funciones lambda, funciones de orden superior, clausuras, y el uso de funciones o clases como interfaces funcionales.
 
 ---
 
-## Código
-- Programa principal (`Program.py`)
-- Pruebas unitarias (`LambdaTests.py`)
-
----
-
-## CI/CD y Aprovisionamiento
-
-- Pipeline de integración continua (`Jenkinsfile`)
-- Dockerfile para construcción de imagen (`Dockerfile`)
-
-**Despliegue:**
-
-Se requiere descargar la imagen necesaria para llevar a cabo el despliegue:
-
-```bash
-docker build -t my-jenkins-python .
-```
-
-Para realizar el despliegue, se debe ejecutar el siguiente script. Este creará los recursos necesarios en Docker y ejecutará los comandos correspondientes de Terraform:
-
-```bash
-python deploy_jenkins.py
-```
-Para liberar el puerto que está utilizando el contenedor en localhost, es necesario detener y eliminar dicho contenedor desde Docker utilizando los siguientes comandos.
-
-```bash
-docker stop <nombre-contenedor>
-docker rm <nombre-contenedor>
-```
+## Código fuente
+<!-- - Programa principal (`Program.py`) -->
+### [Program](src/Program.py) (Programa principal)
+<!-- - Pruebas unitarias (`LambdaTests.py`) -->
+### [LambdaTests](tests/LambdaTests.py) (Pruebas unitarias)
 
 ---
 
@@ -74,17 +49,37 @@ Encadenamiento de operaciones como filtrado, transformación y agregación sobre
 
 ---
 
-## Recomendaciones
+## Ficheros de configuración 
 
-- Usar `lambda` solo para funciones simples.
-- Emplear `def` si la lógica es más extensa o reutilizable.
-- Utilizar funciones como `map`, `filter`, `reduce` y `sorted` para una programación declarativa.
-- Simular interfaces funcionales con funciones o clases que implementen `__call__`.
-<!-- 
+### [Dockerfile](Dockerfile)
+Define la imagen de Docker utilizada en el entorno del proyecto.
+
+### [main.tf](main.tf)
+Archivo principal de configuración de infraestructura en Terraform.
+
+### [Jenkinsfile](Jenkinsfile)
+Contiene la configuración del pipeline de integración continua (CI) usando Jenkins.
+
 ---
 
-## Recursos adicionales
+## Despliegue
+Se requiere descargar la imagen necesaria para llevar a cabo el despliegue:
+````bash
+docker build -t myjenkins-python .
+````
 
-- [Python Docs - Functional Programming HOWTO](https://docs.python.org/3/howto/functional.html)
-- [Fluent Python - Capítulos sobre funciones de orden superior](https://www.oreilly.com/library/view/fluent-python/9781491946237/)
-- [Guía de Lambdas en Java - Oracle](http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html) -->
+Para realizar el despliegue, se debe ejecutar el siguiente script. Este creará los recursos necesarios en Docker y ejecutará los comandos correspondientes de Terraform:
+````bash
+python ./deploy_jenkins.py
+````
+
+Una vez realizado este paso, podemos usar Jenkins en el localhost.
+
+Para liberar los recursos, es necesario realizar los siguientes comandos.
+````bash
+docker stop <nombre-contenedor-dind>
+docker stop <nombre-contenedor-jenkins>
+docker rm <nombre-contenedor-dind>
+docker rm <nombre-contenedor-jenkins>
+docker network rm <id-network-jenkins>
+````
