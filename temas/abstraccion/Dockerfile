@@ -1,25 +1,18 @@
-# Utiliza la imagen base de SDK para compilación
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
-# Establece el directorio de trabajo
+# Fase de construcción - usa .NET 9.0 como en el ejemplo oficial
+FROM mcr.microsoft.com/dotnet/sdk:9.0@sha256:3fcf6f1e809c0553f9feb222369f58749af314af6f063f389cbd2f913b4ad556 AS build
 WORKDIR /src
 
-# Copia los archivos del proyecto (cambia 'herencia' por 'abstraccion')
-COPY ./src/c#/abstraccion.csproj .
+# Copia solo el archivo del proyecto primero (para optimizar caché)
+COPY ./temas/abstraccion/src/c#/abstraccion.csproj .
 RUN dotnet restore
 
-# Copia el resto de archivos fuente
-COPY ./src/c#/ .
+# Copia el resto del código fuente
+COPY ./temas/abstraccion/src/c#/ .
 
 # Compila y publica la aplicación
 RUN dotnet publish -c Release -o /app/publish
 
-# Fase de ejecución - imagen más ligera
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/runtime:9.0@sha256:d067453026c556115c214e81d4f93adaa190487fad6d7ef4b539eab6f8103d2e
 WORKDIR /app
-
-# Copia los archivos publicados desde la fase de compilación
 COPY --from=build /app/publish .
-
-# Define el comando de entrada
 ENTRYPOINT ["dotnet", "abstraccion.dll"]

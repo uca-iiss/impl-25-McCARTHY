@@ -13,6 +13,11 @@ pipeline {
     }
 
     stages {
+        stage ('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Compilar') {
             steps {
                 dir(env.PROJECT_DIR) {
@@ -39,4 +44,14 @@ pipeline {
         }
     }
 
+    post {
+        always {
+            junit '**/TestResults/*.trx'
+            echo "Pipeline completado - Resultado: ${currentBuild.currentResult}"
+        }
+        failure {
+            echo '¡Pipeline fallido! Revisa los logs.'
+            archiveArtifacts artifacts: '**/*.log', fingerprint: true
+        }
+    }
 }
