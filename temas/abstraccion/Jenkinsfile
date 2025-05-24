@@ -9,8 +9,8 @@ pipeline {
     environment {
         DOTNET_CLI_TELEMETRY_OPTOUT = '1'
         DOTNET_NOLOGO = '1'
-        PROJECT_DIR = 'temas/abstraccion/src/c#'
-        TEST_DIR = 'temas/abstraccion/src/test'
+        PROJECT_DIR = 'src/c#'
+        TEST_DIR = 'src/test'
     }
     
     stages {
@@ -31,6 +31,9 @@ pipeline {
                 dir(env.PROJECT_DIR) {
                     sh 'dotnet restore'
                 }
+                dir(env.TEST_DIR) {
+                    sh 'dotnet restore'
+                }
             }
         }
         
@@ -39,15 +42,21 @@ pipeline {
                 dir(env.PROJECT_DIR) {
                     sh 'dotnet build --no-restore -c Release'
                 }
+                dir(env.TEST_DIR) {
+                    sh 'dotnet build --no-restore -c Release'
+                }
             }
         }
         
         stage('Test') {
             steps {
+                sh 'mkdir -p TestResults'
+                
                 dir(env.TEST_DIR) {
                     sh '''
-                        mkdir -p ../TestResults
-                        dotnet test --no-build -c Release --logger "trx;LogFileName=../TestResults/results.trx"
+                        # Usar ruta absoluta hacia la raíz del workspace
+                        dotnet test --no-build -c Release \
+                          --logger "trx;LogFileName=${WORKSPACE}/TestResults/results.trx"
                     '''
                 }
             }
@@ -65,10 +74,13 @@ pipeline {
     
     post {
         always {
-            // Verificar si existe el archivo antes de procesarlo
             script {
-                if (fileExists('**/TestResults/*.trx')) {
-                    junit '**/TestResults/*.trx'
+                if (fileExists('TestResults/results.trx')) {
+                    archiveArtifacts artifacts: 'TestResults/*.trx', 
+                                   fingerprint: true, 
+                                   allowEmptyArchive: true
+                    junit 'TestResults/*.trx'
+                    echo 'Archivos TRX procesados correctamente'
                 } else {
                     echo 'No se encontraron archivos de resultados de pruebas'
                 }
@@ -77,12 +89,6 @@ pipeline {
         }
         failure {
             echo '¡Pipeline fallido! Revisa los logs.'
-            // Solo archivar logs si existen
-            script {
-                if (fileExists('**/*.log')) {
-                    archiveArtifacts artifacts: '**/*.log', fingerprint: true
-                }
-            }
         }
     }
 }
