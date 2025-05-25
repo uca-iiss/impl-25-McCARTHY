@@ -4,14 +4,12 @@ pipeline {
     stages {
         stage('Clonar') {
             steps {
-                echo '--- Clonando el repositorio ---'
                 checkout scm
             }
         }
 
-        stage('Construir contenedor') {
+        stage('Construcción') {
             steps {
-                echo '--- Construyendo la imagen Docker del proyecto ---'
                 dir('temas/abstraccion/typescript') {
                     script {
                         sh 'docker build -t abstraccion-typescript .'
@@ -22,18 +20,16 @@ pipeline {
 
         stage('Pruebas') {
             steps {
-                echo '--- Ejecutando pruebas dentro del contenedor ---'
                 script {
                     sh 'docker run --rm abstraccion-typescript npm run test'
                 }
             }
         }
 
-        stage('Ejecutar aplicación') {
+        stage('Ejecución') {
             steps {
-                echo '--- Ejecutando la aplicación final ---'
                 script {
-                    sh 'docker run --rm abstraccion-typescript'
+                    sh 'docker run --rm abstraccion-typescript npm run start'
                 }
             }
         }
@@ -42,7 +38,7 @@ pipeline {
     post {
         always {
             echo '--- Pipeline finalizado. Limpiando contenedores colgados (si los hubiera) ---'
-            sh 'docker ps -aq --filter status=exited | xargs --no-run-if-empty docker rm || true'
+            sh 'docker ps -aq --filter status=exited | xargs --no-run-if-empty docker rm'
         }
     }
 }

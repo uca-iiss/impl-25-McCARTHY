@@ -2,10 +2,15 @@ FROM node:18
 
 WORKDIR /app
 
+# Copia primero los package.json para usar el cache de Docker
+COPY package*.json ./
+RUN npm install
+
+# Ahora copia el resto del código
 COPY . .
 
-RUN npm install
+# Construir TypeScript
 RUN npm run build
-RUN npm run test
 
-CMD ["npm", "run", "start"]
+# Por defecto, correr tests (puedes cambiarlo según etapa)
+CMD ["npm", "run", "test"]
