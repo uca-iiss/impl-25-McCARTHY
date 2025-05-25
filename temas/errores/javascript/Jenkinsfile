@@ -1,0 +1,35 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:18'
+        }
+    }
+
+    stages {
+        stage('Node Version'){
+            steps{
+                sh 'node --version'
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                sh 'npm i'
+            }
+        }
+
+        stage('Ejecutar tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                echo 'Terminado'
+            }
+        }
+    }
+}
