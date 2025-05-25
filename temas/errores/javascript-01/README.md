@@ -128,6 +128,12 @@ Este documento explora la implementación de un sistema robusto de manejo de **e
 
 ---
 
+## Ficheros de configuración del proyecto `Node.js`
+
+- [package.json](package.json)
+
+---
+
 ## Conceptos clave
 
 ### Manejo de Errores Tradicional
