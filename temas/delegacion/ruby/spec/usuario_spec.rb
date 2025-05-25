@@ -1,16 +1,16 @@
-require 'rspec'
+# spec/usuario_spec.rb
 require_relative '../lib/usuario'
-require_relative '../lib/email_notificador'
-require_relative '../lib/sms_notificador'
+require_relative '../lib/email'
 
 RSpec.describe Usuario do
-  it "delegar notificaciones al notificador de correo" do
-    usuario = Usuario.new("Ana", EmailNotificador.new)
-    expect(usuario.enviar_notificacion("Hola!")).to eq("Enviando correo: Hola!")
-  end
+  it 'envía notificaciones a través de todos los canales' do
+    email = Email.new
+    usuario = Usuario.new("Ana")
+    usuario.agregar(email)
 
-  it "delegar notificaciones al notificador de SMS" do
-    usuario = Usuario.new("Luis", SMSNotificador.new)
-    expect(usuario.enviar_notificacion("Hola!")).to eq("Enviando SMS: Hola!")
+    expect {
+      usuario.notificar_a_todos("Prueba")
+    }.to output(/Enviando mensaje/).to_stdout
   end
 end
+
