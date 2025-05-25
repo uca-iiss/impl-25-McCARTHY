@@ -1,13 +1,15 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3.10'
+        }
+    }
     stages {
         stage('Preparar entorno') {
             steps {
                 echo 'Preparando entorno Python...'
             }
         }
-
         stage('Instalar dependencias') {
             steps {
                 echo 'Instalando dependencias...'
@@ -16,26 +18,20 @@ pipeline {
                 }
             }
         }
-
         stage('Ejecutar pruebas') {
             steps {
-                echo 'Ejecutando pruebas con pytest...'
-                dir('temas/herencia/python-01/empresa') {
-                    sh 'pytest'
+                dir('temas/herencia/python-01') {
+                    sh 'pytest Empresa/tests'
                 }
             }
         }
     }
-
     post {
         always {
             echo 'Pipeline finalizado.'
         }
         failure {
             echo 'La ejecución falló.'
-        }
-        success {
-            echo 'La ejecución fue exitosa.'
         }
     }
 }
