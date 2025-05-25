@@ -8,8 +8,11 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile temas/lambdas/python/app/procesador.py'
-                sh 'python -m py_compile temas/lambdas/python/app/logs.py'
+            	sh '''
+		        python -m py_compile temas/lambdas/python/app/procesador.py
+		        python -m py_compile temas/lambdas/python/app/logs.py
+		        python -m py_compile temas/lambdas/python/main.py
+		'''        
             }
         }
         stage('Test') {
@@ -40,13 +43,15 @@ pipeline {
             }
             steps {
                 sh '''
-                    pyinstaller --onefile temas/lambdas/python/app/procesador.py
+                    pyinstaller --onefile temas/lambdas/python/main.py --name procesador
                 '''
             }
             post {
                 success {
                     sh 'ls -la dist/'
                     archiveArtifacts 'dist/procesador'
+                    sh './dist/procesador > salida.txt || true'
+                    archiveArtifacts 'salida.txt'
                 }
             }
         }
