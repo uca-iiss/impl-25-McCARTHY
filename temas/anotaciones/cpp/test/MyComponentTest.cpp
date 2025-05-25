@@ -28,9 +28,6 @@ TEST(MyComponentTest, DoSomethingLogsMessage) {
 TEST(MyComponentTest, DoSomethingWithoutLoggerPrintsMessage) {
     MyComponent comp;
     comp.logger = nullptr;
-
-    // Aquí podrías capturar la salida estándar para verificar que imprime,
-    // pero para simplificar solo llamamos sin errores.
     comp.doSomething();
 
     SUCCEED();  // Simplemente pasa el test si no hay crash
