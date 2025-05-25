@@ -2,9 +2,8 @@
 import { limpiarPedido, procesarPedidos } from '../src/logic/procesador.js';
 
 describe('limpiarPedido()', () => {
-  test('devuelve null si el cliente es inválido', () => {
-    const pedido = { id: 1, cliente: null, total: 50, pagado: true };
-    console.log(pedido);
+  test('devuelve null si el cliente no tiene nombre', () => {
+    const pedido = { id: 1, cliente: { vip: true }, total: 50 };
     expect(limpiarPedido(pedido)).toBeNull();
   });
 
@@ -22,14 +21,21 @@ describe('limpiarPedido()', () => {
 });
 
 describe('procesarPedidos()', () => {
-  test('filtra correctamente los pedidos pagados y válidos', () => {
-    const pedidos = [
-      { id: 1, cliente: { nombre: 'Juan' }, total: 100, pagado: true },
-      { id: 2, cliente: { nombre: 'María' }, total: 50, pagado: false },
-      { id: 3, cliente: null, total: 80, pagado: true }
-    ];
-    const resultado = procesarPedidos(pedidos);
-    expect(resultado.pedidosValidos.length).toBe(1);
-    expect(resultado.total).toBe(100);
+  const pedidosTest = [
+    { id: 1, cliente: { nombre: 'Ana' }, total: 100, pagado: true },
+    { id: 2, cliente: { nombre: 'Luis' }, total: 200, pagado: false },
+    { id: 3, cliente: { nombre: 'Carlos', vip: true }, total: 300, pagado: true, descuento: 50 },
+    { id: 4, cliente: { }, total: 400, pagado: true }
+  ];
+
+  test('filtra correctamente los pedidos no pagados', () => {
+    const resultado = procesarPedidos(pedidosTest);
+    expect(resultado.pedidosValidos.length).toBe(2);
   });
+
+  test('calcula correctamente el total general', () => {
+    const resultado = procesarPedidos(pedidosTest);
+    expect(resultado.total).toBe(350);
+  });
+
 });
