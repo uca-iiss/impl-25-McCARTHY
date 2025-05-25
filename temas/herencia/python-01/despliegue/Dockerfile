@@ -3,7 +3,7 @@ FROM jenkins/jenkins:lts
 # Cambiar a usuario root para instalar dependencias del sistema
 USER root
 
-# Instalar dependencias necesarias para Ruby y compilación de gemas
+
 RUN apt-get update && \
     apt-get install -y \ 
         python3 \
