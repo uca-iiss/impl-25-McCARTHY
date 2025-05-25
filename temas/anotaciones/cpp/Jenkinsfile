@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'kitware/cmake:latest'  // Imagen oficial con cmake preinstalado
-            args '-v /var/run/docker.sock:/var/run/docker.sock'  // si necesitas acceso a docker dentro del container
-        }
-    }
+    agent { label 'docker-cmake-node' } // el nombre del nodo que tenga lo que necesitas
     stages {
         stage('Build') {
             steps {
@@ -20,11 +15,6 @@ pipeline {
             steps {
                 sh './build/runTests'
             }
-        }
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
         }
     }
 }
