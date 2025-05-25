@@ -380,3 +380,21 @@ Tras ejecutar terraform apply, se imprime automáticamente la URL local para acc
 | [`infra/main.tf`](./infra)               | Infraestructura como código con Terraform                                  |
 
 
+---
+
+## Limpieza de imágenes y contenedores usados
+
+Para evitar dejar imágenes y contenedores ocupando espacio en tu sistema, puedes usar los siguientes comandos para limpiar solo los recursos de este proyecto:
+
+```bash
+# Borrar contenedor Jenkins (si existe)
+docker rm -f jenkins-herencia
+
+# Borrar imagen personalizada de Jenkins
+docker rmi jenkins/jenkins-herencia:custom
+
+# Borrar imagen de desarrollo de Scala
+docker rmi scala-herencia:dev
+```
+
+
