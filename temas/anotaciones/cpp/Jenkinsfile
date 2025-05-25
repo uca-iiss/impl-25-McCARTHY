@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mkdir -p build'
+                sh 'cd build && cmake .. && make'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh './build/runTests'
+            }
+        }
+    }
+}
