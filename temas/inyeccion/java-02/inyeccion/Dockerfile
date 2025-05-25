@@ -1,4 +1,4 @@
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9.6-eclipse-temurin-21
 
 WORKDIR /app
 
@@ -7,10 +7,4 @@ COPY src ./src
 
 RUN mvn clean package
 
-FROM eclipse-temurin:21-jre
-
-WORKDIR /app
-
-COPY --from=build /app/target/inyeccion-1.0-SNAPSHOT-jar-with-dependencies.jar ./inyeccion.jar
-
-CMD ["java", "-jar", "inyeccion.jar"]
+CMD ["java", "-jar", "target/inyeccion-1.0-SNAPSHOT.jar"]

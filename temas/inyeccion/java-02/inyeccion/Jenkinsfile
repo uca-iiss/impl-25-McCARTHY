@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Ejecución') {
             steps {
-                sh 'docker run --rm inyeccion-java java -jar inyeccion.jar'
+                sh 'docker run --rm inyeccion-java'
             }
         }
     }
