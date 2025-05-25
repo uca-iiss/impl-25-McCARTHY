@@ -5,7 +5,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('temas/delegacion/ruby-03/test') {
+                dir('temas/delegacion/ruby-02/test') {
                     echo 'Ejecutando tests con minitest...'
                     sh 'ruby -Ilib:test testOrquesta.rb'
                 }
@@ -15,7 +15,7 @@ pipeline {
     }
 
     post {
-        always {
+        success {
             echo 'Pipeline finalizado.'
         }
         failure {

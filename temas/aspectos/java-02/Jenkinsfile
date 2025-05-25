@@ -6,29 +6,38 @@ pipeline {
     stages {
         stage('Restore') {
             steps {
-                dir('temas/aspectos/java-03/mi-proyecto') {
+                dir('temas/aspectos/java-02/mi-proyecto') {
                     sh 'mvn clean'
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('temas/aspectos/java-03/mi-proyecto') {
+                dir('temas/aspectos/java-02/mi-proyecto') {
                     sh 'mvn compile'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('temas/aspectos/java-03/mi-proyecto') {
+                dir('temas/aspectos/java-02/mi-proyecto') {
                     sh 'mvn test'
                 }
             }
             post {
                 always {
-                    junit 'temas/aspectos/java-03/mi-proyecto/target/surefire-reports/*.xml'
+                    junit 'temas/aspectos/java-02/mi-proyecto/target/surefire-reports/*.xml'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
         }
     }
 }

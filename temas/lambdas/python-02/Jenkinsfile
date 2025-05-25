@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Test') {
+            steps {
+                dir('temas/lambdas/python-02/tests') {
+                    sh 'python3 -m unittest LambdaTests.py'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}

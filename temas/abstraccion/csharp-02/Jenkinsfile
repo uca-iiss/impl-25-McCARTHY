@@ -23,4 +23,13 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
 }
