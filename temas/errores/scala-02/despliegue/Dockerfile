@@ -1,58 +1,68 @@
-FROM jenkins/jenkins:lts
+FROM debian:stable-slim
 
 USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instalar Java y herramientas necesarias
+# Instalar herramientas básicas y Java.
 RUN apt-get update && apt-get install -y \
-    default-jdk \
     curl \
-    zip \
+    git \
+    openjdk-17-jdk \
     unzip \
-    git
+    zip \
+    # Limpiar caché para reducir el tamaño de la imagen
+    && rm -rf /var/lib/apt/lists/*
 
-# Crear el directorio /app (como root)
-RUN mkdir -p /app
+# Crear el usuario 'appuser' y su directorio HOME
+RUN useradd -ms /bin/bash appuser && \
+    mkdir -p /home/appuser/.sdkman && \
+    chown -R appuser:appuser /home/appuser
 
-# Establecer el directorio de trabajo para las siguientes instrucciones COPY
-WORKDIR /app
+# Establecer el directorio de trabajo para el proyecto
+WORKDIR /home/appuser/app
 
-# Copiar los archivos del proyecto Scala al contenedor.
-# Estos estarán disponibles en /app cuando el siguiente comando RUN se ejecute.
+# Copiar los archivos del proyecto Scala al WORKDIR.
+# Estos archivos serán propiedad de root al principio.
 COPY build.sbt .
 COPY project ./project
 COPY src ./src
 
-# *** CAMBIO CLAVE AQUÍ: Asegurar permisos de escritura recursivos para jenkins como ROOT. ***
-# Ahora root cambia la propiedad y los permisos de todo el contenido de /app.
-RUN chown -R jenkins:jenkins /app && chmod -R u+rwX /app
+# Asegurar que 'appuser' sea propietario de todo el directorio de trabajo
+# y tenga los permisos adecuados.
+RUN chown -R appuser:appuser /home/appuser/app && \
+    chmod -R u+rwX /home/appuser/app
 
-# Ahora sí, cambiar al usuario jenkins.
-USER jenkins
+# Cambiar al usuario 'appuser' para las siguientes instrucciones
+USER appuser
 
-ENV HOME=/var/jenkins_home
-ENV SDKMAN_DIR="/var/jenkins_home/.sdkman"
+# Configurar variables de entorno para SDKMAN
+ENV HOME=/home/appuser
+ENV SDKMAN_DIR="/home/appuser/.sdkman"
 SHELL ["/bin/bash", "-c"]
 
-# Instalar SDKMAN, SBT y Scala, y luego verificar sus versiones en el MISMO comando RUN.
-# Esto es CRÍTICO para asegurar que el entorno de SDKMAN esté activo para los comandos.
-RUN bash -c ' \
-    curl -s "https://get.sdkman.io" | bash; \
+# Instalar SDKMAN, SBT y Scala.
+RUN set -e && \
+    # Evitar reinstalar SDKMAN si el script ya existe (útil si hay cachés intermedios)
+    if [ ! -f "$SDKMAN_DIR/bin/sdkman-init.sh" ]; then \
+        curl -s "https://get.sdkman.io" | bash; \
+    fi; \
     echo "sdkman_auto_answer=true" > "$SDKMAN_DIR/etc/sdkmanrc"; \
     source "$SDKMAN_DIR/bin/sdkman-init.sh"; \
     sdk install sbt; \
     sdk install scala; \
     \
-    # Verificar versiones dentro de la misma sesión de shell
+    # Verificar versiones dentro de la misma sesión de shell (para el build)
     java -version; \
     sbt --version; \
     scala -version; \
     \
-    # Si todo lo anterior funciona, entonces puedes añadir aquí la compilación y pruebas del proyecto:
-    sbt compile && sbt test \
-'
+    # Compilar y testear (para el build)
+    sbt compile && sbt test
 
-# Comando para ejecutar la aplicación cuando el contenedor se inicie
-# Aseguramos que el entorno SDKMAN esté activo para el 'sbt run' final
-CMD bash -c 'source "$SDKMAN_DIR/bin/sdkman-init.sh" && sbt run'
+# Añadir los directorios de binarios de SBT y Scala al PATH de forma persistente.
+ENV PATH="$SDKMAN_DIR/candidates/sbt/current/bin:$SDKMAN_DIR/candidates/scala/current/bin:$PATH"
+
+# Comando de ENTRYPOINT que inicializa SDKMAN y luego ejecuta la aplicación Scala.
+# Se ejecuta como appuser, quien ahora tiene control total sobre su $HOME y $SDKMAN_DIR.
+ENTRYPOINT ["/bin/bash", "-c", "source \"$SDKMAN_DIR/bin/sdkman-init.sh\" && sbt run"]
