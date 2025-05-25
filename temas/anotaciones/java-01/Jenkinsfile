@@ -9,6 +9,12 @@ pipeline {
         }
 
         stage('Build & Test') {
+            agent {
+                docker { 
+                    image 'maven:3.9.4-openjdk-17' 
+                    args '-v $HOME/.m2:/root/.m2'  // opcional, cachear dependencias Maven
+                }
+            }
             steps {
                 sh 'mvn clean test package'
             }
