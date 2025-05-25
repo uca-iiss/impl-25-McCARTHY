@@ -17,9 +17,10 @@
     "jest": "^29.7.0"
   },
   "jest": {
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ]
+    "testMatch": ["**/tests/**/*.test.js"],
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   }
 }
 
