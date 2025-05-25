@@ -1,12 +1,19 @@
 {
   "name": "abstraccion-typescript",
   "version": "1.0.0",
-  "description": "Ejemplo de abstracción en TypeScript usando Jenkins",
-  "main": "src/index.ts",
+  "description": "",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "build": "tsc",
+    "test": "jest"
   },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.1.6"
   }
 }

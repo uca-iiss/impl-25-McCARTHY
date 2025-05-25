@@ -2,34 +2,47 @@ pipeline {
     agent any
 
     stages {
-        stage('Clonar Repo') {
+        stage('Clonar') {
             steps {
+                echo '--- Clonando el repositorio ---'
                 checkout scm
             }
         }
 
-        stage('Instalar dependencias') {
+        stage('Construir contenedor') {
             steps {
-                dir('temas/abstraccion/typescript-jenkins') {
-                    sh 'npm install'
+                echo '--- Construyendo la imagen Docker del proyecto ---'
+                dir('temas/abstraccion/typescript') {
+                    script {
+                        sh 'docker build -t abstraccion-typescript .'
+                    }
                 }
             }
         }
 
-        stage('Compilar TypeScript') {
+        stage('Pruebas') {
             steps {
-                dir('temas/abstraccion/typescript-jenkins') {
-                    sh 'npx tsc'
+                echo '--- Ejecutando pruebas dentro del contenedor ---'
+                script {
+                    sh 'docker run --rm abstraccion-typescript npm run test'
                 }
             }
         }
 
-        stage('Ejecutar Script') {
+        stage('Ejecutar aplicación') {
             steps {
-                dir('temas/abstraccion/typescript-jenkins') {
-                    sh 'node dist/index.js'
+                echo '--- Ejecutando la aplicación final ---'
+                script {
+                    sh 'docker run --rm abstraccion-typescript'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo '--- Pipeline finalizado. Limpiando contenedores colgados (si los hubiera) ---'
+            sh 'docker ps -aq --filter status=exited | xargs --no-run-if-empty docker rm || true'
         }
     }
 }
