@@ -1,6 +1,17 @@
 pipeline {
-    agent { label 'docker-cmake-node' } // el nombre del nodo que tenga lo que necesitas
+    agent {
+        docker {
+            image 'gcc:12' // imagen base con gcc y make, le añadiremos cmake en el paso
+            args '-u root:root' // para poder instalar paquetes como root dentro del contenedor
+        }
+    }
     stages {
+        stage('Setup') {
+            steps {
+                // Instalamos cmake porque no está por defecto en gcc:12
+                sh 'apt-get update && apt-get install -y cmake'
+            }
+        }
         stage('Build') {
             steps {
                 sh '''
