@@ -9,21 +9,28 @@ pipeline {
         }
 
         stage('Build & Test') {
-            agent {
-                docker { 
-                    image 'maven:3.9.4-openjdk-17' 
-                    args '-v $HOME/.m2:/root/.m2'  // opcional, cachear dependencias Maven
+            steps {
+                script {
+                    docker.image('maven:3.9.4-openjdk-17').inside('-v $HOME/.m2:/root/.m2') {
+                        sh 'mvn clean test package'
+                    }
                 }
             }
+        }
+
+        stage('Docker Build') {
             steps {
-                sh 'mvn clean test package'
+                sh 'docker build -t anotaciones:latest .'
             }
         }
-        stage('Run Application') {
-            steps {
-                sh 'java -jar target/anotaciones-1.0-SNAPSHOT.jar'
-            }
-        }
+
+        // stage('Push Docker Image') {
+        //     steps {
+        //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
+        //             sh 'docker push anotaciones:latest'
+        //         }
+        //     }
+        // }
     }
 
     post {
