@@ -8,12 +8,34 @@ pipeline {
             }
         }
 
-        stage('Ejecutar Ruby') {
+        stage('Instalar dependencias') {
             steps {
-                dir('temas/lambdas/ruby') {
+                dir('temas/lambdas/ruby-01') {
+                    sh 'bundle install'
+                }
+            }
+        }
+
+        stage('Pruebas') {
+            steps {
+                dir('temas/lambdas/ruby-01') {
+                    sh 'ruby test_main.rb'
+                }
+            }
+        }
+
+        stage('Ejecutar aplicación') {
+            steps {
+                dir('temas/lambdas/ruby-01') {
                     sh 'ruby main.rb'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completado.'
         }
     }
 }
