@@ -1,17 +1,15 @@
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM ubuntu:22.04
+
+# Instalar herramientas necesarias
+RUN apt-get update && \
+    apt-get install -y cmake g++ git build-essential libgtest-dev && \
+    cd /usr/src/gtest && cmake . && make && cp lib/*.a /usr/lib
 
 WORKDIR /app
 
-COPY pom.xml .
-COPY src ./src
+COPY . .
 
-RUN mvn clean package
+RUN cmake -S . -B build && \
+    cmake --build build
 
-FROM eclipse-temurin:21-jre
-
-WORKDIR /app
-
-# Usar el jar generado por maven-assembly-plugin con todas las dependencias
-COPY --from=build /app/target/inyeccion-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
-
-CMD ["java", "-jar", "app.jar"]
+CMD ["./build/main"]

@@ -4,12 +4,13 @@ pipeline {
     stages {
         stage('Construcción y pruebas') {
             steps {
-                sh 'docker build -t inyeccion-java .'
+                sh 'docker build -t inyeccion-cpp .'
+                sh 'docker run --rm inyeccion-cpp ctest --test-dir build'
             }
         }
         stage('Ejecución') {
             steps {
-                sh 'docker run --rm inyeccion-java'
+                sh 'docker run --rm inyeccion-cpp'
             }
         }
     }
