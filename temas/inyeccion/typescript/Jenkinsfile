@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('temas/inyeccion/typescript') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('temas/inyeccion/typescript') {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('temas/inyeccion/typescript') {
+                    sh 'npm test'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Ejemplo de inyección en TypeScript completado correctamente.'
+        }
+        failure {
+            echo '❌ El pipeline ha fallado. Revisa los logs.'
+        }
+    }
+}
