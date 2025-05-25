@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'maven:3.9.4-eclipse-temurin-17' }
-    }
+    agent any
     stages {
         stage('Checkout') {
             steps {
@@ -9,20 +7,25 @@ pipeline {
             }
         }
         stage('Build & Test') {
+            agent {
+                docker { image 'maven:3.9.4-eclipse-temurin-17' }
+            }
             steps {
                 sh 'mvn clean verify'
             }
         }
         stage('Run') {
+            agent {
+                docker { image 'maven:3.9.4-eclipse-temurin-17' }
+            }
             steps {
-                // Ejecutar la app para validar si quieres, o eliminar esta etapa
                 sh 'mvn exec:java -Dexec.mainClass=com.example.App'
             }
         }
     }
     post {
         always {
-            junit '**/target/surefire-reports/*.xml' // Reporte de tests
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
             archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
         }
     }
