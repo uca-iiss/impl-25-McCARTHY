@@ -7,7 +7,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Instalar Python, pip y herramientas necesarias
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip curl && \
+    apt-get install -y python3 python3-pip docker.io curl && \
     pip3 install --no-cache-dir pytest pyinstaller --break-system-packages
 
 # Instalar plugins
