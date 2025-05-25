@@ -47,7 +47,7 @@ pipeline {
                 dir('temas/delegacion/ruby') {
                     sh '''
                         mkdir -p dist
-                        tar -czf dist/delegacion-ruby.tar.gz lib/ Rakefile Gemfile
+                        tar -czf dist/delegacion-ruby.tar.gz lib/ Rakefile Gemfile main.rb
                     '''
                 }
             }
