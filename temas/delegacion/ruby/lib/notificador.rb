@@ -1,6 +1,11 @@
-# Interfaz común
+# Define la interfaz común
 class Notificador
-  def enviar(mensaje)
-    raise NotImplementedError, "Debes implementar este método en una subclase"
+  def preparar
+    # Por defecto no hace nada
+  end
+
+  def enviar(_mensaje)
+    raise NotImplementedError, "Debe implementar #enviar"
   end
 end
+
