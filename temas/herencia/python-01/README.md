@@ -1,8 +1,3 @@
-Perfecto, gracias por la aclaración.
-
-A continuación te dejo un `README.md` **único y completo** para el proyecto de **`empresa.py`**, basado en herencia en Python, con pruebas automatizadas y pipeline en Jenkins con Docker y Terraform. Este fichero está listo para copiar y pegar:
-
----
 
 ````markdown
 # 🏢 Proyecto: Empresa con Herencia en Python + CI/CD con Jenkins
