@@ -2,14 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Construcción') {
+        stage('Construcción y pruebas') {
             steps {
                 sh 'docker build -t inyeccion-java .'
-            }
-        }
-        stage('Pruebas') {
-            steps {
-                sh 'docker run --rm inyeccion-java mvn test'
             }
         }
         stage('Ejecución') {
