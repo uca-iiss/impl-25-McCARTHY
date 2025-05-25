@@ -1,0 +1,20 @@
+{
+  "name": "errores",
+  "version": "1.0.0",
+  "description": "Ejemplo de manejo de errores en JavaScript con streams",
+  "main": "errores/app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}
