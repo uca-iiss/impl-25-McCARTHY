@@ -1,6 +1,6 @@
 FROM gcc:12
 
-# Instalar cmake y gtest
+# Instalar CMake, GTest y ctest
 RUN apt-get update && \
     apt-get install -y cmake libgtest-dev && \
     cd /usr/src/gtest && cmake . && make && cp lib/*.a /usr/lib && \
@@ -10,5 +10,6 @@ WORKDIR /app
 
 COPY . .
 
-# Construcción del proyecto
 RUN cmake -S . -B build && cmake --build build
+
+CMD ["ctest", "--test-dir", "build"]
