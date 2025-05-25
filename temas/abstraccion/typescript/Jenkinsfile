@@ -1,53 +1,35 @@
 pipeline {
-    agent none
+    agent any
 
     stages {
-        stage('Build Docker Image') {
-            agent { label 'docker' } // Asegúrate de que el nodo tenga acceso al daemon Docker
+        stage('Clonar Repo') {
             steps {
-                script {
-                    // Se construye la imagen usando el Dockerfile que se encuentra en el directorio "despliegue"
-                    dockerImage = docker.build("scala-option-example:latest", "-f despliegue/Dockerfile .")
+                checkout scm
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'npm install'
                 }
             }
         }
 
-        stage('Compile') {
-            agent {
-                docker {
-                    image "scala-option-example:latest"
-                    // Si necesitas montar el workspace o configurar variables, puedes hacerlo con args:
-                    // args '-v $PWD:/app --workdir /home/appuser/app'
-                }
-            }
+        stage('Compilar TypeScript') {
             steps {
-                echo 'Compilando el proyecto Scala en el contenedor Docker...'
-                sh 'sbt compile'
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'npx tsc'
+                }
             }
         }
 
-        stage('Test') {
-            agent {
-                docker {
-                    image "scala-option-example:latest"
+        stage('Ejecutar Script') {
+            steps {
+                dir('temas/abstraccion/typescript-jenkins') {
+                    sh 'node dist/index.js'
                 }
             }
-            steps {
-                echo 'Ejecutando pruebas automatizadas en el contenedor Docker...'
-                sh 'sbt test'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline completado con éxito'
-        }
-        failure {
-            echo 'Algo falló en la ejecución del pipeline'
-        }
-        always {
-            echo 'Limpieza de recursos si es necesaria...'
         }
     }
 }
