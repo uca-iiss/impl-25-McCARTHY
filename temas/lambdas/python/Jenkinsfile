@@ -34,25 +34,27 @@ pipeline {
             }
         }
         stage('Deliver') {
-            agent {
-                docker { 
-                    image 'arevalo8/custom-lambdas'
-                }
-            }
-            steps {
-                sh '''
-                    cd temas/lambdas/python
-                    pyinstaller --onefile --paths=. --collect-submodules=app main.py --name procesador
-                '''
-            }
-            post {
-                success {
-                    sh 'ls -la dist/'
-                    sh './dist/procesador > salida.txt || true'
-                    archiveArtifacts artifacts: 'dist/procesador'
-                    archiveArtifacts artifacts: 'salida.txt'
-                }
-            }
-        }
+	    agent {
+		docker { 
+		    image 'arevalo8/custom-lambdas'
+		}
+	    }
+	    steps {
+		sh '''
+		    pyinstaller --onefile temas/lambdas/python/main.py --name procesador
+		    ls -la dist/
+		    file dist/procesador
+		    chmod +x dist/procesador
+		    ./dist/procesador > salida.txt || true
+		'''
+	    }
+	    post {
+		success {
+		    archiveArtifacts 'dist/procesador'
+		    archiveArtifacts 'salida.txt'
+		}
+	    }
+	}
+
     }
 }
