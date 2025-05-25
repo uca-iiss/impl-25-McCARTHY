@@ -2,23 +2,24 @@ pipeline {
     agent {
         docker {
             image 'node:18'
+            args '--entrypoint=""'  // Soluciona el primer error del contenedor
         }
     }
 
     stages {
         stage('Instalar dependencias') {
             steps {
-             
+                dir('temas/errores/javascript') {  // Cambia al directorio correcto
                     sh 'npm install'
-                
+                }
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                 
+                dir('temas/errores/javascript') {  // Cambia al directorio correcto
                     sh 'npm test'
-                
+                }
             }
         }
     }
