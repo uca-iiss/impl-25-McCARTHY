@@ -19,8 +19,18 @@ pipeline {
 	    }
 	    steps {
 		sh '''
-		    export PYTHONPATH=$(pwd)/temas/lambdas/python:$PYTHONPATH
-		    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+		    # Crear directorio para resultados
+                    mkdir -p test-reports
+                    
+                    # Instalar pytest
+                    pip install pytest
+                    
+                    # Configurar PYTHONPATH y ejecutar tests
+                    export PYTHONPATH=$(pwd)/temas/lambdas/python/app:$PYTHONPATH
+                    python -m pytest --verbose --junit-xml=test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+                    
+                    # Verificar que el archivo se creó
+                    ls -la test-reports/
 		'''
 	    }
 	    post {
