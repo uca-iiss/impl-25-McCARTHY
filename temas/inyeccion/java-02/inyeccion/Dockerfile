@@ -11,6 +11,7 @@ FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/inyeccion-1.0-SNAPSHOT.jar app.jar
+# Ojo: usar el -jar-with-dependencies.jar generado por el assembly plugin
+COPY --from=build /app/target/inyeccion-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
 
 CMD ["java", "-jar", "app.jar"]
