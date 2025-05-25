@@ -2,49 +2,19 @@ pipeline {
     agent {
         docker {
             image 'node:18'
-            args '--entrypoint=""'
         }
     }
 
     stages {
-        stage('Preparar entorno') {
-            steps {
-                dir('temas/errores/javascript') {
-                    sh 'node --version'
-                    sh 'npm --version'
-                }
-            }
-        }
-
         stage('Instalar dependencias') {
             steps {
-                dir('temas/errores/javascript') {
-                    sh 'npm ci' // Usa npm ci para instalación limpia
-                }
+                sh 'npm install'
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                dir('temas/errores/javascript') {
-                    sh 'npm test -- --ci --reporters=default --reporters=jest-junit'
-                }
-            }
-        }
-
-        stage('Reportes') {
-            steps {
-                dir('temas/errores/javascript') {
-                    junit 'junit.xml'
-                    publishHTML(target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'coverage',
-                        reportFiles: 'lcov-report/index.html',
-                        reportName: 'Coverage Report'
-                    ])
-                }
+                sh 'npm test'
             }
         }
     }
