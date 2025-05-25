@@ -1,14 +1,16 @@
 pipeline {
-    agent any
-
+    agent { label 'docker-cmake-node' } // el nombre del nodo que tenga lo que necesitas
     stages {
         stage('Build') {
             steps {
-                sh 'mkdir -p build'
-                sh 'cd build && cmake .. && make'
+                sh '''
+                    mkdir -p build
+                    cd build
+                    cmake ..
+                    make
+                '''
             }
         }
-
         stage('Test') {
             steps {
                 sh './build/runTests'
