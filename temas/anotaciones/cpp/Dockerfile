@@ -2,11 +2,10 @@ FROM gcc:12
 
 WORKDIR /app
 
-# Copiar todo el contenido (código fuente y Makefile)
 COPY . .
 
-# Compilar usando Makefile
+RUN chmod +x tests/run_tests.sh
+
 RUN make
 
-# Establecer el binario principal (ajusta si tiene otro nombre)
 CMD ["./main"]
