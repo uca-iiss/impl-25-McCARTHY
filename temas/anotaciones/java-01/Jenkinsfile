@@ -1,39 +1,33 @@
 pipeline {
-    agent any
-
-    tools {
-        maven 'Maven 3'     // Asegúrate de que en Jenkins esté configurado con este nombre
-        jdk 'jdk-17'         // Asegúrate de que en Jenkins esté configurado con este nombre
+    agent {
+        docker {
+            image 'maven:3.9.4-eclipse-temurin-17' // Maven + JDK17
+            args '-v $HOME/.m2:/root/.m2'          // cache maven (mapear tu ~/.m2 a la del contenedor)
+        }
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://turepositorio.git' // <- Modifica con tu URL real
+                checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                sh 'mvn clean test package'
             }
         }
 
         stage('Docker Build') {
             steps {
                 script {
-                    dockerImage = docker.build("anotaciones:latest")
+                    dockerImage = docker.build('anotaciones:latest')
                 }
             }
         }
 
-        // Opcional: para subir imagen a un registry
+        // Descomenta para push a Docker Hub (configura tus credenciales y URL)
         // stage('Push Docker Image') {
         //     steps {
         //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
@@ -41,5 +35,11 @@ pipeline {
         //         }
         //     }
         // }
+    }
+
+    post {
+        always {
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+        }
     }
 }
