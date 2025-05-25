@@ -11,21 +11,40 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                sh 'mvn clean compile'
+                dir('temas/inyeccion/java-02/inyeccion') {
+                    script {
+                        sh 'docker build -t inyeccion-java .'
+                    }
+                }
             }
         }
-        stage('Test') {
+
+        stage('Run Tests') {
             steps {
-                sh 'mvn test'
+                dir('temas/inyeccion/java-02/inyeccion') {
+                    script {
+                        sh 'docker run --rm inyeccion-java mvn test'
+                    }
+                }
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                dir('temas/inyeccion/java-02/inyeccion') {
+                    script {
+                        sh 'docker run --rm inyeccion-java'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            junit 'target/surefire-reports/*.xml'
+            echo 'Pipeline completado.'
         }
     }
 }
