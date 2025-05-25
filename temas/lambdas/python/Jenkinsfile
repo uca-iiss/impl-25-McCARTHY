@@ -34,27 +34,24 @@ pipeline {
             }
         }
         stage('Deliver') {
-	    agent {
-		docker { 
-		    image 'arevalo8/custom-lambdas'
-		}
-	    }
-	    steps {
-		sh '''
-		    pyinstaller --onefile temas/lambdas/python/main.py --name procesador
-		    ls -la dist/
-		    file dist/procesador
-		    chmod +x dist/procesador
-		    ./dist/procesador > salida.txt || true
-		'''
-	    }
-	    post {
-		success {
-		    archiveArtifacts 'dist/procesador'
-		    archiveArtifacts 'salida.txt'
-		}
-	    }
-	}
+            agent {
+                docker { 
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh 'pyinstaller --onefile temas/lambdas/python/main.py --name procesador'
+                sh 'ls -la dist/'
+                sh 'chmod +x dist/procesador'
+                sh './dist/procesador > salida.txt || true'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/procesador'
+                    archiveArtifacts 'salida.txt'
+                }
+            }
+        }
 
     }
 }
