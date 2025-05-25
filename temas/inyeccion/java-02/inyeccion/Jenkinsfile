@@ -1,43 +1,20 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.6-eclipse-temurin-17'
-            args '-v $HOME/.m2:/root/.m2'
-        }
-    }
-
-    environment {
-        MAVEN_OPTS = "-Dmaven.repo.local=/root/.m2/repository"
-    }
+    agent any
 
     stages {
-        stage('Build Docker Image') {
+        stage('Construcción') {
             steps {
-                dir('temas/inyeccion/java-02/inyeccion') {
-                    script {
-                        sh 'docker build -t inyeccion-java .'
-                    }
-                }
+                sh 'docker build -t inyeccion-java .'
             }
         }
-
-        stage('Run Tests') {
+        stage('Pruebas') {
             steps {
-                dir('temas/inyeccion/java-02/inyeccion') {
-                    script {
-                        sh 'docker run --rm inyeccion-java mvn test'
-                    }
-                }
+                sh 'docker run --rm inyeccion-java mvn test'
             }
         }
-
-        stage('Run Application') {
+        stage('Ejecución') {
             steps {
-                dir('temas/inyeccion/java-02/inyeccion') {
-                    script {
-                        sh 'docker run --rm inyeccion-java'
-                    }
-                }
+                sh 'docker run --rm inyeccion-java java -jar inyeccion.jar'
             }
         }
     }
