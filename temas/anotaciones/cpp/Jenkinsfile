@@ -1,30 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'kitware/cmake:latest'  // Imagen oficial con cmake preinstalado
-            args '-v /var/run/docker.sock:/var/run/docker.sock'  // si necesitas acceso a docker dentro del container
-        }
-    }
+    agent any
+
     stages {
         stage('Build') {
             steps {
-                sh '''
-                    mkdir -p build
-                    cd build
-                    cmake ..
-                    make
-                '''
+                sh 'mkdir -p build'
+                sh 'cd build && cmake .. && make'
             }
         }
+
         stage('Test') {
             steps {
                 sh './build/runTests'
             }
-        }
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
         }
     }
 }
