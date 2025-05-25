@@ -8,39 +8,37 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile temas/lambdas/python/app/procesador.py'
-                sh 'python -m py_compile temas/lambdas/python/app/logs.py'
+                sh 'python -m py_compile app/procesador.py'
+                sh 'python -m py_compile app/logs.py'
             }
         }
         stage('Test') {
-	    agent {
-		docker {
-		    image 'arevalo8/custom-lambdas'
-		}
-	    }
-	    steps {
-		sh '''
-		    export PYTHONPATH=$(pwd)/temas/lambdas/python:$PYTHONPATH
-		    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
-		'''
-	    }
-	    post {
-		always {
-		    junit 'test-reports/results.xml'
-		}
-	    }
-	}
-
+            agent {
+                docker {
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh '''
+                    export PYTHONPATH=$(pwd):$PYTHONPATH
+                    py.test --verbose --junit-xml test-reports/results.xml tests/test_procesador.py
+                '''
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
         stage('Deliver') {
             agent {
                 docker { 
                     image 'arevalo8/custom-lambdas'
                 }
-
             }
             steps {
                 sh '''
-                    pyinstaller --onefile temas/lambdas/python/app/procesador.py
+                    pyinstaller --onefile app/procesador.py
                 '''
             }
             post {
@@ -52,3 +50,4 @@ pipeline {
         }
     }
 }
+
