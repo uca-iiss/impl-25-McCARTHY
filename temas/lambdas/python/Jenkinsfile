@@ -49,8 +49,8 @@ pipeline {
             post {
                 success {
                     sh 'ls -la dist/'
-                    archiveArtifacts 'dist/procesador'
-                    sh './dist/procesador > salida.txt || true'
+                    archiveArtifacts './procesador'
+                    sh './procesador > salida.txt || true'
                     archiveArtifacts 'salida.txt'
                 }
             }
