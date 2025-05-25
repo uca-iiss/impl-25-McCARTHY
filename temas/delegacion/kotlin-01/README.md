@@ -1,22 +1,54 @@
-# Ejemplo de Delegación en Kotlin con Jenkins
+# Ejercicio: Delegación en Kotlin
 
-Este ejemplo muestra cómo Kotlin permite delegar interfaces usando la palabra clave `by`.
+Este proyecto demuestra el uso del patrón **delegación** en Kotlin, como parte de la práctica de la asignatura.  
+El objetivo es evitar el abuso de la herencia, utilizando interfaces y delegación a través de objetos.
 
-## Estructura
+---
 
-- `Logger.kt`: interfaz con métodos `logInfo()` y `logError()`
-- `ConsoleLogger.kt`: implementación simple que imprime en consola
-- `Aplicacion.kt`: clase que delega el comportamiento de `Logger`
-- `main.kt`: función principal que demuestra el uso
-- `build.gradle.kts`: configuración de proyecto Kotlin + Gradle
-- `Dockerfile`: ejecuta el proyecto en un contenedor
-- `Jenkinsfile`: compila y ejecuta el ejemplo en Jenkins
+## Estructura del proyecto
+/src
+├── main/kotlin/
+│ ├── Aplicacion.kt
+│ ├── ConsoleLogger.kt
+│ ├── Logger.kt
+│ └── Main.kt
+└── test/kotlin/
+└── AplicacionTest.kt
 
-## Ejecución
+build.gradle.kts
+settings.gradle.kts
+Dockerfile
+Jenkinsfile
+README.md
 
+---
+
+## ⚙️ Construcción
+
+Para construir el proyecto:
 ```bash
-./gradlew run
+./gradlew clean build
+
+Pruebas
+
+Para ejecutar las pruebas unitarias:
+./gradlew test
+
+Docker
+El Dockferfile construye el proyecto usando Gradle:
 docker build -t delegacion-kotlin .
 docker run --rm delegacion-kotlin
 
----
+Jenkins
+
+El Jenkinsfile define un pipeline que:
+
+1. Clona el repositorio.
+
+2. Construye el proyecto ( ./gradlew build) .
+
+3. Ejecuta las pruebas ( ./gradlew test) .
+
+4. Ejecuta la aplicación. ( ./gradlew run ).
+
+Este pipeline está listo para integrarse en Jenkins contenerizado.
