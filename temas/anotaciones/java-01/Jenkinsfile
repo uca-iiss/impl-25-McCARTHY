@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.4-eclipse-temurin-17' // Maven + JDK17
-            args '-v /root/.m2:/root/.m2'          // cache maven (opcional)
+            args '-v $HOME/.m2:/root/.m2'          // cache maven (mapear tu ~/.m2 a la del contenedor)
         }
     }
 
@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-        // Para subir imagen a Docker Hub (descomentar y configurar credenciales)
+        // Descomenta para push a Docker Hub (configura tus credenciales y URL)
         // stage('Push Docker Image') {
         //     steps {
         //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
@@ -39,7 +39,7 @@ pipeline {
 
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
         }
     }
 }
