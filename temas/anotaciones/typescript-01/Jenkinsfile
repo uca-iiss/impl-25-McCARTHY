@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    environment {
+        NODE_ENV = 'development'
+    }
+
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                dir('temas/anotaciones/typescript-01') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('temas/anotaciones/typescript-01') {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('temas/anotaciones/typescript-01') {
+                    sh 'npm run test'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}
