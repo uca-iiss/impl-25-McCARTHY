@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "start": "node dist/index.ts"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
