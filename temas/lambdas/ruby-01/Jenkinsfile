@@ -23,8 +23,8 @@ pipeline {
             steps {
                 dir('temas/lambdas/ruby-01') {
                     script {
-                        // Ejecutamos las pruebas dentro del contenedor
-                        sh 'docker run --rm lambdas-ruby bundle exec rspec test_main.rb'
+                        // Ejecutamos las pruebas con minitest dentro del contenedor
+                        sh 'docker run --rm lambdas-ruby ruby test_main.rb'
                     }
                 }
             }
