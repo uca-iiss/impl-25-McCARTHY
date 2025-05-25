@@ -1,41 +1,29 @@
 pipeline {
-    agent any
-
+    agent {
+        docker { image 'maven:3.9.4-eclipse-temurin-17' }
+    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
         stage('Build & Test') {
             steps {
-                script {
-                    docker.image('maven:3.9.4-openjdk-17').inside('-v $HOME/.m2:/root/.m2') {
-                        sh 'mvn clean test package'
-                    }
-                }
+                sh 'mvn clean verify'
             }
         }
-
-        stage('Docker Build') {
+        stage('Run') {
             steps {
-                sh 'docker build -t anotaciones:latest .'
+                // Ejecutar la app para validar si quieres, o eliminar esta etapa
+                sh 'mvn exec:java -Dexec.mainClass=com.example.App'
             }
         }
-
-        // stage('Push Docker Image') {
-        //     steps {
-        //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-        //             sh 'docker push anotaciones:latest'
-        //         }
-        //     }
-        // }
     }
-
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            junit '**/target/surefire-reports/*.xml' // Reporte de tests
+            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
         }
     }
 }
