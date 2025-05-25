@@ -8,38 +8,36 @@ pipeline {
                 }
             }
             steps {
-            	sh '''
-		        python -m py_compile temas/lambdas/python/app/procesador.py
-		        python -m py_compile temas/lambdas/python/app/logs.py
-		        python -m py_compile temas/lambdas/python/main.py
-		'''        
+                sh '''
+                    python -m py_compile temas/lambdas/python/app/procesador.py
+                    python -m py_compile temas/lambdas/python/app/logs.py
+                    python -m py_compile temas/lambdas/python/main.py
+                '''        
             }
         }
         stage('Test') {
-	    agent {
-		docker {
-		    image 'arevalo8/custom-lambdas'
-		}
-	    }
-	    steps {
-		sh '''
-		    export PYTHONPATH=$(pwd)/temas/lambdas/python:$PYTHONPATH
-		    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
-		'''
-	    }
-	    post {
-		always {
-		    junit 'test-reports/results.xml'
-		}
-	    }
-	}
-
+            agent {
+                docker {
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh '''
+                    export PYTHONPATH=$(pwd)/temas/lambdas/python:$PYTHONPATH
+                    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python/tests/test_procesador.py
+                '''
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
         stage('Deliver') {
             agent {
                 docker { 
                     image 'arevalo8/custom-lambdas'
                 }
-
             }
             steps {
                 sh '''
@@ -49,9 +47,9 @@ pipeline {
             post {
                 success {
                     sh 'ls -la dist/'
-                    archiveArtifacts './procesador'
-                    sh './procesador > salida.txt || true'
-                    archiveArtifacts 'salida.txt'
+                    sh './dist/procesador > salida.txt || true'
+                    archiveArtifacts artifacts: 'dist/procesador'
+                    archiveArtifacts artifacts: 'salida.txt'
                 }
             }
         }
