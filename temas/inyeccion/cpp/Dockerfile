@@ -1,10 +1,15 @@
 FROM gcc:12
 
-RUN apt-get update && apt-get install -y cmake git libgtest-dev
+# Instala cmake y GoogleTest
+RUN apt-get update && \
+    apt-get install -y cmake libgtest-dev && \
+    cd /usr/src/gtest && cmake . && make && cp lib/*.a /usr/lib && \
+    apt-get clean
 
 WORKDIR /app
 
+# Copiamos todos los archivos del proyecto
 COPY . .
 
-RUN cmake -S . -B build
-RUN cmake --build build
+# Configuramos CMake y compilamos
+RUN cmake -S . -B build && cmake --build build
