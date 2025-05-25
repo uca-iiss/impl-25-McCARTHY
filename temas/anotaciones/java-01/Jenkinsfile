@@ -19,20 +19,11 @@ pipeline {
                 sh 'mvn clean test package'
             }
         }
-
-        stage('Docker Build') {
+        stage('Run Application') {
             steps {
-                sh 'docker build -t anotaciones:latest .'
+                sh 'java -jar target/anotaciones-1.0-SNAPSHOT.jar'
             }
         }
-
-        // stage('Push Docker Image') {
-        //     steps {
-        //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-        //             sh 'docker push anotaciones:latest'
-        //         }
-        //     }
-        // }
     }
 
     post {
