@@ -109,7 +109,7 @@ Después de introducir la contraseña:
 
 ## Detalle de las clases
 
-### `Persona`
+### `Persona` [`src/main/scala/Persona.scala`](./src/main/scala/Persona.scala)  
 
 Clase abstracta base con los atributos comunes (`nombre`, `edad`) y un método abstracto `saludar()`.
 
@@ -121,7 +121,7 @@ abstract class Persona(val nombre: String, val edad: Int) {
 
 ---
 
-### `Estudiante`
+### `Estudiante` [`src/main/scala/Estudiante.scala`](./src/main/scala/Estudiante.scala)  
 
 Hereda de `Persona` y del trait `Academico`. Redefine el método `saludar()` y proporciona el nombre del departamento.
 
@@ -136,7 +136,7 @@ class Estudiante(nombre: String, edad: Int, val universidad: String)
 
 ---
 
-### `Profesor`
+### `Profesor` [`src/main/scala/Profesor.scala`](./src/main/scala/Profesor.scala)  
 
 Hereda de `Persona` e implementa dos traits: `Academico` y `Evaluador`. Redefine `saludar()` y ofrece funcionalidad de evaluación.
 
@@ -150,7 +150,7 @@ class Profesor(nombre: String, edad: Int, val departamento: String)
 
 ---
 
-### `Investigador`
+### `Investigador` [`src/main/scala/Investigador.scala`](./src/main/scala/Investigador.scala)  
 
 Extiende `Persona`, introduce una propiedad `especialidad` y ofrece diferentes formas de saludo.
 
@@ -171,12 +171,17 @@ class Investigador(nombre: String, edad: Int, val especialidad: String)
 
 ### Traits
 
+`Academico` [`src/main/scala/Academico.scala`](./src/main/scala/Academico.scala)  
+
 ```scala
 trait Academico {
   def departamento: String
   def infoAcademica(): String = s"Perteneciente al departamento de $departamento"
 }
+```
 
+`Evaluador`[`src/main/scala/Evaluador.scala`](./src/main/scala/Evaluador.scala)  
+```scala
 trait Evaluador {
   def evaluar(): String = "Realizando evaluación de estudiantes..."
 }
@@ -204,6 +209,8 @@ COPY . .
 RUN sbt update
 
 CMD ["sbt"]
+```
+
 Explicación:
 
 Usa una imagen base que incluye Java 17, Scala 2.13.10 y SBT 1.7.1.
@@ -217,6 +224,7 @@ Ejecuta sbt update para resolver dependencias.
 Define sbt como comando por defecto al arrancar el contenedor.
 
 ### 'scala/Jenkinsfile'
+
 Este fichero describe el pipeline declarativo que Jenkins ejecutará para automatizar el flujo de integración continua.
 
 ```groovy
@@ -369,6 +377,6 @@ Tras ejecutar terraform apply, se imprime automáticamente la URL local para acc
 | [`build.sbt`](./build.sbt)               | Configuración del proyecto Scala                                           |
 | [`Dockerfile`](./Dockerfile)             | Imagen personalizada con Scala y SBT                                       |
 | [`Jenkinsfile`](./Jenkinsfile)           | Definición del pipeline de Jenkins                                         |
-| [`infra/main.tf`](./infra/main.tf)       | Infraestructura como código con Terraform                                  |
+| [`infra/main.tf`](./infra)               | Infraestructura como código con Terraform                                  |
 
 
