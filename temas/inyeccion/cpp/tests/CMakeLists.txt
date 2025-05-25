@@ -1,10 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
-project(InyeccionCPP)
+find_package(GTest REQUIRED)
+include(GoogleTest)
 
-set(CMAKE_CXX_STANDARD 17)
+add_executable(service_test service_test.cpp)
+target_link_libraries(service_test service GTest::gtest GTest::gtest_main pthread)
 
-add_library(service src/service.cpp)
-add_executable(app src/main.cpp)
-target_link_libraries(app service)
-
-add_subdirectory(tests)
+gtest_discover_tests(service_test)
