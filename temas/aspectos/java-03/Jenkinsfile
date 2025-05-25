@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Restore') {
+            steps {
+                dir('temas/aspectos/java-03/mi-proyecto') {
+                    sh 'mvn clean'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/aspectos/java-03/mi-proyecto') {
+                    sh 'mvn compile'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/aspectos/java-03/mi-proyecto') {
+                    sh 'mvn test'
+                }
+            }
+            post {
+                always {
+                    junit 'temas/aspectos/java-03/mi-proyecto/target/surefire-reports/*.xml'
+                }
+            }
+        }
+    }
+}
