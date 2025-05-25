@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.4-eclipse-temurin-11'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // para poder usar docker dentro del contenedor (docker-in-docker)
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -21,16 +16,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                script {
-                    dockerImage = docker.build("anotaciones:latest")
-                }
+                sh 'docker build -t anotaciones:latest .'
             }
         }
 
         // stage('Push Docker Image') {
         //     steps {
         //         withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-        //             dockerImage.push('latest')
+        //             sh 'docker push anotaciones:latest'
         //         }
         //     }
         // }
