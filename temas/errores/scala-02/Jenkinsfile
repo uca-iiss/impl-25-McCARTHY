@@ -1,21 +1,32 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'despliegue/Dockerfile'
-            dir '.'
-            additionalBuildArgs '--build-arg DEBIAN_FRONTEND=noninteractive'
-        }
-    }
+    agent any
+
     stages {
         stage('Compile') {
             steps {
-                sh 'sbt compile'
+		dir('temas/errores/scala') {
+                    echo 'Compilando el proyecto Scala...'
+                    sh 'sbt compile'
+		}
             }
         }
+
         stage('Test') {
             steps {
-                sh 'sbt test'
+		dir('temas/errores/scala') {
+                    echo 'Ejecutando pruebas automatizadas...'
+                    sh 'sbt test'
+		}
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completado con éxito'
+        }
+        failure {
+            echo 'Algo falló en la ejecución del pipeline'
         }
     }
 }
