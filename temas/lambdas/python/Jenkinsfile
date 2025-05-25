@@ -9,6 +9,7 @@ pipeline {
             }
             steps {
                 sh 'python -m py_compile temas/lambdas/python/app/procesador.py'
+                sh 'python -m py_compile temas/lambdas/python/app/logs.py'
             }
         }
         stage('Test') {
