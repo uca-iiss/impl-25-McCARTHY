@@ -8,26 +8,35 @@ pipeline {
             }
         }
 
-        stage('Instalar dependencias') {
+        stage('Construcción') {
             steps {
-                dir('temas/lambdas/ruby-01') {
-                    sh 'bundle install'
+                dir('temas/lambdas/ruby') {
+                    script {
+                        // Construimos la imagen Docker
+                        sh 'docker build -t lambdas-ruby .'
+                    }
                 }
             }
         }
 
         stage('Pruebas') {
             steps {
-                dir('temas/lambdas/ruby-01') {
-                    sh 'ruby test_main.rb'
+                dir('temas/lambdas/ruby') {
+                    script {
+                        // Ejecutamos las pruebas dentro del contenedor
+                        sh 'docker run --rm lambdas-ruby bundle exec rspec test_main.rb'
+                    }
                 }
             }
         }
 
-        stage('Ejecutar aplicación') {
+        stage('Ejecución') {
             steps {
-                dir('temas/lambdas/ruby-01') {
-                    sh 'ruby main.rb'
+                dir('temas/lambdas/ruby') {
+                    script {
+                        // Ejecutamos el script principal dentro del contenedor
+                        sh 'docker run --rm lambdas-ruby ruby main.rb'
+                    }
                 }
             }
         }
