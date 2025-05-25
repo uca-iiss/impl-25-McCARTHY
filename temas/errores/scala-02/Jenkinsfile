@@ -1,28 +1,37 @@
 pipeline {
-    agent {
-        // Indica a Jenkins que use una imagen Docker específica como agente.
-        // Aquí usamos la imagen que acabamos de construir.
-        docker {
-            image 'scala-option-example:latest'
-            // Opcional: Si necesitas bind-mounts o credenciales, se configurarían aquí.
-            // Por ejemplo, para montar el directorio de trabajo actual:
-            // args '-v $PWD:/app --workdir /app'
-            // Sin embargo, en el Jenkinsfile default, el workspace ya se monta.
-        }
-    }
+    agent none
 
     stages {
-        stage('Compile') {
+        stage('Build Docker Image') {
+            agent { label 'docker' } // Asegúrate de que el nodo tenga acceso al daemon Docker
             steps {
-                // Como el contenedor Docker ya tiene el WORKDIR en /app
-                // y los archivos de proyecto están copiados, no necesitamos `dir()`.
-                // sbt y Scala ya están en el PATH dentro de ese contenedor.
+                script {
+                    // Se construye la imagen usando el Dockerfile que se encuentra en el directorio "despliegue"
+                    dockerImage = docker.build("scala-option-example:latest", "-f despliegue/Dockerfile .")
+                }
+            }
+        }
+
+        stage('Compile') {
+            agent {
+                docker {
+                    image "scala-option-example:latest"
+                    // Si necesitas montar el workspace o configurar variables, puedes hacerlo con args:
+                    // args '-v $PWD:/app --workdir /home/appuser/app'
+                }
+            }
+            steps {
                 echo 'Compilando el proyecto Scala en el contenedor Docker...'
                 sh 'sbt compile'
             }
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image "scala-option-example:latest"
+                }
+            }
             steps {
                 echo 'Ejecutando pruebas automatizadas en el contenedor Docker...'
                 sh 'sbt test'
@@ -36,12 +45,9 @@ pipeline {
         }
         failure {
             echo 'Algo falló en la ejecución del pipeline'
-            // Opcional: Aquí podrías añadir acciones para errores, como enviar notificaciones.
         }
         always {
-            // Esto se ejecuta siempre, independientemente del resultado del stage.
             echo 'Limpieza de recursos si es necesaria...'
-            // Por ejemplo, si generaste algún artefacto que necesites limpiar.
         }
     }
 }
