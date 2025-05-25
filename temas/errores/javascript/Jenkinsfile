@@ -1,8 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18'
+        }
+    }
 
     stages {
-        stage('Install') {
+        stage('Instalar dependencias') {
             steps {
                 dir('javascript') {
                     sh 'npm install'
@@ -10,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Ejecutar tests') {
             steps {
                 dir('javascript') {
                     sh 'npm test'
