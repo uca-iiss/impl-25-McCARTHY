@@ -8,18 +8,41 @@ pipeline {
             }
         }
 
-        stage('Construir Kotlin') {
+        stage('Construcción') {
             steps {
-                dir('temas/delegacion/kotlin') {
-                    sh './gradlew build'
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew clean build'
+                    }
                 }
             }
         }
 
-        stage('Ejecutar') {
+        stage('Pruebas') {
             steps {
-                sh 'java -jar temas/delegacion/kotlin/build/libs/*.jar'
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew test'
+                    }
+                }
             }
+        }
+
+        stage('Ejecución') {
+            steps {
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew run'
+                    }
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo 'Pipeline completado.'
         }
     }
 }
