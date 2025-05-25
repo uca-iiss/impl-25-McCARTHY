@@ -279,7 +279,7 @@ El pipeline consta de tres fases:
 
 El uso de --rm garantiza limpieza tras cada ejecución.
 
-### scala/infra/main.tf
+### `scala/infra/main.tf`
 Archivo principal de Terraform para construir y desplegar Jenkins contenerizado con soporte para Docker-in-Docker.
 
 ```hcl
@@ -330,7 +330,7 @@ Expone los puertos necesarios (8080, 50000) para acceder a Jenkins.
 
 Monta el socket de Docker para permitir la ejecución de contenedores desde dentro de Jenkins (Docker-in-Docker).
 
-### scala/infra/variables.tf
+### `scala/infra/variables.tf`
 
 Variables reutilizables para parametrizar los recursos definidos en Terraform.
 
@@ -352,7 +352,7 @@ Permiten modificar el nombre de la imagen o del contenedor fácilmente sin cambi
 
 Mejora la legibilidad y mantenimiento de la infraestructura.
 
-### scala/infra/outputs.tf
+### `scala/infra/outputs.tf`
 Muestra información útil al final de la ejecución de Terraform.
 
 ```hcl
