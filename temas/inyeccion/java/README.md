@@ -20,7 +20,7 @@ Google Guice es un framework de inyección de dependencias ligero para Java. Su 
 - Muy adecuado para proyectos pequeños y medianos
 - Uso sencillo con clases Java normales
 
-## � ¿Cómo se aplica en este ejemplo?
+## ¿Cómo se aplica en este ejemplo?
 
 - Tenemos una interfaz abstracta: `Notificador`
 - Varias implementaciones posibles: `EmailNotificador`, `SmsNotificador`, etc.
@@ -110,7 +110,7 @@ class ServicioMensajesTest {
 
 Aquí no usamos Guice directamente en el test, sino que hacemos la inyección manual, algo común en pruebas para tener control total del entorno.
 
-## ⚙️ `pom.xml` destacado
+## `pom.xml` destacado
 
 El archivo `pom.xml` es el corazón del proyecto Maven. Define:
 
@@ -134,7 +134,7 @@ El archivo `pom.xml` es el corazón del proyecto Maven. Define:
 </dependencies>
 ```
 
-## 🧪 Ejecución local
+## Ejecución local
 
 Compilar y ejecutar:
 
@@ -149,7 +149,7 @@ Ejecutar los tests:
 mvn test
 ```
 
-## 🛠️ CI/CD con Jenkins
+## CI/CD con Jenkins
 
 ### `Jenkinsfile`:
 
