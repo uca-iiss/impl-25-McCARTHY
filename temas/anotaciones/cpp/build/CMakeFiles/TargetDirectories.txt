@@ -1,5 +1,0 @@
-/home/texmoz/Github/impl-25-GOSLING/temas/anotaciones/cpp/build/CMakeFiles/di_example.dir
-/home/texmoz/Github/impl-25-GOSLING/temas/anotaciones/cpp/build/CMakeFiles/runTests.dir
-/home/texmoz/Github/impl-25-GOSLING/temas/anotaciones/cpp/build/CMakeFiles/test.dir
-/home/texmoz/Github/impl-25-GOSLING/temas/anotaciones/cpp/build/CMakeFiles/edit_cache.dir
-/home/texmoz/Github/impl-25-GOSLING/temas/anotaciones/cpp/build/CMakeFiles/rebuild_cache.dir
