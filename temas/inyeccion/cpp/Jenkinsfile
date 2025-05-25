@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Ejecución') {
             steps {
-                sh 'docker run --rm inyeccion-cpp ./build/app'
+                sh 'docker run --rm inyeccion-cpp ./build/main'
             }
         }
     }
