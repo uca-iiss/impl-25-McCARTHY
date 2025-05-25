@@ -1,5 +1,7 @@
-const pedidos = require('./data/pedidos');
-const { procesarPedidos } = require('./logic/procesador');
+import { pedidos } from './data/pedidos.js';
+import { procesarPedidos } from './logic/procesador.js';
+
+procesarPedidos(pedidos);
 
 const resultado = procesarPedidos(pedidos);
 
