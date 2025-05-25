@@ -41,7 +41,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    pyinstaller --onefile temas/lambdas/python/main.py --name procesador
+                    cd temas/lambdas/python
+                    pyinstaller --onefile --paths=. --collect-submodules=app main.py --name procesador
                 '''
             }
             post {
