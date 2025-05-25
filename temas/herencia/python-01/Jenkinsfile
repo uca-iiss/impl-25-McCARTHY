@@ -1,20 +1,41 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'Dockerfile'
-            dir 'despliegue'
+    agent any
+
+    stages {
+        stage('Preparar entorno') {
+            steps {
+                echo 'Preparando entorno Python...'
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                echo 'Instalando dependencias...'
+                dir('temas/herencia/python-01/despliegue') {
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Ejecutar pruebas') {
+            steps {
+                echo 'Ejecutando pruebas con pytest...'
+                dir('temas/herencia/python-01/empresa') {
+                    sh 'pytest'
+                }
+            }
         }
     }
-    stages {
-        stage('Install dependencies') {
-            steps {
-                sh 'pip install -r despliegue/requirements.txt'
-            }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
         }
-        stage('Run tests') {
-            steps {
-                sh 'pytest empresa/tests'
-            }
+        failure {
+            echo 'La ejecución falló.'
+        }
+        success {
+            echo 'La ejecución fue exitosa.'
         }
     }
 }
