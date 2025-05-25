@@ -1,15 +1,10 @@
-FROM ubuntu:22.04
+FROM gcc:12
 
-# Instalar herramientas necesarias
-RUN apt-get update && \
-    apt-get install -y cmake g++ git build-essential libgtest-dev && \
-    cd /usr/src/gtest && cmake . && make && cp lib/*.a /usr/lib
+RUN apt-get update && apt-get install -y cmake git libgtest-dev
 
 WORKDIR /app
 
 COPY . .
 
-RUN cmake -S . -B build && \
-    cmake --build build
-
-CMD ["./build/main"]
+RUN cmake -S . -B build
+RUN cmake --build build

@@ -2,15 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Construcción y pruebas') {
+        stage('Construcción') {
             steps {
                 sh 'docker build -t inyeccion-cpp .'
+            }
+        }
+        stage('Pruebas') {
+            steps {
                 sh 'docker run --rm inyeccion-cpp ctest --test-dir build'
             }
         }
         stage('Ejecución') {
             steps {
-                sh 'docker run --rm inyeccion-cpp'
+                sh 'docker run --rm inyeccion-cpp ./build/app'
             }
         }
     }
