@@ -1,13 +1,23 @@
 # Tema B: Delegación (Ruby) - Práctica IISS
 
-Este proyecto demuestra el uso avanzado de **delegación** en Ruby mediante composición, módulos (`mixins`) y `Forwardable`, aplicando buenas prácticas del lenguaje y un enfoque desacoplado. El sistema implementa un **gestor de notificaciones** en una orquesta, donde diferentes canales (email, sms, push) delegan el método `preparar`.
+Este sistema de notificaciones está diseñado para demostrar una implementación avanzada del patrón de delegación en Ruby, aplicando buenas prácticas y aprovechando mecanismos idiomáticos como el módulo Forwardable. Se trata de una arquitectura limpia, extensible y flexible que permite enviar notificaciones a través de múltiples canales (email, SMS, push), delegando el comportamiento concreto sin acoplar directamente a la clase principal.
+
+Una de las claves del diseño es el uso del módulo Forwardable, que permite delegar métodos concretos a objetos internos de una clase sin necesidad de redefinir manualmente cada uno. Esto representa una forma elegante y explícita de aplicar composición y delegación en Ruby.
+
+En este caso:
+
+La clase Usuario mantiene una colección de canales de notificación.
+
+A través de Forwardable, delega llamadas al método preparar directamente a cada uno de los canales agregados, que implementan una interfaz común.
+
+Esto desacopla el comportamiento del envío concreto (SMS, email, push) de la lógica del usuario, lo que respeta el principio de responsabilidad única y facilita la extensión del sistema (por ejemplo, añadiendo un canal nuevo no requiere modificar Usuario).
 
 ## Estructura del proyecto
 
 ```
 temas/
 └── delegacion/
-    └── ruby/
+    └── ruby-03/
         ├── lib/
         │   ├── canales.rb           ← Clase colección con Enumerable
         │   ├── email.rb             ← Canal Email
@@ -43,7 +53,7 @@ Cada clase sigue los principios de encapsulamiento, bajo acoplamiento y alta coh
 
 ### 1. Construcción de la imagen Docker
 
-Desde `temas/delegacion/ruby/docs`:
+Desde `temas/delegacion/ruby-03/docs`:
 
 ```bash
 docker build -t myjenkins-ruby .
@@ -83,7 +93,7 @@ Una vez dentro:
    - SCM: Git
    - URL: `https://github.com/uca-iiss/impl-25-McCARTHY`
    - Branch: `*/main`
-   - Script Path: `temas/delegacion/ruby/Jenkinsfile`
+   - Script Path: `temas/delegacion/ruby-03/Jenkinsfile`
 
 ---
 
@@ -115,7 +125,7 @@ class Canales
 end
 ```
 
-### `email.rb`, `sms.rb`, `push.rb`
+### `email.rb`, `sms.rb`, `push.rb` [`lib/email.rb`](./lib/email.rb) [`lib/sms.rb`](./lib/sms.rb) [`lib/push.rb`](./lib/push.rb)
 
 Cada clase representa un canal y define el método `preparar` y `enviar`.
 
@@ -308,9 +318,110 @@ USER jenkins
 
 ---
 
-### `main.tf`, `providers.tf`, `variables.tf`, `outputs.tf`
+### `main.tf`, `providers.tf`,  [`docs/main.tf`](./docs/main.tf) [`docs/providers.tf`](./docs/providers.tf) 
 
 Configuración estándar para desplegar Jenkins con Docker-in-Docker usando volúmenes, certificados y red personalizada, similar al tema de lambdas.
+
+'''
+resource "docker_network" "jenkins" {
+  name = "jenkins"
+}
+
+resource "docker_volume" "jenkins_data" {
+  name = "jenkins-data"
+}
+
+resource "docker_volume" "docker_certs" {
+  name = "jenkins-docker-certs"
+}
+
+resource "docker_container" "docker_dind" {
+  name     = "jenkins-docker"
+  image    = "docker:dind"
+  privileged = true
+  restart  = "always"
+
+  networks_advanced {
+    name    = docker_network.jenkins.name
+    aliases = ["docker"]
+  }
+
+  env = [
+    "DOCKER_TLS_CERTDIR=/certs"
+  ]
+
+  volumes {
+    volume_name    = docker_volume.docker_certs.name
+    container_path = "/certs/client"
+  }
+
+  volumes {
+    volume_name    = docker_volume.jenkins_data.name
+    container_path = "/var/jenkins_home"
+  }
+
+  ports {
+    internal = 2376
+    external = 2376
+  }
+}
+
+resource "docker_image" "jenkins_image" {
+  name         = "myjenkins-ruby"
+  keep_locally = true
+}
+
+resource "docker_container" "jenkins" {
+  name  = "jenkins-blueocean"
+  image = docker_image.jenkins_image.name
+  restart = "on-failure"
+
+  networks_advanced {
+    name = docker_network.jenkins.name
+  }
+
+  env = [
+    "DOCKER_HOST=tcp://docker:2376",
+    "DOCKER_CERT_PATH=/certs/client",
+    "DOCKER_TLS_VERIFY=1"
+  ]
+
+  volumes {
+    volume_name    = docker_volume.jenkins_data.name
+    container_path = "/var/jenkins_home"
+  }
+
+  volumes {
+    volume_name    = docker_volume.docker_certs.name
+    container_path = "/certs/client"
+    read_only      = true
+  }
+
+  ports {
+    internal = 8080
+    external = 8083
+  }
+
+  ports {
+    internal = 50000
+    external = 50003
+  }
+}
+'''
+
+'''
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.2"
+    }
+  }
+}
+
+provider "docker" {}
+'''
+
 
 ---
 
