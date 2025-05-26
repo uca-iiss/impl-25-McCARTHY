@@ -9,4 +9,4 @@
 | 2024-25 <br/> <br/>| GOSLING | [García Sánchez, Jesús](https://github.com/zusrico) <br/> [Abuín Sánchez, David](https://github.com/davidabuinESI) | [TypeScript](temas/abstraccion/typescript) | [Python](temas/herencia/python-01) | [Kotlin](temas/delegacion/kotlin-01) | [TypeScript](temas/inyeccion/typescript) | [C++](temas/anotaciones/cpp) | [C++](temas/aspectos/cpp) | [Scala](temas/errores/scala-01) | [Ruby](temas/lambdas/ruby-01) |
 =======
 | 2024-25 <br/> <br/>| GOSLING | [García Sánchez, Jesús](https://github.com/zusrico) <br/> [Abuín Sánchez, David](https://github.com/davidabuinESI) | [TypeScript](temas/abstraccion/typescript) | [Python](temas/herencia/python-02) | [Kotlin](temas/delegacion/kotlin) | [Java](temas/inyeccion/java-01) | [Java](temas/anotaciones/java) | [C++](temas/aspectos/cpp) | [Scala](temas/errores/scala-01) | [Ruby](temas/lambdas/ruby) |
->>>>>>> upstream/main
+
