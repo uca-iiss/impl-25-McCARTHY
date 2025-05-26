@@ -1,0 +1,57 @@
+pipeline {
+    agent none
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh '''
+                    python -m py_compile temas/lambdas/python-03/app/procesador.py
+                    python -m py_compile temas/lambdas/python-03/app/logs.py
+                    python -m py_compile temas/lambdas/python-03/main.py
+                '''        
+            }
+        }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh '''
+                    export PYTHONPATH=$(pwd)/temas/lambdas/python-03:$PYTHONPATH
+                    py.test --verbose --junit-xml test-reports/results.xml temas/lambdas/python-03/tests/test_procesador.py
+                '''
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
+        stage('Deliver') {
+            agent {
+                docker { 
+                    image 'arevalo8/custom-lambdas'
+                }
+            }
+            steps {
+                sh 'pyinstaller --onefile temas/lambdas/python-03/main.py --name procesador'
+                sh 'ls -la dist/'
+                sh 'chmod +x dist/procesador'
+                sh './dist/procesador > salida.txt || true'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/procesador'
+                    archiveArtifacts 'salida.txt'
+                }
+            }
+        }
+
+    }
+}
