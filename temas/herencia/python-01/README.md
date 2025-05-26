@@ -1,80 +1,107 @@
 
-```markdown
-# Ejercicio de Herencia en Python
+## 👨‍🏫 ¿Qué es la herencia en Python?
 
-Este proyecto es un ejemplo sencillo del uso del principio de **Herencia** en programación orientada a objetos utilizando el lenguaje **Python**. El objetivo es ilustrar cómo una clase base puede ser extendida por clases hijas que comparten atributos y comportamientos comunes.
+La **herencia** es un concepto fundamental en la programación orientada a objetos. Nos permite definir una clase general (por ejemplo, una *figura*) y luego crear clases más concretas (como *rectángulo* o *círculo*) que heredan de ella sus propiedades y métodos.
 
-Además, el proyecto incluye pruebas automatizadas con `pytest`, y está preparado para su ejecución en entornos de integración continua con **Docker** y **Jenkins**.
+En este ejemplo:
 
-## Estructura del proyecto
+- La clase `Figura` es la base, y define un método `area()` que *debería* implementar cada subclase.
+- `Rectangulo` y `Circulo` son clases hijas que **sobrescriben** ese método para devolver el área correspondiente.
 
-```
+Ejemplo simplificado:
 
-.
-├── app
-│   └── figuras.py              # Definición de clases (Figura, Rectángulo, Círculo)
-├── tests
-│   └── test\_figuras.py         # Tests unitarios con pytest
-├── Dockerfile                  # Imagen Docker para ejecutar las pruebas
-├── Jenkinsfile                 # Pipeline Jenkins que construye y prueba el proyecto
-├── requirements.txt            # Dependencias del proyecto
-└── README.md                   # Este archivo
+```python
+class Figura:
+    def area(self):
+        raise NotImplementedError("Este método debe ser implementado por las subclases")
 
+class Rectangulo(Figura):
+    def __init__(self, ancho, alto):
+        self.ancho = ancho
+        self.alto = alto
+
+    def area(self):
+        return self.ancho * self.alto
 ````
 
-## ¿Qué se implementa?
+---
 
-Se define una clase base `Figura` que representa una figura geométrica genérica, y dos clases hijas:
+## 🗂️ Estructura del proyecto
 
-- `Rectangulo`: con atributos `ancho` y `alto`, y método `area()`.
-- `Circulo`: con atributo `radio`, y método `area()`.
+```plaintext
+.
+├── app
+│   └── figuras.py              # Clases Figura, Rectángulo y Círculo
+├── tests
+│   └── test_figuras.py         # Pruebas unitarias usando pytest
+├── Dockerfile                  # Imagen Docker para ejecutar los tests
+├── Jenkinsfile                 # Pipeline Jenkins para construir y probar
+├── requirements.txt            # Lista de dependencias
+└── README.md                   # Este archivo
+```
 
-Cada subclase sobrescribe el método `area` para calcular su área correspondiente.
+---
 
-## Requisitos
+## 💡 ¿Qué hace el código?
 
-Para ejecutar el proyecto localmente necesitas tener instalado:
+1. Tenemos una clase base `Figura`, que no tiene implementación de `area()` (para obligar a que las subclases lo definan).
+2. Luego definimos:
 
-- [Python 3.10+](https://www.python.org/)
-- [Docker](https://www.docker.com/)
-- [Jenkins](https://www.jenkins.io/) (solo si deseas ejecutar el pipeline)
+   * `Rectangulo`: recibe ancho y alto, y calcula su área como `ancho * alto`.
+   * `Circulo`: recibe un radio y calcula el área usando la fórmula `π * radio²`.
 
-## Instalación y ejecución en local
+---
 
-1. Clona el repositorio:
+## 🧰 Requisitos para usarlo
+
+Para probar el proyecto localmente necesitas tener instalado:
+
+* [Python 3.10 o superior](https://www.python.org/)
+* [Docker](https://www.docker.com/)
+* [Jenkins](https://www.jenkins.io/) (solo si quieres probar la integración continua)
+
+---
+
+## 🚀 ¿Cómo probarlo en tu máquina?
+
+### 1. Clona el repositorio
 
 ```bash
 git clone https://github.com/davidabuinESI/impl-25-GOSLING.git
 cd impl-25-GOSLING
-````
+```
 
-2. Construye la imagen Docker:
+### 2. Construye la imagen Docker
 
 ```bash
 docker build -t herencia-python .
 ```
 
-3. Ejecuta los tests:
+### 3. Ejecuta los tests dentro del contenedor
 
 ```bash
 docker run --rm herencia-python
 ```
 
-## Ejecución en Jenkins
+---
 
-1. Asegúrate de tener configurado Jenkins con soporte para Docker.
+## ⚙️ Cómo usarlo con Jenkins
 
-2. El pipeline Jenkins definido en el archivo `Jenkinsfile` realiza lo siguiente:
+Este proyecto ya incluye un `Jenkinsfile` que automatiza el proceso de testing. La pipeline hace lo siguiente:
 
-* Clona el repositorio.
-* Construye la imagen Docker (`herencia-python`).
-* Ejecuta los tests automáticamente.
+1. Clona el repositorio.
+2. Construye la imagen Docker (`herencia-python`).
+3. Ejecuta los tests automáticamente.
 
-### ¿Cómo configurarlo?
+### 🛠️ Pasos para configurarlo en Jenkins
 
-En Jenkins:
+1. Abre Jenkins en tu navegador (por defecto es [http://localhost:8080](http://localhost:8080)).
+2. Crea un nuevo proyecto de tipo **Pipeline**.
+3. En la sección *Pipeline script from SCM*:
 
-1. Crea un nuevo **proyecto de tipo Pipeline**.
-2. Marca la opción de **"Pipeline script from SCM"**.
-3. Selecciona **Git** y coloca la URL del repositorio.
-4. Guarda y ejecuta el pipeline.
+   * Marca la opción "Git".
+   * Pega esta URL del repo:
+     `https://github.com/davidabuinESI/impl-25-GOSLING.git`
+4. Guarda y dale a "Build Now" o "Ejecutar".
+
+---
