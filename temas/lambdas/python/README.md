@@ -45,50 +45,35 @@ El uso de `@dataclass` y expresiones lambda permite un diseño limpio, compacto 
 
 ### 1. Construcción de la imagen Docker
 
-Desde `temas/lambdas/python`:
+Desde `temas/lambdas/python/docs`:
 
 ```bash
-docker build -t arevalo8/custom-lambdas .
+docker build -t myjenkins-python .
 ```
-
-### 2. Ejecución del procesador desde la imagen
-
-```bash
-docker run --rm -v "$PWD":/app -w /app arevalo8/custom-lambdas ./dist/procesador
-```
-
-### 3. Ejecutar pruebas manualmente
-
-```bash
-pytest -v temas/lambdas/python/tests
-```
-
----
 
 ## Integración continua con Jenkins
 
 Este proyecto se ejecuta automáticamente mediante un **pipeline declarativo de Jenkins** que compila, testea, empaqueta con PyInstaller y archiva el ejecutable y su salida.
 
-### 4. Despliegue de Jenkins con Terraform
+### 2. Despliegue de Jenkins con Terraform
 
 Desde la carpeta `docs`:
 
 ```bash
-cd temas/lambdas/python/docs
 terraform init
 terraform apply
 ```
 
 Esto lanza Jenkins y Docker-in-Docker con acceso compartido al socket de Docker.
 
-### 5. Acceso a Jenkins
+### 3. Acceso a Jenkins
 
 Ir a: [http://localhost:8082](http://localhost:8082)
 
 #### Contraseña inicial
 
 ```bash
-docker exec -it jenkins-lambdas cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec -it jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
 Una vez dentro:
@@ -516,8 +501,12 @@ RUN apt-get update && \
     apt-get install -y python3 python3-pip docker.io curl && \
     pip3 install --no-cache-dir pytest pyinstaller --break-system-packages
 
-# Instalar plugins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+# Instalar todos los plugins necesarios con sus dependencias explícitas
+RUN jenkins-plugin-cli --plugins \
+    blueocean \
+    docker-workflow \
+    token-macro \
+    json-path-api
 
 USER jenkins
 ```
