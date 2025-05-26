@@ -539,6 +539,8 @@ docker rm -f jenkins-docker
 # Borrar imagen Jenkins personalizada 
 docker rmi myjenkins-python
 
+#Borrar red jenkins
+docker network rm jenkins
 ```
 
 ---
