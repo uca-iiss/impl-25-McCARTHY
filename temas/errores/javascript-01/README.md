@@ -54,7 +54,7 @@ Contiene las funciones principales:
 ```js
 export function limpiarPedido(pedido) {
   if (!pedido?.cliente?.nombre || pedido?.total == null) {
-    console.warn(\`Pedido \${pedido?.id ?? 'desconocido'} inválido\`);
+    console.warn(\`Pedido \${pedido?.id ?? 'desconocido'} inválido\');
     return null;
   }
 
