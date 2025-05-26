@@ -92,7 +92,7 @@ Una vez dentro:
 
 ## Detalle de las clases
 
-### `logs.py` [`src/main/python/app/logs.py`](.src/main/python/app/logs.py).
+### `logs.py` [`src/main/python/app/logs.py`](./src/main/python/app/logs.py).
 
 Módulo con funciones funcionales basadas en lambda, map, filter, reduce, y groupby:
 
