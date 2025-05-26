@@ -204,20 +204,61 @@ end
 
 ```groovy
 pipeline {
-    agent {
-        docker {
-            image 'arevalo8/custom-delegacion'
-        }
-    }
+    agent none
+
     stages {
-        stage('Test') {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
             steps {
-                sh 'bundle install'
-                sh 'rspec spec/usuario_spec.rb --format documentation'
+                dir('temas/delegacion/ruby') {
+                    sh 'bundle check || bundle install'
+                    sh 'rake'  // Compilar y verificar el proyecto ejecutando las tareas default
+                }
+            }
+        }
+
+        stage('Test') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
+            steps {
+                dir('temas/delegacion/ruby') {
+                    sh '''
+                        mkdir -p test-reports
+                        rspec --format documentation --format RspecJunitFormatter --out test-reports/results.xml
+                    '''
+                }
             }
             post {
                 always {
-                    junit 'results.xml'
+                    junit 'temas/delegacion/ruby/test-reports/results.xml'
+                }
+            }
+        }
+
+        stage('Deliver') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
+            steps {
+                dir('temas/delegacion/ruby') {
+                    sh '''
+                        mkdir -p dist
+                        tar -czf dist/delegacion-ruby.tar.gz lib/ Rakefile Gemfile main.rb
+                    '''
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'temas/delegacion/ruby/dist/delegacion-ruby.tar.gz', fingerprint: true
                 }
             }
         }
