@@ -330,7 +330,7 @@ Expone los puertos necesarios (8080, 50000) para acceder a Jenkins.
 
 Monta el socket de Docker para permitir la ejecución de contenedores desde dentro de Jenkins (Docker-in-Docker).
 
-### `infra/variables.tf` [`infra/variables.tf`](./infra/variables.tf`) 
+### `infra/variables.tf` [`infra/variables.tf`](./infra/variables.tf) 
 
 Variables reutilizables para parametrizar los recursos definidos en Terraform.
 
