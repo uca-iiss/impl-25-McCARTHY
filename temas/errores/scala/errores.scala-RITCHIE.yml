@@ -1,0 +1,26 @@
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: errores.scala-RITCHIE.Dockerfile
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Esencial para Docker
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      - JENKINS_ADMIN_ID=admin
+      - JENKINS_ADMIN_PASSWORD=password
+      - GIT_SAFE_DIRECTORIES=/var/jenkins_home/workspace
+    user: root  # Temporal para permisos
+    networks:
+      - scala-net
+
+volumes:
+  jenkins_data:
+
+networks:
+  scala-net:
+    driver: bridge

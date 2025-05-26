@@ -1,0 +1,86 @@
+pipeline {
+    agent {
+        docker {
+            image 'mcr.microsoft.com/dotnet/sdk:9.0'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
+    
+    environment {
+        DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+        DOTNET_NOLOGO = '1'
+        PROJECT_DIR = 'temas/abstraccion/csharp-03/src/c#'
+        TEST_DIR = 'temas/abstraccion/csharp-03/src/test'
+    }
+    
+    stages {
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Restore') {
+            steps {
+                dir(env.PROJECT_DIR) {
+                    sh 'dotnet restore'
+                }
+            }
+        }
+        
+        stage('Compilar') {
+            steps {
+                dir(env.PROJECT_DIR) {
+                    sh 'dotnet build --no-restore -c Release'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir(env.TEST_DIR) {
+                    sh '''
+                        mkdir -p ../TestResults
+                        dotnet test --no-build -c Release --logger "trx;LogFileName=../TestResults/results.trx"
+                    '''
+                }
+            }
+        }
+        
+        stage('Empaquetar') {
+            steps {
+                dir(env.PROJECT_DIR) {
+                    sh 'dotnet publish --no-build -c Release -o ./publish'
+                    archiveArtifacts artifacts: 'publish/**/*', fingerprint: true
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            script {
+                if (fileExists('**/TestResults/*.trx')) {
+                    junit '**/TestResults/*.trx'
+                } else {
+                    echo 'No se encontraron archivos de resultados de pruebas'
+                }
+            }
+            echo "Pipeline completado - Resultado: ${currentBuild.currentResult}"
+        }
+        failure {
+            echo '¡Pipeline fallido! Revisa los logs.'
+            script {
+                if (fileExists('**/*.log')) {
+                    archiveArtifacts artifacts: '**/*.log', fingerprint: true
+                }
+            }
+        }
+    }
+}

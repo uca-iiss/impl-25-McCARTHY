@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Construcción') {
+            steps {
+                dir('temas/lambdas/ruby-01') {
+                    script {
+                        // Construimos la imagen Docker
+                        sh 'docker build -t lambdas-ruby .'
+                    }
+                }
+            }
+        }
+
+        stage('Pruebas') {
+            steps {
+                dir('temas/lambdas/ruby-01') {
+                    script {
+                        // Ejecutamos las pruebas con minitest dentro del contenedor
+                        sh 'docker run --rm lambdas-ruby ruby test_main.rb'
+                    }
+                }
+            }
+        }
+
+        stage('Ejecución') {
+            steps {
+                dir('temas/lambdas/ruby-01') {
+                    script {
+                        // Ejecutamos el script principal dentro del contenedor
+                        sh 'docker run --rm lambdas-ruby ruby main.rb'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completado.'
+        }
+    }
+}

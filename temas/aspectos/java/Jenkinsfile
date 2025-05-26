@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Compilar') {
+            steps {
+                dir('temas/aspectos/java') {
+                    echo 'Compilando el proyecto...'
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Ejecutar MainTest.java') {
+            steps {
+                dir('temas/aspectos/java') {
+                    echo 'Ejecutando programa principal...'
+                    sh 'mvn test'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Compilación y ejecución completadas con éxito.'
+        }
+        failure {
+            echo 'Hubo un error en el pipeline.'
+        }
+    }
+}

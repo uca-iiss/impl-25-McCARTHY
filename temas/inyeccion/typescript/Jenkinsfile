@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Construcción') {
+            steps {
+                dir('temas/inyeccion/typescript') {
+                    script {
+                        sh 'docker build -t inyeccion-typescript .'
+                    }
+                }
+            }
+        }
+
+        stage('Pruebas') {
+            steps {
+                script {
+                    sh 'docker run --rm inyeccion-typescript npm run test'
+                }
+            }
+        }
+
+        stage('Ejecución') {
+            steps {
+                script {
+                    sh 'docker run --rm inyeccion-typescript npm run start'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '--- Pipeline finalizado. Limpiando contenedores colgados (si los hubiera) ---'
+            sh 'docker ps -aq --filter status=exited | xargs --no-run-if-empty docker rm'
+        }
+    }
+}

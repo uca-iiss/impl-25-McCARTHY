@@ -1,0 +1,53 @@
+pipeline {
+    agent none
+
+    stages {
+        stage('Build Docker Image') {
+            agent { label 'docker' } // Asegúrate de que el nodo tenga acceso al daemon Docker
+            steps {
+                script {
+                    // Se construye la imagen usando el Dockerfile que se encuentra en el directorio "despliegue"
+                    dockerImage = docker.build("scala-option-example:latest", "-f despliegue/Dockerfile .")
+                }
+            }
+        }
+
+        stage('Compile') {
+            agent {
+                docker {
+                    image "scala-option-example:latest"
+                    // Si necesitas montar el workspace o configurar variables, puedes hacerlo con args:
+                    // args '-v $PWD:/app --workdir /home/appuser/app'
+                }
+            }
+            steps {
+                echo 'Compilando el proyecto Scala en el contenedor Docker...'
+                sh 'sbt compile'
+            }
+        }
+
+        stage('Test') {
+            agent {
+                docker {
+                    image "scala-option-example:latest"
+                }
+            }
+            steps {
+                echo 'Ejecutando pruebas automatizadas en el contenedor Docker...'
+                sh 'sbt test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completado con éxito'
+        }
+        failure {
+            echo 'Algo falló en la ejecución del pipeline'
+        }
+        always {
+            echo 'Limpieza de recursos si es necesaria...'
+        }
+    }
+}

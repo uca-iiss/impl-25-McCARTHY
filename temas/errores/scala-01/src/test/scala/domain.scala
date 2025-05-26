@@ -1,0 +1,5 @@
+case class Cliente(nombre: String)
+case class Diagnostico(problema: String, irreparable: Boolean)
+case class Dispositivo(marca: String, modelo: String, diagnostico: Option[Diagnostico])
+case class Orden(cliente: Cliente, dispositivo: Option[Dispositivo])
+case class Resultado(mensaje: String)
