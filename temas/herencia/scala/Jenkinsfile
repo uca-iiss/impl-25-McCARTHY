@@ -1,63 +1,40 @@
 pipeline {
-    agent {
-        docker {
-            image 'scala-herencia:dev'
-            args '-v $PWD:/app -w /app'
-        }
+    agent any
+
+    environment {
+        SCALA_VERSION = '2.13.12'
     }
 
     stages {
-        stage('Compilar') {
+        stage('Clean') {
+            steps {
+                dir('temas/herencia/scala') {
+                    sh 'sbt clean'
+                }
+            }
+        }
+        stage('Build') {
             steps {
                 dir('temas/herencia/scala') {
                     sh 'sbt compile'
                 }
             }
         }
-
         stage('Test') {
             steps {
                 dir('temas/herencia/scala') {
                     sh 'sbt test'
-                    script {
-                        if (fileExists('target/test-reports')) {
-                            junit 'target/test-reports/*.xml'
-                        } else {
-                            echo 'No se encontró el directorio target/test-reports, omitiendo publicación de resultados.'
-                        }
-                    }
-                }
-            }
-        }
-        
-        stage('Empaquetar') {
-            steps {
-                dir('temas/herencia/scala') {
-                    sh 'sbt package'
-                    script {
-                        if (fileExists('target/scala-2.13')) {
-                            sh 'ls -lh target/scala-2.13'
-                        } else {
-                            echo 'No se generó el jar. target/scala-2.13 no existe.'
-                        }
-                    }
                 }
             }
         }
     }
 
     post {
-        always {
+        success {
             echo 'Pipeline finalizado.'
         }
-        success {
-            dir('temas/herencia/scala') {
-                archiveArtifacts artifacts: 'target/scala-2.13/*.jar', fingerprint: true
-            }
-        }
         failure {
-            echo 'El pipeline falló. Revisa los logs anteriores.'
+            echo 'El pipeline falló en algún punto.'
         }
     }
 }
-
