@@ -195,7 +195,7 @@ En esta sección se detallan los archivos usados para contenerizar el entorno, a
 
 ---
 
-### `scala-02/Dockerfile` [`scala/Dockerfile`](./scala/Dockerfile)  
+### `Dockerfile` [`/Dockerfile`](.Dockerfile)  
 
 Este fichero define la **imagen personalizada de Docker** que se usará para compilar, testear y empaquetar el proyecto Scala.
 
@@ -223,7 +223,7 @@ Ejecuta sbt update para resolver dependencias.
 
 Define sbt como comando por defecto al arrancar el contenedor.
 
-### 'scala-02/Jenkinsfile' [`scala-02/Jenkinsfile`](./scala-02/Jenkinsfile)  
+### 'Jenkinsfile' [`/Jenkinsfile`](./Jenkinsfile)  
 
 Este fichero describe el pipeline declarativo que Jenkins ejecutará para automatizar el flujo de integración continua.
 
@@ -279,7 +279,7 @@ El pipeline consta de tres fases:
 
 El uso de --rm garantiza limpieza tras cada ejecución.
 
-### `scala-02/infra/main.tf` [`scala-02/infra/main.tf`](./scala-02/infra/main.tf`)  
+### `infra/main.tf` [`infra/main.tf`](./infra/main.tf`)  
 Archivo principal de Terraform para construir y desplegar Jenkins contenerizado con soporte para Docker-in-Docker.
 
 ```hcl
@@ -330,7 +330,7 @@ Expone los puertos necesarios (8080, 50000) para acceder a Jenkins.
 
 Monta el socket de Docker para permitir la ejecución de contenedores desde dentro de Jenkins (Docker-in-Docker).
 
-### `scala-02/infra/variables.tf` [`scala-02/infra/variables.tf`](./scala-02/infra/variables.tf`) 
+### `infra/variables.tf` [`infra/variables.tf`](./infra/variables.tf`) 
 
 Variables reutilizables para parametrizar los recursos definidos en Terraform.
 
@@ -352,7 +352,7 @@ Permiten modificar el nombre de la imagen o del contenedor fácilmente sin cambi
 
 Mejora la legibilidad y mantenimiento de la infraestructura.
 
-### `scala/infra/outputs.tf` [`scala-02/infra/outputs.tf`](./scala-02/infra/outputs.tf`) 
+### `infra/outputs.tf` [`infra/outputs.tf`](./infra/outputs.tf`) 
 Muestra información útil al final de la ejecución de Terraform.
 
 ```hcl
@@ -372,12 +372,12 @@ Tras ejecutar terraform apply, se imprime automáticamente la URL local para acc
 
 | Archivo                            | Descripción                                                                 |
 |------------------------------------|-----------------------------------------------------------------------------|
-| [`src/main/scala-02`](./src/main/scala-02)     | Código fuente Scala                                                        |
-| [`src/test/scala-02`](./src/test/scala-02)     | Tests automatizados con ScalaTest                                          |
-| [`build.sbt`](./build.sbt)                     | Configuración del proyecto Scala                                           |
-| [`Dockerfile`](./Dockerfile)                   | Imagen personalizada con Scala y SBT                                       |
-| [`Jenkinsfile`](./Jenkinsfile)                 | Definición del pipeline de Jenkins                                         |
-| [`infra/main.tf`](./infra)                     | Infraestructura como código con Terraform                                  |
+| [`src/main/scala`](./src/main/scala)     | Código fuente Scala                                                        |
+| [`src/test/scala`](./src/test/scala)     | Tests automatizados con ScalaTest                                          |
+| [`build.sbt`](./build.sbt)               | Configuración del proyecto Scala                                           |
+| [`Dockerfile`](./Dockerfile)             | Imagen personalizada con Scala y SBT                                       |
+| [`Jenkinsfile`](./Jenkinsfile)           | Definición del pipeline de Jenkins                                         |
+| [`infra/main.tf`](./infra)               | Infraestructura como código con Terraform                                  |
 
 
 ---
