@@ -83,7 +83,7 @@ Esto lanza Jenkins y Docker-in-Docker con acceso compartido al socket de Docker.
 
 ### 5. Acceso a Jenkins
 
-Ir a: [http://localhost:8080](http://localhost:8083)
+Ir a: [http://localhost:8082](http://localhost:8082)
 
 #### Contraseña inicial
 
