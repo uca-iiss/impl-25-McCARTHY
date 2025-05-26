@@ -10,8 +10,10 @@ pipeline {
 
         stage('Construir imagen Docker') {
             steps {
-                script {
-                    sh 'docker build -t herencia-python .'
+                dir('temas/herencia/python-01') {
+                    script {
+                        sh 'docker build -t herencia-python .'
+                    }
                 }
             }
         }
@@ -22,6 +24,18 @@ pipeline {
                     sh 'docker run --rm herencia-python'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completado.'
+        }
+        success {
+            echo 'Todos los tests pasaron correctamente.'
+        }
+        failure {
+            echo 'Fallo en alguna etapa. Revisa los logs.'
         }
     }
 }
