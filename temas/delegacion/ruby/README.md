@@ -328,12 +328,13 @@ Configuración estándar para desplegar Jenkins con Docker-in-Docker usando vol�
 
 ---
 
-## Limpieza de imágenes y contenedores
+## Limpieza de imágenes, contenedores y redes
 
 ```bash
 docker rm -f jenkins-blueocean
 docker rm -f jenkins-docker
 docker rmi myjenkins-ruby
+docker network rm jenkins
 ```
 
 ---
