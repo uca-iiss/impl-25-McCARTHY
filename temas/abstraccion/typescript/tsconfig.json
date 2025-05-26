@@ -4,6 +4,14 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true
-  }
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,           // 🔹 Salta comprobación de tipos en node_modules (evita errores tontos)
+    "forceConsistentCasingInFileNames": true  // 🔹 Asegura consistencia en nombres de archivos (importante en CI/CD)
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",                // 🔹 Excluye archivos de test del build final (porque solo se testean, no se ejecutan)
+    "dist"                         // 🔹 Excluye carpeta de salida por si se recompila varias veces
+  ]
 }

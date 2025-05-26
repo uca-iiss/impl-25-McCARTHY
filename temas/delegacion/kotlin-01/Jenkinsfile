@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Construcción') {
+            steps {
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew clean build'
+                    }
+                }
+            }
+        }
+
+        stage('Pruebas') {
+            steps {
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew test'
+                    }
+                }
+            }
+        }
+
+        stage('Ejecución') {
+            steps {
+                dir('temas/delegacion/kotlin-01') {
+                    script {
+                        sh './gradlew run'
+                    }
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo 'Pipeline completado.'
+        }
+    }
+}
