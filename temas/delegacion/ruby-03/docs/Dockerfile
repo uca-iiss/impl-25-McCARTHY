@@ -9,7 +9,12 @@ RUN apt-get update && apt-get install -y \
     gem install bundler rake rspec
 
 # Instalar plugins de Jenkins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+RUN jenkins-plugin-cli --plugins \
+    blueocean \
+    docker-workflow \
+    token-macro \
+    json-path-api
+
 
 USER jenkins
 
