@@ -11,7 +11,7 @@ pipeline {
         stage('Construir imagen Docker') {
             steps {
                 script {
-                    docker.build('herencia-python')
+                    sh 'docker build -t herencia-python .'
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         stage('Ejecutar tests') {
             steps {
                 script {
-                    docker.image('herencia-python').run()
+                    sh 'docker run --rm herencia-python'
                 }
             }
         }
