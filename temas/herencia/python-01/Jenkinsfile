@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clonar repositorio') {
             steps {
-                git 'https://github.com/davidabuinESI/impl-25-GOSLING.git'
+                git branch: 'main', url: 'https://github.com/davidabuinESI/impl-25-GOSLING.git'
             }
         }
 
