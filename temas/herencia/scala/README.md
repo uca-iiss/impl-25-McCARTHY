@@ -391,7 +391,7 @@ Para evitar dejar imágenes y contenedores ocupando espacio en tu sistema, puede
 docker rm -f jenkins-herencia
 
 # Borrar imagen personalizada de Jenkins
-docker rmi jenkins/jenkins-herencia:custom
+docker rmi jenkins/jenkins-herencia
 
 # Borrar imagen de desarrollo de Scala
 docker rmi scala-herencia:dev
