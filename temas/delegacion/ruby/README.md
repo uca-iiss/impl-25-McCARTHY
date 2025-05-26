@@ -68,7 +68,7 @@ Esto lanza Jenkins y Docker-in-Docker con acceso compartido al socket de Docker.
 
 ### 3. Acceso a Jenkins
 
-Ir a: [http://localhost:8081](http://localhost:8081)
+Ir a: [http://localhost:8083](http://localhost:8083)
 
 #### Contraseña inicial
 
@@ -82,7 +82,7 @@ Una vez dentro:
 3. En **Pipeline script from SCM**:
    - SCM: Git
    - URL: `https://github.com/uca-iiss/impl-25-McCARTHY`
-   - Branch: `*/feature/delegacion-infra`
+   - Branch: `*/main`
    - Script Path: `temas/delegacion/ruby/Jenkinsfile`
 
 ---
