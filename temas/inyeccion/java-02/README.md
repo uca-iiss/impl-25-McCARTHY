@@ -30,7 +30,7 @@ Google Guice es un framework de inyección de dependencias ligero para Java. Su 
 ## Descripción de clases
 
 ### `Notificador.java`
-Interfaz que define el contrato para enviar un mensaje.
+Interfaz que define la función para enviar un mensaje.
 
 ```java
 public interface Notificador {
