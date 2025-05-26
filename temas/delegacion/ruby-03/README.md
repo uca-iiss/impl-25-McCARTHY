@@ -446,6 +446,8 @@ docker rmi myjenkins-ruby
 docker network rm jenkins
 docker rm -f jenkins-blueocean jenkins-docker
 docker volume rm jenkins-data jenkins-docker-certs
+rm -f terraform.tfstate terraform.tfstate.backup .terraform.lock.hcl
+rm -rf .terraform
 terraform destroy -auto-approve
 ```
 
