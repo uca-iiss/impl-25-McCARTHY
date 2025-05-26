@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:18'
+            image 'node:latest'
         }
     }
 
@@ -23,7 +23,7 @@ pipeline {
         stage('Instalar dependencias') {
             steps {
                 dir('temas/errores/javascript-01') {
-                    sh 'npm install'
+                    sh 'npm i'
                 }
             }
         }
