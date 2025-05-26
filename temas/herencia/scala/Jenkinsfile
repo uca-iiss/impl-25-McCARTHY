@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    environment {
+        SCALA_VERSION = '2.13.12'
+    }
+
+    stages {
+        stage('Clean') {
+            steps {
+                dir('temas/herencia/scala') {
+                    sh 'sbt clean'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/herencia/scala') {
+                    sh 'sbt compile'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/herencia/scala') {
+                    sh 'sbt test'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}

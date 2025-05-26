@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean') {
+            steps {
+                dir('temas/inyeccion/lua') {
+                    sh 'rm -rf build/ tmp/ *.log || true'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/inyeccion/lua') {
+                    sh 'luarocks list'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/inyeccion/lua') {
+                    sh 'busted test/'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}

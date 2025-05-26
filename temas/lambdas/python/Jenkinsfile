@@ -1,11 +1,10 @@
 pipeline {
     agent {
-        docker{
-            image 'python:3.9-slim'
+        docker {
+            image 'python:3.9' 
         }
-
     }
-        
+
     stages {
         stage('Preparar entorno') {
             steps {
@@ -16,7 +15,7 @@ pipeline {
 
         stage('Ejecutar pruebas') {
             steps {
-                sh './venv/bin/python temas/herencia/python/test.py'
+                sh './venv/bin/python temas/lambdas/python/test.py'
             }
         }
     }
