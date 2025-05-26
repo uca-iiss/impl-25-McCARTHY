@@ -439,13 +439,14 @@ provider "docker" {}
 
 ---
 
-## Limpieza de imágenes, contenedores y redes
+## Limpieza de imágenes, contenedores, redes y volumenes
 
 ```bash
-docker rm -f jenkins-blueocean
-docker rm -f jenkins-docker
 docker rmi myjenkins-ruby
 docker network rm jenkins
+docker rm -f jenkins-blueocean jenkins-docker
+docker volume rm jenkins-data jenkins-docker-certs
+terraform destroy -auto-approve
 ```
 
 ---
