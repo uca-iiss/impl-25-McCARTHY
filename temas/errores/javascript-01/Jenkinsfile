@@ -12,10 +12,18 @@ pipeline {
             }
         }
 
+        stage('Limpiar dependencias') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'rm -rf node_modules package-lock.json'
+                }
+            }
+        }
+
         stage('Instalar dependencias') {
             steps {
                 dir('temas/errores/javascript-01') {
-                    sh 'npm i'
+                    sh 'npm install'
                 }
             }
         }
