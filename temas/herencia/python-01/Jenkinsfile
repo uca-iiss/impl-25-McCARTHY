@@ -1,37 +1,27 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10'
-        }
-    }
+    agent any
+
     stages {
-        stage('Preparar entorno') {
+        stage('Clonar repositorio') {
             steps {
-                echo 'Preparando entorno Python...'
+                git 'https://github.com/davidabuinESI/impl-25-GOSLING.git'
             }
         }
-        stage('Instalar dependencias') {
+
+        stage('Construir imagen Docker') {
             steps {
-                echo 'Instalando dependencias...'
-                dir('temas/herencia/python-01/despliegue') {
-                    sh 'pip install -r requirements.txt'
+                script {
+                    docker.build('herencia-python')
                 }
             }
         }
-        stage('Ejecutar pruebas') {
+
+        stage('Ejecutar tests') {
             steps {
-                dir('temas/herencia/python-01') {
-                    sh 'pytest Empresa/tests'
+                script {
+                    docker.image('herencia-python').run()
                 }
             }
-        }
-    }
-    post {
-        always {
-            echo 'Pipeline finalizado.'
-        }
-        failure {
-            echo 'La ejecución falló.'
         }
     }
 }
