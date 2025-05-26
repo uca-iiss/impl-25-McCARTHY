@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar repositorio') {
+            steps {
+                git 'https://github.com/davidabuinESI/impl-25-GOSLING.git'
+            }
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                script {
+                    docker.build('herencia-python')
+                }
+            }
+        }
+
+        stage('Ejecutar tests') {
+            steps {
+                script {
+                    docker.image('herencia-python').run()
+                }
+            }
+        }
+    }
+}
