@@ -7,7 +7,7 @@ Este proyecto muestra un ejemplo avanzado del uso de **herencia** en Scala, sigu
 ```
 temas/
 └── herencia/
-    └── scala/
+    └── scala-02/
         ├── build.sbt
         ├── Dockerfile
         ├── Jenkinsfile
@@ -39,7 +39,7 @@ El sistema modela una jerarquía de personas en un entorno académico:
 Desde la raíz del proyecto:
 
 ```bash
-cd temas/herencia/scala
+cd temas/herencia/scala-02
 docker build -t scala-herencia:dev .
 ```
 
@@ -66,7 +66,7 @@ Este ejemplo se integra en un pipeline de Jenkins para compilar, testear y empaq
 Desde la carpeta `infra/`:
 
 ```bash
-cd temas/herencia/scala/infra
+cd temas/herencia/scala-02/infra
 terraform init
 terraform apply
 ```
@@ -102,14 +102,14 @@ Después de introducir la contraseña:
    - En **SCM**, seleccionar: `Git`.
    - En **Repository URL**, poner: `https://github.com/uca-iiss/impl-25-McCARTHY`
    - En **Branch Specifier**, escribir: `*/main`
-   - En **Script Path**, poner: `temas/herencia/scala/Jenkinsfile`
+   - En **Script Path**, poner: `temas/herencia/scala-02/Jenkinsfile`
 5. Guardar y lanzar el pipeline (Build now).
 
 ---
 
 ## Detalle de las clases
 
-### `Persona` [`src/main/scala/Persona.scala`](./src/main/scala/Persona.scala)  
+### `Persona` [`src/main/scala-02/Persona.scala`](./src/main/scala-02/Persona.scala)  
 
 Clase abstracta base con los atributos comunes (`nombre`, `edad`) y un método abstracto `saludar()`.
 
@@ -121,7 +121,7 @@ abstract class Persona(val nombre: String, val edad: Int) {
 
 ---
 
-### `Estudiante` [`src/main/scala/Estudiante.scala`](./src/main/scala/Estudiante.scala)  
+### `Estudiante` [`src/main/scala-02/Estudiante.scala`](./src/main/scala-02/Estudiante.scala)  
 
 Hereda de `Persona` y del trait `Academico`. Redefine el método `saludar()` y proporciona el nombre del departamento.
 
@@ -136,7 +136,7 @@ class Estudiante(nombre: String, edad: Int, val universidad: String)
 
 ---
 
-### `Profesor` [`src/main/scala/Profesor.scala`](./src/main/scala/Profesor.scala)  
+### `Profesor` [`src/main/scala-02/Profesor.scala`](./src/main/scala-02/Profesor.scala)  
 
 Hereda de `Persona` e implementa dos traits: `Academico` y `Evaluador`. Redefine `saludar()` y ofrece funcionalidad de evaluación.
 
@@ -150,7 +150,7 @@ class Profesor(nombre: String, edad: Int, val departamento: String)
 
 ---
 
-### `Investigador` [`src/main/scala/Investigador.scala`](./src/main/scala/Investigador.scala)  
+### `Investigador` [`src/main/scala-02/Investigador.scala`](./src/main/scala-02/Investigador.scala)  
 
 Extiende `Persona`, introduce una propiedad `especialidad` y ofrece diferentes formas de saludo.
 
@@ -171,7 +171,7 @@ class Investigador(nombre: String, edad: Int, val especialidad: String)
 
 ### Traits
 
-`Academico` [`src/main/scala/Academico.scala`](./src/main/scala/Academico.scala)  
+`Academico` [`src/main/scala-02/Academico.scala`](./src/main/scala-02/Academico.scala)  
 
 ```scala
 trait Academico {
@@ -180,7 +180,7 @@ trait Academico {
 }
 ```
 
-`Evaluador`[`src/main/scala/Evaluador.scala`](./src/main/scala/Evaluador.scala)  
+`Evaluador`[`src/main/scala-02/Evaluador.scala`](./src/main/scala-02/Evaluador.scala)  
 ```scala
 trait Evaluador {
   def evaluar(): String = "Realizando evaluación de estudiantes..."
@@ -195,7 +195,7 @@ En esta sección se detallan los archivos usados para contenerizar el entorno, a
 
 ---
 
-### `scala/Dockerfile`
+### `scala-02/Dockerfile` [`scala-02/Dockerfile`](./scala-02/Dockerfile)  
 
 Este fichero define la **imagen personalizada de Docker** que se usará para compilar, testear y empaquetar el proyecto Scala.
 
@@ -223,7 +223,7 @@ Ejecuta sbt update para resolver dependencias.
 
 Define sbt como comando por defecto al arrancar el contenedor.
 
-### 'scala/Jenkinsfile'
+### 'scala-02/Jenkinsfile' [`scala-02/Jenkinsfile`](./scala-02/Jenkinsfile)  
 
 Este fichero describe el pipeline declarativo que Jenkins ejecutará para automatizar el flujo de integración continua.
 
@@ -279,7 +279,7 @@ El pipeline consta de tres fases:
 
 El uso de --rm garantiza limpieza tras cada ejecución.
 
-### `scala/infra/main.tf`
+### `scala-02/infra/main.tf` [`scala-02/infra/main.tf`](./scala-02/infra/main.tf`)  
 Archivo principal de Terraform para construir y desplegar Jenkins contenerizado con soporte para Docker-in-Docker.
 
 ```hcl
@@ -330,7 +330,7 @@ Expone los puertos necesarios (8080, 50000) para acceder a Jenkins.
 
 Monta el socket de Docker para permitir la ejecución de contenedores desde dentro de Jenkins (Docker-in-Docker).
 
-### `scala/infra/variables.tf`
+### `scala-02/infra/variables.tf` [`scala-02/infra/variables.tf`](./scala-02/infra/variables.tf`) 
 
 Variables reutilizables para parametrizar los recursos definidos en Terraform.
 
@@ -352,7 +352,7 @@ Permiten modificar el nombre de la imagen o del contenedor fácilmente sin cambi
 
 Mejora la legibilidad y mantenimiento de la infraestructura.
 
-### `scala/infra/outputs.tf`
+### `scala/infra/outputs.tf` [`scala-02/infra/outputs.tf`](./scala-02/infra/outputs.tf`) 
 Muestra información útil al final de la ejecución de Terraform.
 
 ```hcl
@@ -372,12 +372,12 @@ Tras ejecutar terraform apply, se imprime automáticamente la URL local para acc
 
 | Archivo                            | Descripción                                                                 |
 |------------------------------------|-----------------------------------------------------------------------------|
-| [`src/main/scala`](./src/main/scala)     | Código fuente Scala                                                        |
-| [`src/test/scala`](./src/test/scala)     | Tests automatizados con ScalaTest                                          |
-| [`build.sbt`](./build.sbt)               | Configuración del proyecto Scala                                           |
-| [`Dockerfile`](./Dockerfile)             | Imagen personalizada con Scala y SBT                                       |
-| [`Jenkinsfile`](./Jenkinsfile)           | Definición del pipeline de Jenkins                                         |
-| [`infra/main.tf`](./infra)               | Infraestructura como código con Terraform                                  |
+| [`src/main/scala-02`](./src/main/scala-02)     | Código fuente Scala                                                        |
+| [`src/test/scala-02`](./src/test/scala-02)     | Tests automatizados con ScalaTest                                          |
+| [`build.sbt`](./build.sbt)                     | Configuración del proyecto Scala                                           |
+| [`Dockerfile`](./Dockerfile)                   | Imagen personalizada con Scala y SBT                                       |
+| [`Jenkinsfile`](./Jenkinsfile)                 | Definición del pipeline de Jenkins                                         |
+| [`infra/main.tf`](./infra)                     | Infraestructura como código con Terraform                                  |
 
 
 ---
