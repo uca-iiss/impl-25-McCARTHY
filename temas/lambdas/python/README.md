@@ -127,7 +127,7 @@ def ejemplo_logs() -> List[str]:
 
 ---
 
-### `procesador.py` [`src/main/python/app/procesador.py`](./src/main/python/app/procesador.py).
+### `procesador.py` [`app/procesador.py`](./app/procesador.py).
 
 Contiene funciones de alto nivel para manipular los logs:
 
@@ -168,7 +168,7 @@ def agrupar_por_nivel(logs):
 
 ---
 
-### `main.py` [`src/main/python/main.py`](./src/main/python/main.py).
+### `main.py` [`/main.py`](./main.py).
 
 Punto de entrada de la aplicación. Orquesta el procesamiento de logs:
 
@@ -190,7 +190,7 @@ Imprime resultados en consola o los guarda en salida.txt
 
 ---
 
-### `setup.py` [`src/main/python/setup.py`](./src/main/python/setup.py).
+### `setup.py` [`setup.py`](./setup.py).
 
 ```python
 from setuptools import setup, find_packages
@@ -211,7 +211,7 @@ setup(
 
 ---
 
-### `requirements.txt` [`src/main/python/requirements.txt`](./src/main/python/requirements.txt).
+### `requirements.txt` [`requirements.txt`](./requirements.txt).
 
 Lista de dependencias necesarias para ejecutar el proyecto:
 
@@ -226,7 +226,7 @@ pyinstaller
 
 ---
 
-### `test_procesador.py` [`src/main/python/tests/test_procesador.py`](./src/main/python/tests/test_procesador.py).
+### `test_procesador.py` [`tests/test_procesador.py`](./tests/test_procesador.py).
 
 Conjunto de pruebas automatizadas con pytest. Prueba:
 
@@ -273,7 +273,7 @@ def test_agrupar_por_nivel():
 
 ## Infraestructura del Proyecto
 
-### `Jenkinsfile` [`src/main/python/Jenkinsfile`](./src/main/python/Jenkinsfile).
+### `Jenkinsfile` [`Jenkinsfile`](./Jenkinsfile).
 
 ```groovy
 pipeline {
@@ -337,7 +337,7 @@ pipeline {
 
 ---
 
-### `Dockerfile` [`src/main/python/Dockerfile`](./src/main/python/Dockerfile).
+### `Dockerfile` [`Dockerfile`](./Dockerfile).
 
 Construye la imagen personalizada con:
 
@@ -373,7 +373,7 @@ CMD ["pytest"]
 
 ---
 
-### `main.tf` [`src/main/python/docs/main.tf`](./src/main/python/docs/main.tf).
+### `main.tf` [`docs/main.tf`](./docs/main.tf).
 
 Este archivo Terraform despliega una infraestructura contenerizada para Jenkins con soporte completo para Docker-in-Docker (DinD), 
 permitiendo que Jenkins ejecute contenedores Docker durante sus pipelines.
@@ -467,7 +467,7 @@ resource "docker_container" "jenkins" {
 
 ---
 
-### `providers.tf` [`src/main/python/docs/providers.tf`](./src/main/python/docs/providers.tf).
+### `providers.tf` [`docs/providers.tf`](./docs/providers.tf).
 
 ```hcl
 terraform {
@@ -484,7 +484,7 @@ provider "docker" {}
 
 ---
 
-### `docs/Dockerfile` [`src/main/python/docs/Dockerfile`](./src/main/python/docs/Dockerfile).
+### `docs/Dockerfile` [`docs/Dockerfile`](./docs/Dockerfile).
 
 construye una imagen personalizada basada en jenkins/jenkins:lts, añadiendo soporte para Python, PyInstaller, pytest, y plugins esenciales de Jenkins, permitiendo ejecutar pipelines Python avanzados desde Jenkins.
 
@@ -530,8 +530,15 @@ USER jenkins
 ## Limpieza de imágenes y contenedores
 
 ```bash
-docker rm -f jenkins-lambdas
-docker rmi arevalo8/custom-lambdas
+# Borrar contenedor Jenkins
+docker rm -f jenkins-blueocean
+
+# Borrar contenedor Docker-in-Docker
+docker rm -f jenkins-docker
+
+# Borrar imagen Jenkins personalizada 
+docker rmi myjenkins-python
+
 ```
 
 ---
