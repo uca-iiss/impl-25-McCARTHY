@@ -1,0 +1,47 @@
+pipeline {
+    agent {
+        docker {
+            image 'sbtscala/scala-sbt:eclipse-temurin-11.0.14.1_1.6.2_2.13.8'
+            args '-v /root/.ivy2:/root/.ivy2' // Cache de dependencias
+        }
+    }
+
+    environment {
+        PROJECT_DIR = "temas/abstraccion/scala/abstraccion-pagos"
+    }
+
+    stages {
+        stage('Limpiar') {
+            steps {
+                dir("${env.PROJECT_DIR}") {
+                    sh 'sbt clean'
+                }
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                dir("${env.PROJECT_DIR}") {
+                    sh 'sbt compile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir("${env.PROJECT_DIR}") {
+                    sh 'sbt test'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build finalizado correctamente.'
+        }
+        failure {
+            echo 'Ha fallado alguna etapa del build.'
+        }
+    }
+}

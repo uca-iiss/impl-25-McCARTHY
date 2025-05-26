@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    stages {
+        stage('Restore') {
+            steps {
+                dir('temas/abstraccion/csharp-02/src') {
+                    sh 'dotnet restore Abstraccion.csproj'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('temas/abstraccion/csharp-02/src') {
+                    sh 'dotnet build Abstraccion.csproj --no-restore'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('temas/abstraccion/csharp-02/tests') {
+                    sh 'dotnet test AbstraccionTests.csproj --no-restore --no-build'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado.'
+        }
+        failure {
+            echo 'El pipeline falló en algún punto.'
+        }
+    }
+}

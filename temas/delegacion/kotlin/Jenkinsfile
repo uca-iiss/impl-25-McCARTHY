@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                dir('temas/delegacion/kotlin') {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('temas/delegacion/kotlin') {
+                    echo 'Compilando el proyecto con Maven...'
+                    sh 'mvn compile'
+                }
+            }
+        }
+
+        stage('Run Main') {
+            steps {
+                dir('temas/delegacion/kotlin') {
+                    echo 'Ejecutando Main.kt...'
+                    sh 'mvn exec:java'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('temas/delegacion/kotlin') {
+                    echo 'Ejecutando tests'
+                    sh 'mvn test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+        }
+        success {
+            echo 'Pipeline completado correctamente.'
+        }
+        failure {
+            echo 'Error en la ejecución del pipeline.'
+        }
+    }
+}

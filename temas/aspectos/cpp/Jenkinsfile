@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar') {
+            steps {
+                echo '--- Clonando el repositorio ---'
+                checkout scm
+            }
+        }
+
+        stage('Construir contenedor') {
+            steps {
+                echo '--- Construyendo la imagen Docker del proyecto C++ ---'
+                dir('temas/aspectos/cpp') {
+                    script {
+                        sh 'docker build -t aspectos-cpp .'
+                    }
+                }
+            }
+        }
+
+        stage('Pruebas') {
+            steps {
+                echo '--- Ejecutando pruebas dentro del contenedor ---'
+                script {
+                    sh 'docker run --rm aspectos-cpp make test'
+                }
+            }
+        }
+
+        stage('Ejecutar aplicación') {
+            steps {
+                echo '--- Ejecutando la aplicación final ---'
+                script {
+                    sh 'docker run --rm aspectos-cpp ./main'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '--- Pipeline finalizado. Limpiando contenedores colgados (si los hubiera) ---'
+            sh 'docker ps -aq --filter status=exited | xargs --no-run-if-empty docker rm || true'
+        }
+    }
+}
