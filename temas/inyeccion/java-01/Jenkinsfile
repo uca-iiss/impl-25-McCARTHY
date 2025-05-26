@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Compilar') {
             steps {
-                dir('temas/inyeccion/java') {
+                dir('temas/inyeccion/java-01') {
                     echo 'Compilando el proyecto...'
                     sh 'mvn clean compile'
                 }
@@ -13,7 +13,7 @@ pipeline {
 
         stage('Test de MainTest.java') {
             steps {
-                dir('temas/inyeccion/java') {
+                dir('temas/inyeccion/java-01') {
                     echo 'Ejecutando programa principal...'
                     sh 'mvn test'
                 }
