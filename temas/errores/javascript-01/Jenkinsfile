@@ -6,21 +6,25 @@ pipeline {
     }
 
     stages {
-        stage('Node Version'){
-            steps{
+        stage('Node Version') {
+            steps {
                 sh 'node --version'
             }
         }
 
         stage('Instalar dependencias') {
             steps {
-                sh 'npm i'
+                dir('temas/errores/javascript-01') {
+                    sh 'npm i'
+                }
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh 'npm test'
+                dir('temas/errores/javascript-01') {
+                    sh 'npm test'
+                }
             }
         }
     }
