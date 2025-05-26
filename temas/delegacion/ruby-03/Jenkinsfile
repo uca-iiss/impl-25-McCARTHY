@@ -1,0 +1,61 @@
+pipeline {
+    agent none
+
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
+            steps {
+                dir('temas/delegacion/ruby-03') {
+                    sh 'bundle check || bundle install'
+                    sh 'rake'  // Compilar y verificar el proyecto ejecutando las tareas default
+                }
+            }
+        }
+
+        stage('Test') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
+            steps {
+                dir('temas/delegacion/ruby-03') {
+                    sh '''
+                        mkdir -p test-reports
+                        rspec --format documentation --format RspecJunitFormatter --out test-reports/results.xml
+                    '''
+                }
+            }
+            post {
+                always {
+                    junit 'temas/delegacion/ruby-03/test-reports/results.xml'
+                }
+            }
+        }
+
+        stage('Deliver') {
+            agent {
+                docker {
+                    image 'arevalo8/delegacion-ruby:latest'
+                }
+            }
+            steps {
+                dir('temas/delegacion/ruby-03') {
+                    sh '''
+                        mkdir -p dist
+                        tar -czf dist/delegacion-ruby.tar.gz lib/ Rakefile Gemfile main.rb
+                    '''
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'temas/delegacion/ruby-03/dist/delegacion-ruby.tar.gz', fingerprint: true
+                }
+            }
+        }
+    }
+}
