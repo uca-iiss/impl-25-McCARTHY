@@ -109,7 +109,7 @@ Después de introducir la contraseña:
 
 ## Detalle de las clases
 
-### `Persona` [`src/main/scala-02/Persona.scala`](./src/main/scala-02/Persona.scala)  
+### `Persona` [`src/main/scala/Persona.scala`](./src/main/scala/Persona.scala)  
 
 Clase abstracta base con los atributos comunes (`nombre`, `edad`) y un método abstracto `saludar()`.
 
@@ -121,7 +121,7 @@ abstract class Persona(val nombre: String, val edad: Int) {
 
 ---
 
-### `Estudiante` [`src/main/scala-02/Estudiante.scala`](./src/main/scala-02/Estudiante.scala)  
+### `Estudiante` [`src/main/scala/Estudiante.scala`](./src/main/scala/Estudiante.scala)  
 
 Hereda de `Persona` y del trait `Academico`. Redefine el método `saludar()` y proporciona el nombre del departamento.
 
@@ -136,7 +136,7 @@ class Estudiante(nombre: String, edad: Int, val universidad: String)
 
 ---
 
-### `Profesor` [`src/main/scala-02/Profesor.scala`](./src/main/scala-02/Profesor.scala)  
+### `Profesor` [`src/main/scala/Profesor.scala`](./src/main/scala/Profesor.scala)  
 
 Hereda de `Persona` e implementa dos traits: `Academico` y `Evaluador`. Redefine `saludar()` y ofrece funcionalidad de evaluación.
 
@@ -150,7 +150,7 @@ class Profesor(nombre: String, edad: Int, val departamento: String)
 
 ---
 
-### `Investigador` [`src/main/scala-02/Investigador.scala`](./src/main/scala-02/Investigador.scala)  
+### `Investigador` [`src/main/scala/Investigador.scala`](./src/main/scala/Investigador.scala)  
 
 Extiende `Persona`, introduce una propiedad `especialidad` y ofrece diferentes formas de saludo.
 
@@ -171,7 +171,7 @@ class Investigador(nombre: String, edad: Int, val especialidad: String)
 
 ### Traits
 
-`Academico` [`src/main/scala-02/Academico.scala`](./src/main/scala-02/Academico.scala)  
+`Academico` [`src/main/scala/Academico.scala`](./src/main/scala/Academico.scala)  
 
 ```scala
 trait Academico {
@@ -180,7 +180,7 @@ trait Academico {
 }
 ```
 
-`Evaluador`[`src/main/scala-02/Evaluador.scala`](./src/main/scala-02/Evaluador.scala)  
+`Evaluador`[`src/main/scala/Evaluador.scala`](./src/main/scala/Evaluador.scala)  
 ```scala
 trait Evaluador {
   def evaluar(): String = "Realizando evaluación de estudiantes..."
@@ -195,7 +195,7 @@ En esta sección se detallan los archivos usados para contenerizar el entorno, a
 
 ---
 
-### `scala-02/Dockerfile` [`scala-02/Dockerfile`](./scala-02/Dockerfile)  
+### `scala-02/Dockerfile` [`scala/Dockerfile`](./scala/Dockerfile)  
 
 Este fichero define la **imagen personalizada de Docker** que se usará para compilar, testear y empaquetar el proyecto Scala.
 
