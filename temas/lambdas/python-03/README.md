@@ -7,7 +7,7 @@ Este proyecto demuestra el uso avanzado de **lambdas** y programación funcional
 ```
 temas/
 └── lambdas/
-    └── python/
+    └── python-03/
         ├── app/
         │   ├── logs.py           ← Módulo con funciones que usan lambdas
         │   └── procesador.py     ← Funciones funcionales que procesan los logs
@@ -45,7 +45,7 @@ El uso de `@dataclass` y expresiones lambda permite un diseño limpio, compacto 
 
 ### 1. Construcción de la imagen Docker
 
-Desde `temas/lambdas/python/docs`:
+Desde `temas/lambdas/python-03/docs`:
 
 ```bash
 docker build -t myjenkins-python .
@@ -85,7 +85,7 @@ Una vez dentro:
    - En **SCM**, seleccionar: `Git`.
    - En **Repository URL**, poner: `https://github.com/uca-iiss/impl-25-McCARTHY`
    - En **Branch Specifier**, escribir: `*/main`
-   - En **Script Path**, poner: `temas/lambdas/python/Jenkinsfile`
+   - En **Script Path**, poner: `temas/lambdas/python-03/Jenkinsfile`
 5. Guardar y lanzar el pipeline (Build now).
 
 ---
