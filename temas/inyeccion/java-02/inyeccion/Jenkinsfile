@@ -7,20 +7,20 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                dir('temas/inyeccion/java/inyeccion') {
+                dir('temas/inyeccion/java-02/inyeccion') {
                     sh 'mvn -B -DskipTests clean package'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('temas/inyeccion/java/inyeccion') {
+                dir('temas/inyeccion/java-02/inyeccion') {
                     sh 'mvn test'
                 }
             }
             post {
                 always {
-                    junit 'temas/inyeccion/java/inyeccion/target/surefire-reports/*.xml'
+                    junit 'temas/inyeccion/java-02/inyeccion/target/surefire-reports/*.xml'
                 }
             }
         }
