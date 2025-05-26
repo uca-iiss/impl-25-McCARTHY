@@ -195,7 +195,7 @@ En esta sección se detallan los archivos usados para contenerizar el entorno, a
 
 ---
 
-### `Dockerfile` [`/Dockerfile`](.Dockerfile)  
+### `Dockerfile` [`/Dockerfile`](./Dockerfile)  
 
 Este fichero define la **imagen personalizada de Docker** que se usará para compilar, testear y empaquetar el proyecto Scala.
 
@@ -279,7 +279,7 @@ El pipeline consta de tres fases:
 
 El uso de --rm garantiza limpieza tras cada ejecución.
 
-### `infra/main.tf` [`infra/main.tf`](./infra/main.tf`)  
+### `infra/main.tf` [`infra/main.tf`](./infra/main.tf)  
 Archivo principal de Terraform para construir y desplegar Jenkins contenerizado con soporte para Docker-in-Docker.
 
 ```hcl
@@ -352,7 +352,7 @@ Permiten modificar el nombre de la imagen o del contenedor fácilmente sin cambi
 
 Mejora la legibilidad y mantenimiento de la infraestructura.
 
-### `infra/outputs.tf` [`infra/outputs.tf`](./infra/outputs.tf`) 
+### `infra/outputs.tf` [`infra/outputs.tf`](./infra/outputs.tf) 
 Muestra información útil al final de la ejecución de Terraform.
 
 ```hcl
