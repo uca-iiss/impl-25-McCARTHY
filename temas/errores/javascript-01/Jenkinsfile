@@ -1,0 +1,47 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:18'
+        }
+    }
+
+    stages {
+        stage('Node Version') {
+            steps {
+                sh 'node --version'
+            }
+        }
+
+        stage('Limpiar dependencias') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'rm -rf node_modules package-lock.json'
+                }
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Ejecutar tests') {
+            steps {
+                dir('temas/errores/javascript-01') {
+                    sh 'npm test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                echo 'Terminado'
+            }
+        }
+    }
+}

@@ -118,8 +118,3 @@ build/
 # Dart
 .dart_tool/
 
-target/
-**/target/
-project/target/
-project/project/
-
