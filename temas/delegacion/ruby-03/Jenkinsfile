@@ -9,7 +9,7 @@ pipeline {
                 }
             }
             steps {
-                dir('temas/delegacion/ruby') {
+                dir('temas/delegacion/ruby-03') {
                     sh 'bundle check || bundle install'
                     sh 'rake'  // Compilar y verificar el proyecto ejecutando las tareas default
                 }
@@ -23,7 +23,7 @@ pipeline {
                 }
             }
             steps {
-                dir('temas/delegacion/ruby') {
+                dir('temas/delegacion/ruby-03') {
                     sh '''
                         mkdir -p test-reports
                         rspec --format documentation --format RspecJunitFormatter --out test-reports/results.xml
@@ -32,7 +32,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'temas/delegacion/ruby/test-reports/results.xml'
+                    junit 'temas/delegacion/ruby-03/test-reports/results.xml'
                 }
             }
         }
@@ -44,7 +44,7 @@ pipeline {
                 }
             }
             steps {
-                dir('temas/delegacion/ruby') {
+                dir('temas/delegacion/ruby-03') {
                     sh '''
                         mkdir -p dist
                         tar -czf dist/delegacion-ruby.tar.gz lib/ Rakefile Gemfile main.rb
@@ -53,7 +53,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: 'temas/delegacion/ruby/dist/delegacion-ruby.tar.gz', fingerprint: true
+                    archiveArtifacts artifacts: 'temas/delegacion/ruby-03/dist/delegacion-ruby.tar.gz', fingerprint: true
                 }
             }
         }
